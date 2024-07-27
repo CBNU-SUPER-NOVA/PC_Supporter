@@ -1,0 +1,6 @@
+repos:
+  - repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v1.5.7  # 최신 버전 확인
+    hooks:
+      - id: autopep8
+        args: [--max-line-length=88, --ignore=E501]
