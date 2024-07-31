@@ -21,4 +21,4 @@ def execute_code(code):
 
         return output
     except Exception as e:
-        return f"코드 실행 중 오류 발생:\n{e}"
+        return f"코드 실행 중 오류 발생: \n{e}"
