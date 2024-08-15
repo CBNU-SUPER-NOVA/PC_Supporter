@@ -3,12 +3,11 @@ import wx.svg
 
 
 class SVGButton(wx.Panel):
-    def __init__(self, parent, URL, size, on_click):
+    def __init__(self, parent, URL, size):
         super(SVGButton, self).__init__(parent)
         self.Bind(wx.EVT_PAINT, self.on_paint)
         self.SetSize(size, size)
         self.svg_image = wx.svg.SVGimage.CreateFromFile(URL)
-        self.Bind(wx.EVT_LEFT_DOWN, on_click)
         self.Bind(wx.EVT_ENTER_WINDOW, self.on_enter)
         self.Bind(wx.EVT_LEAVE_WINDOW, self.on_leave)
 
@@ -33,3 +32,10 @@ class SVGButton(wx.Panel):
     def on_leave(self, event):
         self.is_hovered = False
         self.Refresh()
+
+    def pos(self, x, y):
+        self.SetPosition((x, y))
+        self.Refresh()
+
+    def set_on_click(self, on_click):
+        self.Bind(wx.EVT_LEFT_DOWN, on_click)
