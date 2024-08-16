@@ -7,7 +7,7 @@ class MainFrame(wx.Frame):
     def __init__(self, *args, **kw):
         super(MainFrame, self).__init__(*args, **kw)
         self.SetSize((1200, 800))
-        self.SetTitle("Panel Management Example")
+        self.SetTitle("PCSupporter")
 
         # 메인 패널 생성 및 추가
         self.main_panel = AiPanel(self)
@@ -24,6 +24,9 @@ class MainFrame(wx.Frame):
         else:
             self.overlay_panel.Show()  # 오버레이 패널 보이기
         self.main_panel.Refresh()  # 화면 갱신
+
+    def newChat(self):
+        print("newChat created")
 
 
 def main():

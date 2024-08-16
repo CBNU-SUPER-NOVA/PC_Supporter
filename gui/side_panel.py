@@ -37,12 +37,13 @@ class SidePanel(wx.Panel):
     def sideBarButtonClick(self, event):
         self.Hide()
         self.Parent.SidebarButton.Show()
+        self.Parent.NewChatButton.Show()
 
     def settingButtonClick(self, event):
         print("Setting Button Clicked")
 
     def newChatButtonClick(self, event):
-        print("New Chat Button Clicked")
+        self.Parent.Parent.newChat()
 
     def promptSettingButtonClick(self, event):
         print("Prompt Setting Button Clicked")
