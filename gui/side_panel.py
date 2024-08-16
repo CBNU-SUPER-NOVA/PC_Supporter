@@ -1,13 +1,20 @@
 import wx
 import wx.svg
 from componets.SVGButton import SVGButton
+from componets.RoundedPanel import RoundedPanel
+
+string_array = ["apple", "banana", "cherry", "date",
+                "나는 문어", "꿈을 꾸는 문어", " 꿈속에서는 무엇이든지 할수있어", " 으아악ㅇㄱㅇ각"]
 
 
 class SidePanel(wx.Panel):
     def __init__(self, parent):
         super(SidePanel, self).__init__(
             parent, size=(400, 800))
-        self.SetBackgroundColour("light blue")
+        self.SetBackgroundColour("#D0D0D0")
+
+        # 더블 버퍼링 활성화
+        self.SetDoubleBuffered(True)
 
         # 사이드바 버튼 생성
         self.sideBarButton = SVGButton(self, "gui/icons/SideBar.svg", 40)
@@ -27,9 +34,10 @@ class SidePanel(wx.Panel):
         self.promptSettingButton.pos(300, 10)
         self.promptSettingButton.set_on_click(self.settingButtonClick)
 
-        # 임시 텍스트
-        self.text = wx.StaticText(self, label="Overlay Panel", pos=(100, 200))
-        self.text = wx.StaticText(self, label="Overlay Panel", pos=(100, 100))
+        # workflow들 출력
+        for index, workflow in enumerate(string_array):
+            self.workflow = RoundedPanel(self, (360, 40), 20, workflow)
+            self.workflow.SetPosition((20, 60 + 60 * index))
 
         # 초기에는 숨김
         self.Hide()
