@@ -1,2 +1,12 @@
+#python virtual environment
+PCSupporter
+
+#logs
+__pycache__
+
+#IDE environment
+.vscode
+
+#
 .env
 test.py
