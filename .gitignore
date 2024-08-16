@@ -6,3 +6,7 @@ __pycache__
 
 #IDE environment
 .vscode
+
+#
+.env
+test.py
