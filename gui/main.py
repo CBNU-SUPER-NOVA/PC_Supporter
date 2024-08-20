@@ -1,6 +1,7 @@
 import wx
 from ai_panel import AiPanel
 from side_panel import SidePanel
+from code_panel import CodePanel
 
 
 class MainFrame(wx.Frame):
@@ -9,8 +10,18 @@ class MainFrame(wx.Frame):
         self.SetSize((1200, 800))
         self.SetTitle("PCSupporter")
 
+        # 스플릿 패널 추가
+        splitter = wx.SplitterWindow(self)
+
         # 메인 패널 생성 및 추가
-        self.main_panel = AiPanel(self)
+        self.main_panel = AiPanel(splitter)
+
+        # 코드 패널 생성 및 추가
+        self.code_panel = CodePanel(splitter)
+
+        # 스플릿 패널 속성
+        splitter.SetMinimumPaneSize(600)
+        splitter.SplitVertically(self.main_panel, self.code_panel)
 
         # 오버레이 패널 생성 및 추가
         self.overlay_panel = SidePanel(self.main_panel)
