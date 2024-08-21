@@ -2,38 +2,62 @@ import wx
 
 
 class CodeBox(wx.Panel):
-    def __init__(self, parent, texts, language="python"):
+    # Todo => drag and drop , UI 수정
+    def __init__(self, parent, isWorkflow, texts, language="python"):
         super(CodeBox, self).__init__(parent)
-
-        self.texts = wx.StaticText(self, label=texts, pos=(20, 50))
-        self.language = wx.StaticText(self, label=language, pos=(20, 20))
-        self.texts.SetBackgroundColour("white")
-        self.language.SetBackgroundColour("white")
-        self.texts.SetForegroundColour("black")
-        self.language.SetForegroundColour("black")
-        self.texts.SetFont(wx.Font(12, wx.FONTFAMILY_DEFAULT,
-                                   wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
-        self.language.SetFont(wx.Font(12, wx.FONTFAMILY_DEFAULT,
-                                      wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
-        self.texts.Wrap(400)
-        self.language.Wrap(400)
+        # 박스의 크기
+        self.SetSize((540, 100))
+        selfWidth, selfHeight = self.GetSize()
+        print(selfWidth, selfHeight)
         self.SetBackgroundColour("blue")
-        self.SetSize(400, 100)
-        self.SetPosition((20, 20))
-        # 버튼들 추가
-        self.button1 = wx.Button(self, label="Run", pos=(20, 70))
-        self.button2 = wx.Button(self, label="Save", pos=(100, 70))
-        self.button3 = wx.Button(self, label="Copy", pos=(180, 70))
-        self.button4 = wx.Button(self, label="Paste", pos=(260, 70))
 
-        # 버튼 이벤트 바인딩
-        self.button1.Bind(wx.EVT_BUTTON, self.on_run)
-        self.button2.Bind(wx.EVT_BUTTON, self.on_save)
-        self.button3.Bind(wx.EVT_BUTTON, self.on_copy)
-        self.button4.Bind(wx.EVT_BUTTON, self.on_paste)
+        # 변수 내용 저장
+        self.text = texts
+        self.language = language
+
+        # 코딩언어
+        self.codeLanguage = wx.StaticText(
+            self, label=self.language, pos=(20, 20))
+        self.codeLanguage.SetBackgroundColour("white")
+        self.codeLanguage.SetForegroundColour("black")
+        self.codeLanguage.SetFont(wx.Font(12, wx.FONTFAMILY_DEFAULT,
+                                          wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
+        self.codeLanguage.Wrap(400)
+        # 코드
+        self.code = wx.TextCtrl(self, value=self.text, pos=(20, 40), size=(selfWidth - 40, selfHeight - 50),
+                                style=wx.NO_BORDER | wx.TE_MULTILINE | wx.TE_NO_VSCROLL | wx.TE_RICH2 | wx.TE_PROCESS_ENTER | wx.TE_PROCESS_TAB)
+        self.code.SetEditable(False)
+        self.code.SetBackgroundColour("white")
+        self.code.SetForegroundColour("black")
+        self.code.SetFont(wx.Font(12, wx.FONTFAMILY_DEFAULT,
+                                  wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
+        # self.code.Wrap(400)
+
+        # 버튼들 추가
+        # codeRun , codeCopy , codeEdit , isWorkflow False => codeToWorkFlow , isWorkflow True => codeboxDelete
+        self.runButton = wx.Button(
+            self, label="Run", pos=(selfWidth - 20 - 70 * 4, 20))
+        self.runButton.Bind(wx.EVT_BUTTON, self.on_run)
+
+        self.copyButton = wx.Button(
+            self, label="Copy", pos=(selfWidth - 20 - 70 * 3, 20))
+        self.copyButton.Bind(wx.EVT_BUTTON, self.on_copy)
+
+        self.editButton = wx.Button(
+            self, label="Edit", pos=(selfWidth - 20 - 70 * 2, 20))
+        self.editButton.Bind(wx.EVT_BUTTON, self.on_edit)
+
+        if (isWorkflow):
+            self.deleteButton = wx.Button(
+                self, label="Delete", pos=(selfWidth - 20 - 70 * 1, 20))
+            self.deleteButton.Bind(wx.EVT_BUTTON, self.on_delete)
+        else:
+            self.toWorkflowButton = wx.Button(
+                self, label="toWorkflow", pos=(selfWidth - 20 - 70 * 1, 20))
+            self.toWorkflowButton.Bind(wx.EVT_BUTTON, self.on_to_workflow)
 
     def on_run(self, event):
-        wx.MessageBox("Run Button Clicked!", "Info",
+        wx.MessageBox("language = " + self.language + "   texts = " + self.text, "Info",
                       wx.OK | wx.ICON_INFORMATION)
 
     def on_save(self, event):
@@ -46,4 +70,18 @@ class CodeBox(wx.Panel):
 
     def on_paste(self, event):
         wx.MessageBox("Paste Button Clicked!", "Info",
+                      wx.OK | wx.ICON_INFORMATION)
+
+    def on_edit(self, event):
+        if (self.code.IsEditable()):
+            self.code.SetEditable(False)
+        else:
+            self.code.SetEditable(True)
+
+    def on_delete(self, event):
+        wx.MessageBox("Delete Button Clicked!", "Info",
+                      wx.OK | wx.ICON_INFORMATION)
+
+    def on_to_workflow(self, event):
+        wx.MessageBox("toWorkflow Button Clicked!", "Info",
                       wx.OK | wx.ICON_INFORMATION)
