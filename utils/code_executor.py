@@ -4,6 +4,7 @@
 import subprocess
 import sys
 import io
+import os
 
 
 def execute_code(code):
@@ -22,3 +23,11 @@ def execute_code(code):
         return output
     except Exception as e:
         return f"코드 실행 중 오류 발생: \n{e}"
+
+def execute_pipeline(pipeline):
+    for block in pipeline:
+        print(f"Executing {block['name']}: {block['description']}")
+        exec(block['code'])
+
+def validate_path(path):
+    return os.path.exists(path)
