@@ -1,11 +1,10 @@
 import wx
+from .SVGButton import SVGButton
 
 
 class CodeBox(wx.Panel):
     def __init__(self, parent, isWorkflow, texts, language="python"):
         super(CodeBox, self).__init__(parent)
-        self.SetBackgroundColour("#FFFFFF")
-        self.SetSize(400, 100)
 
         # 변수 내용 저장
         self.text = texts
@@ -35,25 +34,25 @@ class CodeBox(wx.Panel):
         top_sizer.AddStretchSpacer(1)
 
         # 버튼들 추가 (우측 정렬을 위한 공간 추가)
-        self.runButton = wx.Button(top_panel, label="Run")
-        self.runButton.Bind(wx.EVT_BUTTON, self.on_run)
-        top_sizer.Add(self.runButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+        self.codePlayButton = SVGButton(top_panel, "gui/icons/CodePlay.svg", 20)
+        self.codePlayButton.set_on_click(self.on_run)
+        top_sizer.Add(self.codePlayButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
-        self.copyButton = wx.Button(top_panel, label="Copy")
-        self.copyButton.Bind(wx.EVT_BUTTON, self.on_copy)
+        self.copyButton = SVGButton(top_panel, "gui/icons/Copy.svg", 20)
+        self.copyButton.set_on_click(self.on_copy)
         top_sizer.Add(self.copyButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
-        self.editButton = wx.Button(top_panel, label="Edit")
-        self.editButton.Bind(wx.EVT_BUTTON, self.on_edit)
+        self.editButton = SVGButton(top_panel, "gui/icons/Edit.svg", 20)
+        self.editButton.set_on_click(self.on_edit)
         top_sizer.Add(self.editButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
         if isWorkflow:
-            self.deleteButton = wx.Button(top_panel, label="Delete")
-            self.deleteButton.Bind(wx.EVT_BUTTON, self.on_delete)
+            self.deleteButton = SVGButton(top_panel, "gui/icons/Delete.svg", 20)
+            self.deleteButton.set_on_click(self.on_delete)
             top_sizer.Add(self.deleteButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
         else:
-            self.toWorkflowButton = wx.Button(top_panel, label="toWorkflow")
-            self.toWorkflowButton.Bind(wx.EVT_BUTTON, self.on_to_workflow)
+            self.toWorkflowButton = SVGButton(top_panel, "gui/icons/ToWorkflow.svg", 20)
+            self.toWorkflowButton.set_on_click(self.on_to_workflow)
             top_sizer.Add(self.toWorkflowButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
         # 패널에 수평 박스 사이저 설정
