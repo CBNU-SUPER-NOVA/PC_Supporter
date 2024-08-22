@@ -5,7 +5,7 @@ class CodeBox(wx.Panel):
     def __init__(self, parent, isWorkflow, texts, language="python"):
         super(CodeBox, self).__init__(parent)
         self.SetBackgroundColour("#FFFFFF")
-        self.SetSize(400, 400)
+        self.SetSize(400, 100)
 
         # 변수 내용 저장
         self.text = texts
@@ -21,7 +21,7 @@ class CodeBox(wx.Panel):
         # 첫 번째 수평 박스 사이저 생성 (좌우 배치용)
         top_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        # 코딩언어 라벨 (좌측)
+        # 코딩언어 라벨 (좌측 정렬)
         self.codeLanguage = wx.StaticText(top_panel, label=self.language)
         self.codeLanguage.SetBackgroundColour("#1E1E1E")
         self.codeLanguage.SetForegroundColour("#FFFFFF")
@@ -29,35 +29,32 @@ class CodeBox(wx.Panel):
                                           wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
         self.codeLanguage.Wrap(400)
 
-        top_sizer.Add(self.codeLanguage, 0,
-                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 20)
+        # 좌측 정렬
+        top_sizer.Add(self.codeLanguage, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 0)
+        # 중간 공간 추가하여 버튼들을 우측으로 밀어내기
+        top_sizer.AddStretchSpacer(1)
 
-        # 버튼들 추가 (우측)
+        # 버튼들 추가 (우측 정렬을 위한 공간 추가)
         self.runButton = wx.Button(top_panel, label="Run")
         self.runButton.Bind(wx.EVT_BUTTON, self.on_run)
-        top_sizer.Add(self.runButton, 0,
-                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+        top_sizer.Add(self.runButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
         self.copyButton = wx.Button(top_panel, label="Copy")
         self.copyButton.Bind(wx.EVT_BUTTON, self.on_copy)
-        top_sizer.Add(self.copyButton, 0,
-                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+        top_sizer.Add(self.copyButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
         self.editButton = wx.Button(top_panel, label="Edit")
         self.editButton.Bind(wx.EVT_BUTTON, self.on_edit)
-        top_sizer.Add(self.editButton, 0,
-                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+        top_sizer.Add(self.editButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
         if isWorkflow:
             self.deleteButton = wx.Button(top_panel, label="Delete")
             self.deleteButton.Bind(wx.EVT_BUTTON, self.on_delete)
-            top_sizer.Add(self.deleteButton, 0,
-                          wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+            top_sizer.Add(self.deleteButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
         else:
             self.toWorkflowButton = wx.Button(top_panel, label="toWorkflow")
             self.toWorkflowButton.Bind(wx.EVT_BUTTON, self.on_to_workflow)
-            top_sizer.Add(self.toWorkflowButton, 0,
-                          wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+            top_sizer.Add(self.toWorkflowButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
         # 패널에 수평 박스 사이저 설정
         top_panel.SetSizer(top_sizer)
@@ -81,12 +78,12 @@ class CodeBox(wx.Panel):
 
         # 메인 수직 박스 사이저를 패널에 설정
         self.SetSizer(main_sizer)
-
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnResize)
 
     def OnPaint(self, event):
         width, height = self.GetSize()
+        radius = 15  # 둥근 모서리의 반지름 설정
 
         # 더블 버퍼링을 위한 장치 맥락 생성
         dc = wx.BufferedPaintDC(self)
@@ -95,13 +92,33 @@ class CodeBox(wx.Panel):
         # 그래픽 컨텍스트 생성
         gc = wx.GraphicsContext.Create(dc)
 
-        # 둥근 사각형 그리기
-        path = gc.CreatePath()
-        path.AddRoundedRectangle(0, 0, width, height, 15)
+        # 위쪽 모서리만 둥근 사각형 그리기 (path_top)
+        path_top = gc.CreatePath()
+        path_top.MoveToPoint(radius, 0)
+        path_top.AddLineToPoint(width - radius, 0)
+        path_top.AddArcToPoint(width, 0, width, radius, radius)  # 오른쪽 위 둥근 모서리
+        path_top.AddLineToPoint(width, 40)
+        path_top.AddLineToPoint(0, 40)
+        path_top.AddLineToPoint(0, radius)
+        path_top.AddArcToPoint(0, 0, radius, 0, radius)  # 왼쪽 위 둥근 모서리
+        path_top.CloseSubpath()
+        gc.SetBrush(wx.Brush("#1E1E1E"))  # 원하는 색상으로 변경
+        gc.SetPen(wx.Pen("#1E1E1E", 0))
+        gc.DrawPath(path_top)
 
+        # 아래쪽 모서리만 둥근 사각형 그리기 (path_bottom)
+        path_bottom = gc.CreatePath()
+        path_bottom.MoveToPoint(0, 40)
+        path_bottom.AddLineToPoint(0, height - radius)
+        path_bottom.AddArcToPoint(0, height, radius, height, radius)  # 왼쪽 아래 둥근 모서리
+        path_bottom.AddLineToPoint(width - radius, height)
+        path_bottom.AddArcToPoint(width, height, width, height - radius, radius)  # 오른쪽 아래 둥근 모서리
+        path_bottom.AddLineToPoint(width, 40)
+        path_bottom.AddLineToPoint(0, 40)
+        path_bottom.CloseSubpath()
         gc.SetBrush(wx.Brush("#000000"))
-        gc.SetPen(wx.Pen("#000000", 4))
-        gc.DrawPath(path)
+        gc.SetPen(wx.Pen("#000000", 0))
+        gc.DrawPath(path_bottom)
 
     def OnResize(self, event):
         # 리사이즈 시 다시 그리기
