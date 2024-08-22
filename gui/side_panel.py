@@ -1,7 +1,7 @@
 import wx
 import wx.svg
-from componets.SVGButton import SVGButton
-from componets.RoundedPanel import RoundedPanel
+from gui.componets.SVGButton import SVGButton
+from gui.componets.RoundedPanel import RoundedPanel
 
 string_array = ["apple", "banana", "cherry", "date",
                 "나는 문어", "꿈을 꾸는 문어", " 꿈속에서는 무엇이든지 할수있어", " 으아악ㅇㄱㅇ각"]

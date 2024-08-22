@@ -1,5 +1,5 @@
 import wx
-from componets.SVGButton import SVGButton
+from gui.componets.SVGButton import SVGButton
 
 
 class AiPanel(wx.Panel):
@@ -14,6 +14,11 @@ class AiPanel(wx.Panel):
         self.NewChatButton.pos(60, 10)
         self.NewChatButton.set_on_click(self.newChatButtonClick)
 
+        # Send 버튼 생성
+        self.SendButton = SVGButton(self, "gui/icons/NewChat.svg", 40)
+        self.SendButton.pos(300, 300)
+        self.SendButton.set_on_click(self.sendButtonClick)
+
     def bindSideBarButton(self, handler):
         def wrapped_handler(event):
             handler(event)
@@ -24,3 +29,9 @@ class AiPanel(wx.Panel):
 
     def newChatButtonClick(self, event):
         self.Parent.newChat()
+
+    def sendButtonClick(self, event):
+        # from ..gpt_api.api import send_to_gpt
+        # print(send_to_gpt("Hello, World!"))
+        from gpt_api.api import send_to_gpt
+        print(send_to_gpt("파이썬으로 아주아주 쌈뽕한 코드 작성해줘 대답은 한글로 할것"))

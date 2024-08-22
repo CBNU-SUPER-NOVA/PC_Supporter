@@ -1,6 +1,6 @@
 import wx
-from componets.CodeBox import CodeBox
-from componets.SVGButton import SVGButton
+from gui.componets.CodeBox import CodeBox
+from gui.componets.SVGButton import SVGButton
 
 # 임시데이터
 json = [("ls -al", "bash"),

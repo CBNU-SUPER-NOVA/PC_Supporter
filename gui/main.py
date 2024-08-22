@@ -1,7 +1,7 @@
 import wx
-from ai_panel import AiPanel
-from side_panel import SidePanel
-from code_panel import CodePanel
+from gui.ai_panel import AiPanel
+from gui.side_panel import SidePanel
+from gui.code_panel import CodePanel
 
 
 class MainFrame(wx.Frame):
