@@ -14,6 +14,11 @@ class AiPanel(wx.Panel):
         self.NewChatButton.pos(60, 10)
         self.NewChatButton.set_on_click(self.newChatButtonClick)
 
+        # prompt입력 창 생성
+        self.PromptInput = wx.TextCtrl(self, style=wx.TE_MULTILINE)
+        self.PromptInput.SetSize(400, 200)
+        self.PromptInput.SetPosition((10, 60))
+
         # Send 버튼 생성
         self.SendButton = SVGButton(self, "gui/icons/NewChat.svg", 40)
         self.SendButton.pos(300, 300)
@@ -31,7 +36,8 @@ class AiPanel(wx.Panel):
         self.Parent.newChat()
 
     def sendButtonClick(self, event):
-        # from ..gpt_api.api import send_to_gpt
-        # print(send_to_gpt("Hello, World!"))
+        textvalue = self.PromptInput.GetValue()
+        self.PromptInput.Clear()
         from gpt_api.api import send_to_gpt
-        print(send_to_gpt("파이썬으로 아주아주 쌈뽕한 코드 작성해줘 대답은 한글로 할것"))
+        json = send_to_gpt(textvalue)
+        print(json)
