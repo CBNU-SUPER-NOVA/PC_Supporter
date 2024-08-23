@@ -3,3 +3,4 @@
 
 openai
 PyQt5
+wxpython
