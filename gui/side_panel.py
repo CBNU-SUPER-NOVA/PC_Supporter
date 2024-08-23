@@ -1,46 +1,84 @@
 import wx
-import wx.svg
 from gui.componets.SVGButton import SVGButton
 from gui.componets.RoundedPanel import RoundedPanel
 
 string_array = ["apple", "banana", "cherry", "date",
+                "나는 문어", "꿈을 꾸는 문어", " 꿈속에서는 무엇이든지 할수있어", " 으아악ㅇㄱㅇ각",
+                "나는 문어", "꿈을 꾸는 문어", " 꿈속에서는 무엇이든지 할수있어", " 으아악ㅇㄱㅇ각",
+                "나는 문어", "꿈을 꾸는 문어", " 꿈속에서는 무엇이든지 할수있어", " 으아악ㅇㄱㅇ각",
+                "나는 문어", "꿈을 꾸는 문어", " 꿈속에서는 무엇이든지 할수있어", " 으아악ㅇㄱㅇ각",
                 "나는 문어", "꿈을 꾸는 문어", " 꿈속에서는 무엇이든지 할수있어", " 으아악ㅇㄱㅇ각"]
 
 
 class SidePanel(wx.Panel):
     def __init__(self, parent):
-        super(SidePanel, self).__init__(
-            parent, size=(400, 800))
+        super(SidePanel, self).__init__(parent, size=(400, 800))
         self.SetBackgroundColour("#D0D0D0")
 
         # 더블 버퍼링 활성화
         self.SetDoubleBuffered(True)
 
+        # 상단 버튼들의 박스사이저 생성
+        top_sizer = wx.BoxSizer(wx.HORIZONTAL)
+
         # 사이드바 버튼 생성
         self.sideBarButton = SVGButton(self, "gui/icons/SideBar.svg", 40)
-        self.sideBarButton.pos(10, 10)
+        top_sizer.Add(self.sideBarButton, 0,
+                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
         self.sideBarButton.set_on_click(self.sideBarButtonClick)
+
         # 새 채팅 추가 버튼
         self.newChatButton = SVGButton(self, "gui/icons/NewChat.svg", 40)
-        self.newChatButton.pos(60, 10)
+        top_sizer.Add(self.newChatButton, 0,
+                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
         self.newChatButton.set_on_click(self.newChatButtonClick)
+
         # 세팅 버튼 생성
         self.settingButton = SVGButton(self, "gui/icons/Setting.svg", 40)
-        self.settingButton.pos(350, 10)
+        top_sizer.Add(self.settingButton, 0,
+                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
         self.settingButton.set_on_click(self.settingButtonClick)
+
         # prompt setting button
         self.promptSettingButton = SVGButton(
             self, "gui/icons/PromptSetting.svg", 40)
-        self.promptSettingButton.pos(300, 10)
-        self.promptSettingButton.set_on_click(self.settingButtonClick)
+        top_sizer.Add(self.promptSettingButton, 0,
+                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+        self.promptSettingButton.set_on_click(self.promptSettingButtonClick)
 
-        # workflow들 출력
-        for index, workflow in enumerate(string_array):
-            self.workflow = RoundedPanel(self, (360, 40), 20, workflow)
-            self.workflow.SetPosition((20, 60 + 60 * index))
+        # main_sizer 생성
+        main_sizer = wx.BoxSizer(wx.VERTICAL)
+        main_sizer.Add(top_sizer, 0, wx.EXPAND | wx.TOP, 10)
+
+        # 스크롤 가능한 영역 생성
+        scroll_panel = wx.ScrolledWindow(self, style=wx.VSCROLL)
+        scroll_panel.SetBackgroundColour("#D0D0D0")
+        scroll_panel.SetScrollRate(5, 5)
+
+        # workflow들을 출력할 sizer 생성
+        workflow_sizer = wx.BoxSizer(wx.VERTICAL)
+        for workflow in string_array:
+            workflow_panel = RoundedPanel(
+                scroll_panel, size=(340, 40), radius=20, texts=workflow, alignment="left")
+            workflow_sizer.Add(workflow_panel, 0, wx.ALL | wx.EXPAND, 5)
+
+        scroll_panel.SetSizer(workflow_sizer)
+        workflow_sizer.Fit(scroll_panel)
+
+        main_sizer.Add(scroll_panel, 1, wx.EXPAND | wx.ALL, 10)
+
+        # 메인 사이저 설정
+        self.SetSizer(main_sizer)
+        self.Layout()  # 초기 레이아웃 설정
+
+        self.Bind(wx.EVT_SIZE, self.on_resize)
 
         # 초기에는 숨김
         self.Hide()
+
+    def on_resize(self, event):
+        self.Layout()  # 레이아웃 갱신
+        event.Skip()
 
     def sideBarButtonClick(self, event):
         self.Hide()
