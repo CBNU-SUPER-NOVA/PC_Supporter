@@ -30,9 +30,8 @@ def send_to_gpt(prompt):
     response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system",
-                "content": "You are a helpful assistant designed to output JSON."},
-            {"role": "user", "content": prompt}
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": f"Please output the result as a code block:\n{prompt}"}
         ],
         max_tokens=100
     )
