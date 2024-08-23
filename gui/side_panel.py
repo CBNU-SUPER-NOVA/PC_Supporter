@@ -33,17 +33,20 @@ class SidePanel(wx.Panel):
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
         self.newChatButton.set_on_click(self.newChatButtonClick)
 
+        # 중간 공간 추가하여 버튼들을 우측으로 밀어내기
+        top_sizer.AddStretchSpacer(1)
+
         # 세팅 버튼 생성
         self.settingButton = SVGButton(self, "gui/icons/Setting.svg", 40)
         top_sizer.Add(self.settingButton, 0,
-                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+                      wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
         self.settingButton.set_on_click(self.settingButtonClick)
 
         # prompt setting button
         self.promptSettingButton = SVGButton(
             self, "gui/icons/PromptSetting.svg", 40)
         top_sizer.Add(self.promptSettingButton, 0,
-                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+                      wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
         self.promptSettingButton.set_on_click(self.promptSettingButtonClick)
 
         # main_sizer 생성
@@ -53,7 +56,7 @@ class SidePanel(wx.Panel):
         # 스크롤 가능한 영역 생성
         scroll_panel = wx.ScrolledWindow(self, style=wx.VSCROLL)
         scroll_panel.SetBackgroundColour("#D0D0D0")
-        scroll_panel.SetScrollRate(5, 5)
+        scroll_panel.SetScrollRate(20, 20)
 
         # workflow들을 출력할 sizer 생성
         workflow_sizer = wx.BoxSizer(wx.VERTICAL)
