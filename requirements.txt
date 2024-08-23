@@ -2,5 +2,4 @@
 # `pip install -r requirements.txt`를 사용하여 나열된 모든 패키지 목록을 설치하십시오.
 
 openai
-PyQt5
 wxpython
