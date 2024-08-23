@@ -61,6 +61,7 @@ class SidePanel(wx.Panel):
             workflow_panel = RoundedPanel(
                 scroll_panel, size=(340, 40), radius=20, texts=workflow, alignment="left")
             workflow_sizer.Add(workflow_panel, 0, wx.ALL | wx.EXPAND, 5)
+            workflow_panel.on_click(self.on_workflow_click)
 
         scroll_panel.SetSizer(workflow_sizer)
         workflow_sizer.Fit(scroll_panel)
@@ -81,9 +82,8 @@ class SidePanel(wx.Panel):
         event.Skip()
 
     def sideBarButtonClick(self, event):
+        self.Parent.Parent.main_panel.Enable(True)
         self.Hide()
-        self.Parent.SidebarButton.Show()
-        self.Parent.NewChatButton.Show()
 
     def settingButtonClick(self, event):
         print("Setting Button Clicked")
@@ -93,3 +93,6 @@ class SidePanel(wx.Panel):
 
     def promptSettingButtonClick(self, event):
         print("Prompt Setting Button Clicked")
+
+    def on_workflow_click(self, event):
+        print("Workflow Clicked")
