@@ -1,6 +1,7 @@
 import wx
 from gui.componets.CodeBox import CodeBox
 from gui.componets.SVGButton import SVGButton
+from gui.componets.RoundedPanel import RoundedPanel
 
 # 임시데이터
 json = [("ls -al", "bash"),
@@ -10,7 +11,7 @@ json = [("ls -al", "bash"),
         ("print('Hello, World!')", "python"),
         ("print('Hello, World!')", "python"),
         ("print('Hello, World!')", "python"),
-        ("print('Hello, World!')", "python"),
+        ("print('Hello, World!'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)\npruint\n\n\nratasdf", "python"),
         ("print('Hello, World!')", "python")]
 
 
@@ -51,9 +52,11 @@ class CodePanel(wx.Panel):
         main_sizer.Add(scrolled_window, 1, wx.EXPAND | wx.ALL, 5)
 
         # 독립적인 버튼 생성
-        runButton = wx.Button(self, label="Workflow Run")
-        runButton.Bind(wx.EVT_BUTTON, self.workflowRun)
-        main_sizer.Add(runButton, 0, wx.ALIGN_CENTER | wx.ALL, 10)
+        WorkflowRunButton = RoundedPanel(
+            self, size=(300, 50), radius=25, alignment="center", texts="Workflow Run", color="#D0D0D0", hover_color="#C0C0C0")
+        WorkflowRunButton.on_click(self.workflowRun)
+        main_sizer.Add(WorkflowRunButton, 0, wx.ALIGN_CENTER | wx.ALL, 10)
+
         self.SetSizer(main_sizer)
 
         # 창 크기 조정 시 가로 크기를 다시 맞춤

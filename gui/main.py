@@ -11,33 +11,20 @@ class MainFrame(wx.Frame):
         self.SetTitle("PCSupporter")
 
         # 스플릿 패널 추가
-        splitter = wx.SplitterWindow(self)
+        self.splitter = wx.SplitterWindow(self)
 
         # 메인 패널 생성 및 추가
-        self.main_panel = AiPanel(splitter)
+        self.main_panel = AiPanel(self.splitter)
 
         # 코드 패널 생성 및 추가
-        self.code_panel = CodePanel(splitter)
+        self.code_panel = CodePanel(self.splitter)
 
         # 스플릿 패널 속성
-        splitter.SetMinimumPaneSize(600)
-        splitter.SplitVertically(self.main_panel, self.code_panel)
+        self.splitter.SetMinimumPaneSize(600)
+        self.splitter.SplitVertically(self.main_panel, self.code_panel)
 
         # 오버레이 패널 생성 및 추가
-        self.overlay_panel = SidePanel(self.main_panel)
-
-        # 버튼 이벤트 핸들러 바인딩
-        self.main_panel.bindSideBarButton(self.on_toggle_overlay)
-
-    def on_toggle_overlay(self, event):
-        if self.overlay_panel.IsShown():
-            self.overlay_panel.Hide()  # 오버레이 패널 숨기기
-        else:
-            self.overlay_panel.Show()  # 오버레이 패널 보이기
-        self.main_panel.Refresh()  # 화면 갱신
-
-    def newChat(self):
-        print("newChat created")
+        self.overlay_panel = SidePanel(self.splitter)
 
 
 def main():

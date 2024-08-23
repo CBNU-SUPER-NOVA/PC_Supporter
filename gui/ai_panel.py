@@ -8,6 +8,7 @@ class AiPanel(wx.Panel):
         self.SetBackgroundColour("white")
         # 사이드바 버튼 생성
         self.SidebarButton = SVGButton(self, "gui/icons/SideBar.svg", 40)
+        self.SidebarButton.set_on_click(self.SidebarButtonClick)
         self.SidebarButton.pos(10, 10)
         # New chat 버튼 생성
         self.NewChatButton = SVGButton(self, "gui/icons/NewChat.svg", 40)
@@ -24,13 +25,10 @@ class AiPanel(wx.Panel):
         self.SendButton.pos(300, 300)
         self.SendButton.set_on_click(self.sendButtonClick)
 
-    def bindSideBarButton(self, handler):
-        def wrapped_handler(event):
-            handler(event)
-            self.SidebarButton.Hide()
-            self.NewChatButton.Hide()
-        # 외부에서 이벤트 핸들러를 바인딩할 수 있도록 메서드 추가
-        self.SidebarButton.set_on_click(wrapped_handler)
+    def SidebarButtonClick(self, event):
+        self.Parent.Parent.overlay_panel.Show()
+        self.Enable(False)
+        # asdf
 
     def newChatButtonClick(self, event):
         self.Parent.newChat()
