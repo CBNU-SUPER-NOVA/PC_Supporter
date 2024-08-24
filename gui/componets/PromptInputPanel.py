@@ -7,10 +7,10 @@ class PromptInputPanel(wx.Panel):
         super(PromptInputPanel, self).__init__(parent)
 
         self.basecolor = "#DDDDDD"
-        self.padding = 10  # 패딩 설정
+        self.padding = 16  # 패딩 설정
         self.fixed_width = 400  # 고정된 너비 설정
-        self.initial_height = 40  # 초기 높이 설정
         self.current_lines = 1  # 현재 라인 수를 추적
+        self.initial_height = 26   # 초기 높이 설정
 
         # 배경 색상 설정
         self.SetBackgroundColour("white")
@@ -25,7 +25,7 @@ class PromptInputPanel(wx.Panel):
         self.prompt_input.SetBackgroundColour(self.basecolor)
 
         # 폰트 크기 설정
-        font = wx.Font(10, wx.FONTFAMILY_DEFAULT,
+        font = wx.Font(16, wx.FONTFAMILY_DEFAULT,
                        wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
         self.prompt_input.SetFont(font)
 
@@ -36,7 +36,7 @@ class PromptInputPanel(wx.Panel):
             wx.Size(self.fixed_width, self.initial_height))
 
         # 초기 최대 높이 설정 (이 높이까지는 스크롤 없이 확장됨)
-        self.max_height = 80
+        self.max_height = self.initial_height * 5
 
         sizer.Add(self.prompt_input, 1, wx.EXPAND | wx.ALL, self.padding)
 
@@ -83,7 +83,9 @@ class PromptInputPanel(wx.Panel):
             text_height = self.prompt_input.GetCharHeight() * lines
 
             # 창의 높이 설정 (최대 높이까지 증가)
-            new_height = min(text_height + 20, self.max_height)
+            new_height = min(text_height + self.padding, self.max_height)
+
+            self.prompt_input.SetMinSize(wx.Size(self.fixed_width, new_height))
             self.prompt_input.SetSize(wx.Size(self.fixed_width, new_height))
 
             # 패널의 크기 업데이트 및 레이아웃 재조정
@@ -107,7 +109,7 @@ class PromptInputPanel(wx.Panel):
         self.prompt_input.SetSize(
             wx.Size(self.fixed_width, self.initial_height))
         self.SetMinSize(
-            wx.Size(self.fixed_width, self.initial_height + self.padding))
+            wx.Size(self.fixed_width, self.initial_height))
         self.current_lines = 1  # 라인 수를 초기 상태로 복원
         self.Layout()
         self.Fit()
