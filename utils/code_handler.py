@@ -4,14 +4,14 @@
 from .code_extractor import extract_code
 from .code_executor import execute_code
 
-
-def handle_code(text):
-    code = extract_code(text)
-    if code:
-        print("추출된 코드:")
-        print(code)
-        result = execute_code(code)
-        print("실행 결과:")
-        print(result)
-    else:
-        print("코드를 추출할 수 없습니다.")
+def handle_code_blocks(code_blocks):
+    """
+    주어진 코드 블록들을 처리하고, 실행 가능한 형태로 변환합니다.
+    :param code_blocks: 코드 블록 딕셔너리 리스트
+    :return: 실행 가능한 코드 블록 리스트
+    """
+    executable_blocks = []
+    for block in code_blocks:
+        if block['type'] in ['python', 'bash']:
+            executable_blocks.append(block)
+    return executable_blocks

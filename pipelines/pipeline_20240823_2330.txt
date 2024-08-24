@@ -1,6 +1,0 @@
-# Test Block 1 : This is a test code block 1
-print('Hello from Block 1')
-
-# Test Block 2 : This is a test code block 2
-print('Hello from Block 2')
-
