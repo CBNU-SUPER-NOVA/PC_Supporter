@@ -43,7 +43,6 @@ class SVGButton(wx.Panel):
 
     # 마우스 hover
     def on_enter(self, event):
-        print("HOVER")
         self.is_hovered = True
         self.Refresh()
 
