@@ -2,9 +2,13 @@ import wx
 
 
 class MyChatBox(wx.Panel):
-    def __init__(self, parent, message):
+    def __init__(self, parent, message, text_color="#000000", font_size=10, font_family=wx.FONTFAMILY_DEFAULT):
         super(MyChatBox, self).__init__(parent)
-        self.color = "#AAAAAA"
+        self.color = "#F7F7F8"
+        self.text_color = text_color
+        self.font_size = font_size
+        self.font_family = font_family
+
         # 메인 사이저 생성 (수평 정렬)
         main_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -15,6 +19,14 @@ class MyChatBox(wx.Panel):
         # 메시지 레이블 생성
         message_label = wx.StaticText(rounded_panel, label=message)
         message_label.Wrap(300)  # 너비 제한 설정
+
+        # 텍스트 색상 설정
+        message_label.SetForegroundColour(self.text_color)
+
+        # 폰트 설정
+        font = wx.Font(self.font_size, self.font_family,
+                       wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
+        message_label.SetFont(font)
 
         # 둥근 박스 안에 레이블을 포함하는 사이저 생성
         rounded_sizer = wx.BoxSizer(wx.HORIZONTAL)

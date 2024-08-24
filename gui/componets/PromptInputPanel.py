@@ -6,7 +6,7 @@ class PromptInputPanel(wx.Panel):
     def __init__(self, parent):
         super(PromptInputPanel, self).__init__(parent)
 
-        self.basecolor = "#DDDDDD"
+        self.basecolor = "#F7F7F8"
         self.padding = 14  # 패딩 설정
         self.fixed_width = 400  # 고정된 너비 설정
         self.current_lines = 1  # 현재 라인 수를 추적

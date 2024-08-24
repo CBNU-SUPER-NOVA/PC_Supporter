@@ -53,7 +53,7 @@ class CodePanel(wx.Panel):
 
         # 독립적인 버튼 생성
         WorkflowRunButton = RoundedPanel(
-            self, size=(300, 50), radius=25, alignment="center", texts="Workflow Run", color="#D0D0D0", hover_color="#C0C0C0")
+            self, size=(300, 50), radius=25, alignment="center", texts="Workflow Run", color="#F7F7F8", hover_color="#C0C0C0")
         WorkflowRunButton.on_click(self.workflowRun)
         main_sizer.Add(WorkflowRunButton, 0, wx.ALIGN_CENTER | wx.ALL, 10)
 
