@@ -1,7 +1,10 @@
 import wx
+import json
 from gui.componets.CodeBox import CodeBox
 from gui.componets.SVGButton import SVGButton
 from gui.componets.RoundedPanel import RoundedPanel
+from utils.code_handler import handle_code_blocks
+from utils.code_pipeline import create_pipeline ,save_pipeline_to_file, load_pipeline_from_file
 
 # 임시데이터
 json = [("ls -al", "bash"),
@@ -57,6 +60,21 @@ class CodePanel(wx.Panel):
         self.GetSizer().Layout()
         self.scrolled_window.FitInside()  # 스크롤 윈도우 내부 크기 재조정
         event.Skip()
+
+    def RemoveCodeBlock(self, code_box):
+        # 'X' 버튼이 클릭된 CodeBox를 제거하는 메서드
+        self.sizer.Hide(code_box)
+        self.sizer.Remove(code_box)
+        self.code_blocks = [block for block in self.code_blocks if block['data'] != code_box.text]
+        self.update_ui()
+        save_pipeline_to_file(self.code_blocks, f"{self.conversation_id}_pipeline.json")
+
+    def update_ui(self):
+        # UI 업데이트: 기존 코드 블록들 제거 후 새로 그리기
+        self.scrolled_window.SetSizer(self.sizer)
+        self.sizer.Layout()
+        self.scrolled_window.FitInside()
+        self.scrolled_window.SetVirtualSize((self.GetClientSize().GetWidth(), self.sizer.GetMinSize().GetHeight()))
 
     def workflowRun(self, code):
         print("workflowRun")

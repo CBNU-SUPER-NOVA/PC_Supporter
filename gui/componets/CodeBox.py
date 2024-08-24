@@ -219,8 +219,16 @@ class CodeBox(wx.Panel):
         self.editButton.Refresh()  # 버튼 상태 업데이트
 
     def on_delete(self, event):
-        wx.MessageBox("Delete Button Clicked!", "Info",
-                      wx.OK | wx.ICON_INFORMATION)
+    # 삭제 버튼 클릭 시 이벤트 처리
+        parent = self.GetParent()  # ScrolledWindow
+        grandparent = parent.GetParent()  # CodePanel
+
+        if hasattr(grandparent, 'RemoveCodeBlock'):
+            grandparent.RemoveCodeBlock(self)
+        else:
+            wx.MessageBox("코드 블록을 제거할 수 없습니다.", "Error", 
+                          wx.OK | wx.ICON_ERROR)
+
 
     def on_to_workflow(self, event):
         wx.MessageBox("toWorkflow Button Clicked!",
