@@ -29,31 +29,40 @@ class CodeBox(wx.Panel):
         self.codeLanguage.Wrap(400)
 
         # 좌측 정렬
-        top_sizer.Add(self.codeLanguage, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 0)
+        top_sizer.Add(self.codeLanguage, 0,
+                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 0)
         # 중간 공간 추가하여 버튼들을 우측으로 밀어내기
         top_sizer.AddStretchSpacer(1)
 
         # 버튼들 추가 (우측 정렬을 위한 공간 추가)
-        self.codePlayButton = SVGButton(top_panel, "gui/icons/CodePlay.svg", 20)
+        self.codePlayButton = SVGButton(
+            top_panel, "gui/icons/CodePlay.svg", 20)
         self.codePlayButton.set_on_click(self.on_run)
-        top_sizer.Add(self.codePlayButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+        top_sizer.Add(self.codePlayButton, 0,
+                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
         self.copyButton = SVGButton(top_panel, "gui/icons/Copy.svg", 20)
         self.copyButton.set_on_click(self.on_copy)
-        top_sizer.Add(self.copyButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+        top_sizer.Add(self.copyButton, 0,
+                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
         self.editButton = SVGButton(top_panel, "gui/icons/Edit.svg", 20)
         self.editButton.set_on_click(self.on_edit)
-        top_sizer.Add(self.editButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+        top_sizer.Add(self.editButton, 0,
+                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
         if isWorkflow:
-            self.deleteButton = SVGButton(top_panel, "gui/icons/Delete.svg", 20)
+            self.deleteButton = SVGButton(
+                top_panel, "gui/icons/Delete.svg", 20)
             self.deleteButton.set_on_click(self.on_delete)
-            top_sizer.Add(self.deleteButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+            top_sizer.Add(self.deleteButton, 0,
+                          wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
         else:
-            self.toWorkflowButton = SVGButton(top_panel, "gui/icons/ToWorkflow.svg", 20)
+            self.toWorkflowButton = SVGButton(
+                top_panel, "gui/icons/ToWorkflow.svg", 20)
             self.toWorkflowButton.set_on_click(self.on_to_workflow)
-            top_sizer.Add(self.toWorkflowButton, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+            top_sizer.Add(self.toWorkflowButton, 0,
+                          wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
         # 패널에 수평 박스 사이저 설정
         top_panel.SetSizer(top_sizer)
@@ -109,9 +118,11 @@ class CodeBox(wx.Panel):
         path_bottom = gc.CreatePath()
         path_bottom.MoveToPoint(0, 40)
         path_bottom.AddLineToPoint(0, height - radius)
-        path_bottom.AddArcToPoint(0, height, radius, height, radius)  # 왼쪽 아래 둥근 모서리
+        path_bottom.AddArcToPoint(
+            0, height, radius, height, radius)  # 왼쪽 아래 둥근 모서리
         path_bottom.AddLineToPoint(width - radius, height)
-        path_bottom.AddArcToPoint(width, height, width, height - radius, radius)  # 오른쪽 아래 둥근 모서리
+        path_bottom.AddArcToPoint(
+            width, height, width, height - radius, radius)  # 오른쪽 아래 둥근 모서리
         path_bottom.AddLineToPoint(width, 40)
         path_bottom.AddLineToPoint(0, 40)
         path_bottom.CloseSubpath()
