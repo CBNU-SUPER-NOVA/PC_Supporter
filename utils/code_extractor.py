@@ -5,10 +5,6 @@ import re
 
 
 def extract_code(text):
-    """
-    주어진 텍스트에서 마크다운 코드 블록을 제거하고, 언어별로 코드 블록을 분리합니다.
-    빈 코드 블록도 'text' 항목으로 추가합니다.
-    """
     # 마크다운 코드 블록 패턴 정의
     code_block_pattern = re.compile(r'```(\w*)\n(.*?)\n```', re.DOTALL)
     # 코드 블록을 저장할 리스트
@@ -43,6 +39,3 @@ def extract_code(text):
 
     # 빈 항목 제거
     return [(block_type, content) for block_type, content in blocks if content]
-
-
-print(extract_code(text))

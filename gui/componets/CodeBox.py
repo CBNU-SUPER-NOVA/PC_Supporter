@@ -1,6 +1,8 @@
 import wx
 from .SVGButton import SVGButton
 
+from utils.code_executor import execute_code
+
 
 class CodeBox(wx.Panel):
     def __init__(self, parent, isWorkflow, texts, language="python"):
@@ -136,7 +138,15 @@ class CodeBox(wx.Panel):
         event.Skip()
 
     def on_run(self, event):
-        wx.MessageBox("language = " + self.language + "   texts = " + self.text, "Info",
+        # 실행할 코드와 언어를 정의
+        code = self.text
+        language = self.language
+
+        # 코드 실행
+        output = execute_code(code, language)
+
+        # 결과를 메시지 박스로 표시
+        wx.MessageBox(f"language = {language}\ntexts = {code}\n\nOutput:\n{output}", "Info",
                       wx.OK | wx.ICON_INFORMATION)
 
     def on_copy(self, event):
