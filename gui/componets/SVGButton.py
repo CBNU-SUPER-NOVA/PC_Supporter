@@ -3,7 +3,7 @@ import wx.svg
 
 
 class SVGButton(wx.Panel):
-    def __init__(self, parent, URL, size, corner_radius=10):
+    def __init__(self, parent, URL, size, corner_radius=10, hover_color="#F7F7F8"):
         super(SVGButton, self).__init__(parent)
         self.SetMinSize((size, size))  # 최소 크기 설정
         self.SetSizeHints(size, size)  # 크기 힌트 설정
@@ -16,7 +16,7 @@ class SVGButton(wx.Panel):
         self.Bind(wx.EVT_LEAVE_WINDOW, self.on_leave)
 
         self.is_hovered = False
-        self.hover_color = "#F7F7F8"  # 호버 시 배경색
+        self.hover_color = hover_color  # 호버 시 배경색
         self.corner_radius = corner_radius  # 둥근 모서리 반경
 
     def on_paint(self, event):
@@ -43,6 +43,7 @@ class SVGButton(wx.Panel):
 
     # 마우스 hover
     def on_enter(self, event):
+        print("HOVER")
         self.is_hovered = True
         self.Refresh()
 

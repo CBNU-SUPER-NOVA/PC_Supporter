@@ -29,14 +29,16 @@ class SidePanel(wx.Panel):
         top_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
         # 사이드바 버튼 생성
-        self.sideBarButton = SVGButton(self, "gui/icons/SideBar.svg", 40)
+        self.sideBarButton = SVGButton(
+            self, "gui/icons/SideBar.svg", 40, hover_color="#AAAAAA")
         self.sideBarButton.SetBackgroundColour(self.background_color)
         top_sizer.Add(self.sideBarButton, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
         self.sideBarButton.set_on_click(self.sideBarButtonClick)
 
         # 새 채팅 추가 버튼
-        self.newChatButton = SVGButton(self, "gui/icons/NewChat.svg", 40)
+        self.newChatButton = SVGButton(
+            self, "gui/icons/NewChat.svg", 40, hover_color="#AAAAAA")
         self.newChatButton.SetBackgroundColour(self.background_color)
         top_sizer.Add(self.newChatButton, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
@@ -46,7 +48,8 @@ class SidePanel(wx.Panel):
         top_sizer.AddStretchSpacer(1)
 
         # 세팅 버튼 생성
-        self.settingButton = SVGButton(self, "gui/icons/Setting.svg", 40)
+        self.settingButton = SVGButton(
+            self, "gui/icons/Setting.svg", 40, hover_color="#AAAAAA")
         self.settingButton.SetBackgroundColour(self.background_color)
         top_sizer.Add(self.settingButton, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
@@ -54,7 +57,7 @@ class SidePanel(wx.Panel):
 
         # prompt setting button
         self.promptSettingButton = SVGButton(
-            self, "gui/icons/PromptSetting.svg", 40)
+            self, "gui/icons/PromptSetting.svg", 40, hover_color="#AAAAAA")
         self.promptSettingButton.SetBackgroundColour(self.background_color)
         top_sizer.Add(self.promptSettingButton, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
