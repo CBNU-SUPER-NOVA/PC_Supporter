@@ -1,5 +1,6 @@
 import wx
 from .SVGButton import SVGButton
+from .EditButton import EditButton
 from utils.code_executor import execute_code
 
 
@@ -52,7 +53,7 @@ class CodeBox(wx.Panel):
         top_sizer.Add(self.copyButton, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
-        self.editButton = SVGButton(top_panel, "gui/icons/Edit.svg", 20)
+        self.editButton = EditButton(top_panel, "gui/icons/Edit.svg", 20)
         self.editButton.set_on_click(self.on_edit)
         top_sizer.Add(self.editButton, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
@@ -93,7 +94,6 @@ class CodeBox(wx.Panel):
 
         # 텍스트가 변경될 때 이벤트 바인딩
         self.code.Bind(wx.EVT_TEXT, self.OnTextChange)
-        self.code.Bind(wx.EVT_KEY_UP, self.OnKeyUp)  # 키보드 입력 이벤트 바인딩
 
         # 코드 입력 상자를 메인 수직 박스 사이저에 추가
         main_sizer.Add(self.code, 1, wx.EXPAND | wx.ALL, self.padding)
@@ -156,12 +156,6 @@ class CodeBox(wx.Panel):
     def OnTextChange(self, event):
         self.update_size()
 
-    def OnKeyUp(self, event):
-        # Enter 키를 눌렀을 때 크기를 업데이트
-        if event.GetKeyCode() == wx.WXK_RETURN:
-            self.update_size()
-        event.Skip()
-
     def update_size(self, initial=False):
         # 현재 텍스트에서 라인의 수를 계산
         lines = self.code.GetNumberOfLines()
@@ -169,8 +163,6 @@ class CodeBox(wx.Panel):
         # 초기 렌더링 시에도 크기 조정
         if initial or lines != self.current_lines:
             self.current_lines = lines
-            print(self.GetSize())
-
             # 텍스트 높이 측정
             text_height = self.code.GetCharHeight() * lines
 
@@ -219,8 +211,12 @@ class CodeBox(wx.Panel):
     def on_edit(self, event):
         if self.code.IsEditable():
             self.code.SetEditable(False)
+            self.editButton.is_active = False  # 활성화 해제
         else:
             self.code.SetEditable(True)
+            self.editButton.is_active = True  # 활성화 상태로 설정
+
+        self.editButton.Refresh()  # 버튼 상태 업데이트
 
     def on_delete(self, event):
         wx.MessageBox("Delete Button Clicked!", "Info",
