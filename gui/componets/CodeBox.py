@@ -150,8 +150,14 @@ class CodeBox(wx.Panel):
                       wx.OK | wx.ICON_INFORMATION)
 
     def on_copy(self, event):
-        wx.MessageBox("Copy Button Clicked!", "Info",
-                      wx.OK | wx.ICON_INFORMATION)
+        # 클립보드에 텍스트 복사
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(wx.TextDataObject(self.code.GetValue()))
+            wx.TheClipboard.Close()
+            wx.MessageBox("텍스트가 클립보드에 복사되었습니다.", "Info",
+                          wx.OK | wx.ICON_INFORMATION)
+        else:
+            wx.MessageBox("클립보드에 접근할 수 없습니다.", "Error", wx.OK | wx.ICON_ERROR)
 
     def on_edit(self, event):
         if self.code.IsEditable():
