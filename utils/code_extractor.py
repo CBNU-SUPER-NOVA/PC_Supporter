@@ -2,40 +2,32 @@
 # 이 모듈은 주어진 텍스트에서 코드 블록을 추출하는 기능을 제공합니다.
 
 import re
+import json
 
 
 def extract_code(text):
-    # 마크다운 코드 블록 패턴 정의
-    code_block_pattern = re.compile(r'```(\w*)\n(.*?)\n```', re.DOTALL)
-    # 코드 블록을 저장할 리스트
-    blocks = []
+    """
+    주어진 텍스트에서 모든 코드 블록과 일반 텍스트를 추출합니다.
+    코드 블록은 ```python, ```zsh, ```cmd, ```shell, ```bash 또는 ```로 감싸져 있다고 가정합니다.
+    반환된 리스트는 각 블록의 타입과 내용을 포함합니다.
+    """
+    code_blocks = []
 
-    # 코드 블록을 추출하고, 텍스트와 코드 블록의 위치를 기록
-    last_pos = 0
-    for match in code_block_pattern.finditer(text):
-        start, end = match.span()
-        language = match.group(1).strip().lower()
-        code = match.group(2).strip()
+    # 코드 블록과 일반 텍스트를 모두 추출할 수 있는 정규 표현식
+    pattern = r'```(python|zsh|cmd|shell|bash)?\n(.*?)```|([^`]+)'
 
-        # 텍스트와 코드 블록의 위치를 기반으로 순서를 유지
-        if last_pos < start:
-            # 빈 코드 블록이 아닌 일반 텍스트 추가
-            blocks.append(('text', text[last_pos:start].strip()))
+    matches = re.findall(pattern, text, re.DOTALL)
 
-        # 빈 코드 블록 처리
-        if not code:
-            blocks.append(('text', ''))
-        else:
-            # 언어를 'bash'로 통합
-            if language in {'zsh', 'shell', 'cmd'}:
-                language = 'bash'
-            blocks.append((language, code))
+    for match in matches:
+        if match[0]:  # 코드 블록일 때
+            code_type = match[0]
+            if code_type in {"zsh", "cmd", "shell"}:
+                code_type = "bash"
+            elif not code_type:  # 타입이 없을 경우
+                code_type = "text"
+            code_data = match[1].strip()
+            code_blocks.append({"type": code_type, "data": code_data})
+        elif match[2].strip():  # 일반 텍스트일 때
+            code_blocks.append({"type": "text", "data": match[2].strip()})
 
-        last_pos = end
-
-    # 마지막 텍스트 추가
-    if last_pos < len(text):
-        blocks.append(('text', text[last_pos:].strip()))
-
-    # 빈 항목 제거
-    return [(block_type, content) for block_type, content in blocks if content]
+    return code_blocks
