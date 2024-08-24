@@ -1,16 +1,20 @@
 import wx
 from .SVGButton import SVGButton
-
 from utils.code_executor import execute_code
 
 
 class CodeBox(wx.Panel):
-    def __init__(self, parent, isWorkflow, texts, language="python"):
+    def __init__(self, parent, isWorkflow, texts, language="python", fixed_width=400):
         super(CodeBox, self).__init__(parent)
-
+        self.SetBackgroundColour("white")  # 배경색 설정
         # 변수 내용 저장
         self.text = texts
         self.language = language
+        self.fixed_width = fixed_width  # 좌우 길이를 고정
+        self.current_lines = 1  # 현재 라인 수를 추적
+        self.padding = 10  # 패딩 설정
+        self.initial_height = 24  # 초기 높이 설정
+        self.min_height = 24  # 텍스트 부분의 최소 높이 설정
 
         # 메인 수직 박스 사이저 생성 (위아래 배치용)
         main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -83,11 +87,23 @@ class CodeBox(wx.Panel):
         self.code.SetStyle(0, self.code.GetLastPosition(),
                            wx.TextAttr(wx.Colour(255, 255, 255)))  # 흰색 텍스트
 
+        # 고정된 너비와 기본 높이 설정
+        self.code.SetMinSize(wx.Size(self.fixed_width, self.min_height))
+        self.code.SetSize(wx.Size(self.fixed_width, self.initial_height))
+
+        # 텍스트가 변경될 때 이벤트 바인딩
+        self.code.Bind(wx.EVT_TEXT, self.OnTextChange)
+        self.code.Bind(wx.EVT_KEY_UP, self.OnKeyUp)  # 키보드 입력 이벤트 바인딩
+
         # 코드 입력 상자를 메인 수직 박스 사이저에 추가
-        main_sizer.Add(self.code, 1, wx.EXPAND | wx.ALL, 10)
+        main_sizer.Add(self.code, 1, wx.EXPAND | wx.ALL, self.padding)
 
         # 메인 수직 박스 사이저를 패널에 설정
         self.SetSizer(main_sizer)
+
+        # 초기 텍스트 줄 수에 따라 크기 조정
+        self.update_size(initial=True)
+
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnResize)
 
@@ -137,6 +153,46 @@ class CodeBox(wx.Panel):
         self.Refresh()
         event.Skip()
 
+    def OnTextChange(self, event):
+        self.update_size()
+
+    def OnKeyUp(self, event):
+        # Enter 키를 눌렀을 때 크기를 업데이트
+        if event.GetKeyCode() == wx.WXK_RETURN:
+            self.update_size()
+        event.Skip()
+
+    def update_size(self, initial=False):
+        # 현재 텍스트에서 라인의 수를 계산
+        lines = self.code.GetNumberOfLines()
+
+        # 초기 렌더링 시에도 크기 조정
+        if initial or lines != self.current_lines:
+            self.current_lines = lines
+            print(self.GetSize())
+
+            # 텍스트 높이 측정
+            text_height = self.code.GetCharHeight() * lines
+
+            # 창의 높이 설정 (최소 높이만 고려)
+            new_height = max(text_height + self.padding + 40,  # 40 추가
+                             self.min_height)
+
+            self.code.SetMinSize(wx.Size(self.fixed_width, new_height))
+            self.code.SetSize(wx.Size(self.fixed_width, new_height))
+
+            # 패널의 크기 업데이트 및 레이아웃 재조정
+            self.SetMinSize(
+                wx.Size(self.fixed_width, new_height + self.padding))
+            self.Layout()
+            self.Fit()
+
+            # 부모 패널의 레이아웃 재조정
+            if self.Parent:
+                self.Parent.Layout()
+
+            self.Refresh()
+
     def on_run(self, event):
         # 실행할 코드와 언어를 정의
         code = self.text
@@ -170,5 +226,5 @@ class CodeBox(wx.Panel):
                       wx.OK | wx.ICON_INFORMATION)
 
     def on_to_workflow(self, event):
-        wx.MessageBox("toWorkflow Button Clicked!", "Info",
-                      wx.OK | wx.ICON_INFORMATION)
+        wx.MessageBox("toWorkflow Button Clicked!",
+                      "Info", wx.OK | wx.ICON_INFORMATION)
