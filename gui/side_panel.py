@@ -12,10 +12,10 @@ string_array = ["apple", "banana", "cherry", "date",
 
 class SidePanel(wx.Panel):
     def __init__(self, parent):
-        super(SidePanel, self).__init__(parent, size=(400, 800))
+        super(SidePanel, self).__init__(parent, size=(
+            400, parent.GetClientSize().GetHeight()))
 
         # 컬러 설정
-        # GPT 추천 컬러 => E5E5E5
         self.background_color = "#F7F7F8"
         self.text_color = "#000000"
 
@@ -91,13 +91,22 @@ class SidePanel(wx.Panel):
         self.Layout()  # 초기 레이아웃 설정
 
         self.Bind(wx.EVT_SIZE, self.on_resize)
+        self.Bind(wx.EVT_SHOW, self.on_show)  # 패널이 보일 때 크기를 조정
 
         # 초기에는 숨김
         self.Hide()
 
     def on_resize(self, event):
+        self.SetSize((self.GetSize().GetWidth(),
+                     self.Parent.GetClientSize().GetHeight()))
         self.Layout()  # 레이아웃 갱신
         event.Skip()
+
+    def on_show(self, event):
+        if event.IsShown():
+            self.SetSize((self.GetSize().GetWidth(),
+                         self.Parent.GetClientSize().GetHeight()))
+            self.Layout()
 
     def sideBarButtonClick(self, event):
         self.Parent.Parent.main_panel.Enable(True)
