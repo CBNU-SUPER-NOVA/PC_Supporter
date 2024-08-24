@@ -7,7 +7,7 @@ class PromptInputPanel(wx.Panel):
         super(PromptInputPanel, self).__init__(parent)
 
         self.basecolor = "#DDDDDD"
-        self.padding = 16  # 패딩 설정
+        self.padding = 14  # 패딩 설정
         self.fixed_width = 400  # 고정된 너비 설정
         self.current_lines = 1  # 현재 라인 수를 추적
         self.initial_height = 26   # 초기 높이 설정
@@ -41,7 +41,7 @@ class PromptInputPanel(wx.Panel):
         sizer.Add(self.prompt_input, 1, wx.EXPAND | wx.ALL, self.padding)
 
         # 전송 버튼 생성
-        self.send_button = SVGButton(self, "gui/icons/Arrow.svg", 40)
+        self.send_button = SVGButton(self, "gui/icons/Arrow.svg", 30)
         self.send_button.SetBackgroundColour(self.basecolor)
         self.send_button.set_on_click(self.send_prompt)
         sizer.Add(self.send_button, 0, wx.ALIGN_CENTER_VERTICAL |
@@ -67,7 +67,7 @@ class PromptInputPanel(wx.Panel):
         gc.SetBrush(wx.Brush(self.basecolor))  # 배경색을 지정된 색으로 설정
         # 둥근 모서리 그리기
         rect = self.GetClientRect()
-        radius = 20
+        radius = 25
         gc.DrawRoundedRectangle(
             rect.x, rect.y, rect.width, rect.height, radius)
 
@@ -100,16 +100,8 @@ class PromptInputPanel(wx.Panel):
 
             self.Refresh()
 
-    def get_prompt_text(self):
-        return self.prompt_input.GetValue()
-
     def clear_prompt(self):
         self.prompt_input.Clear()
-        # 텍스트가 클리어되면 다시 원래 크기로 돌아감
-        self.prompt_input.SetSize(
-            wx.Size(self.fixed_width, self.initial_height))
-        self.SetMinSize(
-            wx.Size(self.fixed_width, self.initial_height))
         self.current_lines = 1  # 라인 수를 초기 상태로 복원
         self.Layout()
         self.Fit()
@@ -121,8 +113,10 @@ class PromptInputPanel(wx.Panel):
         self.Refresh()
 
     def send_prompt(self, event=None):
-        prompt_text = self.get_prompt_text()
-        if prompt_text.strip():
-            print("프롬프트가 전송되었습니다:", prompt_text)
-            self.clear_prompt()
+        prompt_text = self.prompt_input.GetValue()
+        self.clear_prompt()
+        if prompt_text.strip():  # 공백이 아닌 경우에만 전송
             # 추가적인 전송 로직 작성
+            from gpt_api.api import send_to_gpt
+            json = send_to_gpt(prompt_text)
+            print(json)

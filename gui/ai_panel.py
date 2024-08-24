@@ -35,7 +35,6 @@ class AiPanel(wx.Panel):
         main_sizer.Add(self.AiOutput, 1, wx.EXPAND | wx.ALL, 10)
 
         # 하단의 프롬프트 입력 패널 추가
-        print("promp generated")
         self.prompt_panel = PromptInputPanel(self)
         main_sizer.Add(self.prompt_panel, 0, wx.EXPAND | wx.ALL, 10)
 
@@ -49,9 +48,4 @@ class AiPanel(wx.Panel):
     def newChatButtonClick(self, event):
         self.Parent.newChat()
 
-    def sendButtonClick(self, event):
-        textvalue = self.prompt_panel.get_prompt_text()
-        self.prompt_panel.clear_prompt()
-        from gpt_api.api import send_to_gpt
-        json = send_to_gpt(textvalue)
-        print(json)
+    # send_Button_Click은 PromptInputPanel으로 이동하였음
