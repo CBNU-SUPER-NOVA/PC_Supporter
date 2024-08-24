@@ -187,9 +187,10 @@ class CodeBox(wx.Panel):
             self.Layout()
             self.Fit()
 
-            # 부모 패널의 레이아웃 재조정
+            # 부모 패널의 레이아웃 재조정 (새로 추가된 부분)
             if self.Parent:
                 self.Parent.Layout()
+                self.Parent.FitInside()  # 부모 패널의 크기를 업데이트
 
             self.Refresh()
 
