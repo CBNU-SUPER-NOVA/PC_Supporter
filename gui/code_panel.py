@@ -28,31 +28,22 @@ class CodePanel(wx.Panel):
         main_sizer = wx.BoxSizer(wx.VERTICAL)
 
         # ScrolledWindow 생성 (수직 스크롤만 허용)
-        scrolled_window = wx.ScrolledWindow(self, style=wx.VSCROLL)
-        scrolled_window.SetScrollRate(20, 20)  # 스크롤 속도 설정
-        scrolled_window.SetBackgroundColour("white")
+        self.scrolled_window = wx.ScrolledWindow(self, style=wx.VSCROLL)
+        self.scrolled_window.SetScrollRate(20, 20)  # 스크롤 속도 설정
+        self.scrolled_window.SetBackgroundColour("white")
 
         # Sizer 생성
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        scrolled_window.SetSizer(sizer)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.scrolled_window.SetSizer(self.sizer)
 
         # sizer에 코드박스 추가
         for i, code_info in enumerate(json):
-            code_box = CodeBox(scrolled_window, True,
+            code_box = CodeBox(self.scrolled_window, True,
                                code_info[0], code_info[1])
-            sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 10)
-
-        # 내부 위젯의 크기에 맞게 ScrolledWindow 크기를 조정
-        sizer.Fit(scrolled_window)
-
-        # 가로 크기를 패널의 가로 크기로 고정하고 세로만 가상 크기 설정
-        scrolled_window.SetVirtualSize(
-            (self.GetClientSize().GetWidth(), sizer.GetMinSize().GetHeight()))
-        scrolled_window.SetMinSize(
-            (self.GetClientSize().GetWidth(), sizer.GetMinSize().GetHeight()))
+            self.sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 10)
 
         # ScrolledWindow를 메인 Sizer에 추가
-        main_sizer.Add(scrolled_window, 1, wx.EXPAND | wx.ALL, 5)
+        main_sizer.Add(self.scrolled_window, 1, wx.EXPAND | wx.ALL, 5)
 
         # 독립적인 버튼 생성
         WorkflowRunButton = RoundedPanel(
@@ -67,6 +58,7 @@ class CodePanel(wx.Panel):
 
     def on_resize(self, event):
         self.GetSizer().Layout()
+        self.scrolled_window.FitInside()  # 스크롤 윈도우 내부 크기 재조정
         event.Skip()
 
     def RemoveCodeBlock(self, code_box):
