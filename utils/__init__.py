@@ -3,4 +3,4 @@
 
 from .code_extractor import extract_code
 from .code_executor import execute_code
-from .code_handler import handle_code
+from .code_handler import handle_code_blocks
