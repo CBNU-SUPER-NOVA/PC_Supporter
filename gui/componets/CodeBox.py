@@ -7,7 +7,7 @@ from utils.code_executor import execute_code
 
 
 class CodeBox(wx.Panel):
-    def __init__(self, parent, isWorkflow, texts, language="python", fixed_width=400):
+    def __init__(self, parent, isWorkflow, texts, language="python", fixed_width=400, code_id=None):
         super(CodeBox, self).__init__(parent)
         self.SetBackgroundColour("white")  # 배경색 설정
         # 변수 내용 저장
@@ -18,6 +18,7 @@ class CodeBox(wx.Panel):
         self.padding = 10  # 패딩 설정
         self.initial_height = 24  # 초기 높이 설정
         self.min_height = 24  # 텍스트 부분의 최소 높이 설정
+        self.code_id = code_id  # 각 CodeBox에 고유한 code_id 부여
 
         # 메인 수직 박스 사이저 생성 (위아래 배치용)
         main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -227,6 +228,7 @@ class CodeBox(wx.Panel):
 
         if hasattr(grandparent, 'RemoveCodeBlock'):
             grandparent.RemoveCodeBlock(self)
+            grandparent.refresh()
         else:
             wx.MessageBox("코드 블록을 제거할 수 없습니다.", "Error",
                           wx.OK | wx.ICON_ERROR)

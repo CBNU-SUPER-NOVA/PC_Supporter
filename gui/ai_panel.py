@@ -4,6 +4,7 @@ from gui.componets.PromptInputPanel import PromptInputPanel
 from gui.componets.AIChatBox import AIChatBox
 from gui.componets.MyChatBox import MyChatBox
 from gui.tempchatData import tempdata
+from utils.db_handler import create_conversation
 
 
 class AiPanel(wx.Panel):
@@ -65,4 +66,16 @@ class AiPanel(wx.Panel):
         self.Enable(False)
 
     def newChatButtonClick(self, event):
-        self.Parent.newChat()
+        # 기존의 함수에 대화 생성 로직 추가
+        dialog = wx.TextEntryDialog(self, 'Enter the conversation name :', 'New Conversation')
+        if dialog.ShowModal() == wx.ID_OK:
+            conversation_name = dialog.GetValue()
+            # 데이터베이스에 새로운 대화 생성
+            conversation_id = create_conversation(conversation_name)
+            wx.MessageBox(f'Conversation "{conversation_name}" created with ID {conversation_id}', 'Info', wx.OK | wx.ICON_INFORMATION)
+
+            # 새로운 대화 생성 후 사이드 패널 업데이트 호출
+        if hasattr(self, 'on_new_conversation'):
+            self.on_new_conversation(conversation_id)
+
+        dialog.Destroy()
