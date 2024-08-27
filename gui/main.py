@@ -10,7 +10,7 @@ class MainFrame(wx.Frame):
         super(MainFrame, self).__init__(*args, **kw)
         self.SetSize((1200, 800))
         self.SetTitle("PCSupporter")
-
+        self.conversation_id = None
         # 스플릿 패널 추가
         self.splitter = wx.SplitterWindow(self)
 
@@ -18,7 +18,6 @@ class MainFrame(wx.Frame):
         self.aiPanel = AiPanel(self.splitter)
 
         # 코드 패널 생성 및 추가
-        # 'conversation_id=None' 명시적으로 추가
         self.codePanel = CodePanel(self.splitter, conversation_id=None)
 
         # 스플릿 패널 속성
@@ -30,9 +29,9 @@ class MainFrame(wx.Frame):
 
     def refresh_data(self, conversation_id):
         # 데이터를 새로고침하는 메서드
-        # self.aiPanel.Refresh() <- 이부분은 생성되면 추가
+        self.conversation_id = conversation_id  # 대화 ID 저장
+        self.aiPanel.update_list(conversation_id)
         self.codePanel.update_list(conversation_id)
-        self.sidePanel.update_list
 
 
 def main():

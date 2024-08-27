@@ -3,7 +3,7 @@ from .SVGButton import SVGButton
 
 
 class AIChatBox(wx.Panel):
-    def __init__(self, parent, message, max_width=550, text_color="#000000", font_size=10, font_family=wx.FONTFAMILY_DEFAULT, bg_color="#FFFFFF", text_bg_color="#FFFFFF"):
+    def __init__(self, parent, type, message, max_width=550, text_color="#000000", font_size=10, font_family=wx.FONTFAMILY_DEFAULT, bg_color="#FFFFFF", text_bg_color="#FFFFFF"):
         super(AIChatBox, self).__init__(parent)
 
         # 배경 색상 설정 (패널과 텍스트 배경 색상 통일)

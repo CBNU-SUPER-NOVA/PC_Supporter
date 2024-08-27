@@ -3,8 +3,7 @@ from gui.componets.SVGButton import SVGButton
 from gui.componets.PromptInputPanel import PromptInputPanel
 from gui.componets.AIChatBox import AIChatBox
 from gui.componets.MyChatBox import MyChatBox
-# from gui.tempchatData import tempdata
-from utils.db_handler import create_conversation
+from utils.db_handler import create_conversation, get_messages
 
 
 class AiPanel(wx.Panel):
@@ -55,6 +54,24 @@ class AiPanel(wx.Panel):
     def SidebarButtonClick(self, event):
         self.Parent.Parent.sidePanel.Show()
         self.Enable(False)
+
+    def update_list(self, conversation_id):
+        # 대화 목록 초기화
+        for child in self.middle_panel.GetChildren():
+            child.Destroy()
+
+        # 대화 목록을 데이터베이스에서 불러와 생성
+        conversations = get_messages(conversation_id)
+        for conversation in conversations:
+            if conversation[0] == "user":
+                chat_box = MyChatBox(self.middle_panel, conversation[2])
+            else:
+                chat_box = AIChatBox(
+                    self.middle_panel, conversation[1], conversation[2])
+            self.middle_panel.GetSizer().Add(chat_box, 0, wx.ALL | wx.EXPAND, 10)
+
+        self.middle_panel.GetSizer().Layout()
+        self.middle_panel.FitInside()
 
     def newChatButtonClick(self, event):
         # 기존의 함수에 대화 생성 로직 추가
