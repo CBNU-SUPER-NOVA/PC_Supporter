@@ -3,6 +3,7 @@ from gui.componets.SVGButton import SVGButton
 from gui.componets.RoundedPanel import RoundedPanel
 from utils.db_handler import get_conversation_names
 
+
 class SidePanel(wx.Panel):
     def __init__(self, parent):
         super(SidePanel, self).__init__(parent, size=(
@@ -78,11 +79,11 @@ class SidePanel(wx.Panel):
         self.Bind(wx.EVT_SIZE, self.on_resize)
         self.Bind(wx.EVT_SHOW, self.on_show)  # 패널이 보일 때 크기를 조정
 
+        #  처음생성시 대화 목록 업데이트
+        self.update_list()
+
         # 초기에는 숨김
         self.Hide()
-
-        # 초기화 시 대화 목록 업데이트
-        self.update_conversation_list()
 
     def on_resize(self, event):
         self.SetSize((self.GetSize().GetWidth(),
@@ -104,13 +105,11 @@ class SidePanel(wx.Panel):
         print("Setting Button Clicked")
 
     def newChatButtonClick(self, event):
-        self.Parent.Parent.newChat()
+        # AI 패널의 새 채팅 버튼 클릭과 동일한 동작 수행
+        self.Parent.Parent.main_panel.newChatButtonClick(event)
 
     def promptSettingButtonClick(self, event):
         print("Prompt Setting Button Clicked")
-
-    def on_workflow_click(self, event):
-        print("Workflow Clicked")
 
     def on_workflow_click(self, event):
         clicked_panel = event.GetEventObject()
@@ -118,7 +117,7 @@ class SidePanel(wx.Panel):
         print(f"Clicked conversation ID: {conversation_id}")
         # 대화 ID를 이용해 다음 단계로 연결하는 로직 추가
 
-    def update_conversation_list(self):
+    def update_list(self):
         """
         대화 목록을 업데이트하는 메서드
         """
@@ -137,7 +136,8 @@ class SidePanel(wx.Panel):
             workflow_panel.SetBackgroundColour(self.background_color)
             workflow_panel.conversation_id = conversation[0]  # 대화 ID 저장
             self.workflow_sizer.Add(workflow_panel, 0, wx.ALL | wx.EXPAND, 5)
-            workflow_panel.Bind(wx.EVT_LEFT_UP, self.on_workflow_click)  # 이벤트 바인딩
+            workflow_panel.Bind(
+                wx.EVT_LEFT_UP, self.on_workflow_click)  # 이벤트 바인딩
 
         # 레이아웃 업데이트
         self.workflow_sizer.Layout()
