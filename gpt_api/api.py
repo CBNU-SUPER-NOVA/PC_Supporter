@@ -56,8 +56,7 @@ def main():
     print(f"Command Result:\n{command_result}")
 
     # GPT로 보낼 프롬프트 작성
-    prompt = f"The command '{
-        command}' was executed and returned the following result: {command_result}"
+    prompt = f"The command '{command}' was executed and returned the following result: {command_result}"
 
     # GPT에 데이터 전달
     response = send_to_gpt(prompt)

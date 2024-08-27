@@ -61,23 +61,21 @@ class CodePanel(wx.Panel):
         event.Skip()
 
     def update_list(self, conversation_id):
-        """
-        특정 대화 ID에 해당하는 코드 블록을 로드하고 UI에 표시
-        """
         self.code_blocks = get_code_blocks(conversation_id)
+        print("Fetched code blocks:", self.code_blocks)  # 디버깅 출력
 
-        # 기존 코드 블록들 제거
         for child in self.sizer.GetChildren():
             child.GetWindow().Destroy()
 
-        # 새로운 코드 블록들 추가
         for code_block in self.code_blocks:
-            code_box = CodeBox(self.scrolled_window, True,
-                               code_block[1], code_block[2], code_block[0])
+            code_id, code_type, code_data, order_num = code_block
+            print(f"Adding CodeBox with data: {code_data}, type: {code_type}")  # 디버깅 출력
+            code_box = CodeBox(self.scrolled_window, True, code_data, code_type, code_id=code_id)
             self.sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 10)
 
         self.sizer.Layout()
         self.scrolled_window.FitInside()
+
 
     def add_code_block_to_ui(self, code, language, order):
         # 코드 블록을 UI에 추가하는 메서드
