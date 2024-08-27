@@ -69,13 +69,14 @@ class CodePanel(wx.Panel):
 
         for code_block in self.code_blocks:
             code_id, code_type, code_data, order_num = code_block
-            print(f"Adding CodeBox with data: {code_data}, type: {code_type}")  # 디버깅 출력
-            code_box = CodeBox(self.scrolled_window, True, code_data, code_type, code_id=code_id)
+            print(f"Adding CodeBox with data: {
+                  code_data}, type: {code_type}")  # 디버깅 출력
+            code_box = CodeBox(self.scrolled_window, True,
+                               code_data, code_type, code_id=code_id)
             self.sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 10)
 
         self.sizer.Layout()
         self.scrolled_window.FitInside()
-
 
     def add_code_block_to_ui(self, code, language, order):
         # 코드 블록을 UI에 추가하는 메서드

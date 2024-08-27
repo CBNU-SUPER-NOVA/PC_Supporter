@@ -3,7 +3,7 @@ from gui.componets.SVGButton import SVGButton
 from gui.componets.PromptInputPanel import PromptInputPanel
 from gui.componets.AIChatBox import AIChatBox
 from gui.componets.MyChatBox import MyChatBox
-from gui.tempchatData import tempdata
+# from gui.tempchatData import tempdata
 from utils.db_handler import create_conversation
 
 
@@ -43,15 +43,6 @@ class AiPanel(wx.Panel):
         middle_sizer = wx.BoxSizer(wx.VERTICAL)
         self.middle_panel.SetSizer(middle_sizer)
 
-        # 임시 데이터 추가
-        for data in tempdata:
-            if data["type"] == "AI":
-                ai_chat = AIChatBox(self.middle_panel, data["data"])
-                middle_sizer.Add(ai_chat, 0, wx.ALL | wx.EXPAND, 5)
-            elif data["type"] == "User":
-                user_chat = MyChatBox(self.middle_panel, data["data"])
-                middle_sizer.Add(user_chat, 0, wx.ALL | wx.EXPAND, 5)
-
         main_sizer.Add(self.middle_panel, 1, wx.EXPAND | wx.ALL, 10)
 
         # 하단의 프롬프트 입력 패널 추가
@@ -62,20 +53,21 @@ class AiPanel(wx.Panel):
         self.Layout()
 
     def SidebarButtonClick(self, event):
-        self.Parent.Parent.overlay_panel.Show()
+        self.Parent.Parent.sidePanel.Show()
         self.Enable(False)
 
     def newChatButtonClick(self, event):
         # 기존의 함수에 대화 생성 로직 추가
-        dialog = wx.TextEntryDialog(self, 'Enter the conversation name :', 'New Conversation')
+        dialog = wx.TextEntryDialog(
+            self, 'Enter the conversation name :', 'New Conversation')
         if dialog.ShowModal() == wx.ID_OK:
             conversation_name = dialog.GetValue()
             # 데이터베이스에 새로운 대화 생성
             conversation_id = create_conversation(conversation_name)
-            wx.MessageBox(f'Conversation "{conversation_name}" created with ID {conversation_id}', 'Info', wx.OK | wx.ICON_INFORMATION)
+            wx.MessageBox(f'Conversation "{conversation_name}" created with ID {
+                          conversation_id}', 'Info', wx.OK | wx.ICON_INFORMATION)
 
             # 새로운 대화 생성 후 사이드 패널 업데이트 호출
-        if hasattr(self, 'on_new_conversation'):
-            self.on_new_conversation(conversation_id)
+            self.Parent.Parent.sidePanel.update_list()
 
         dialog.Destroy()

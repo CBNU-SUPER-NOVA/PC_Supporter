@@ -98,7 +98,7 @@ class SidePanel(wx.Panel):
             self.Layout()
 
     def sideBarButtonClick(self, event):
-        self.Parent.Parent.main_panel.Enable(True)
+        self.Parent.Parent.aiPanel.Enable(True)
         self.Hide()
 
     def settingButtonClick(self, event):
@@ -106,7 +106,7 @@ class SidePanel(wx.Panel):
 
     def newChatButtonClick(self, event):
         # AI 패널의 새 채팅 버튼 클릭과 동일한 동작 수행
-        self.Parent.Parent.main_panel.newChatButtonClick(event)
+        self.Parent.Parent.aiPanel.newChatButtonClick(event)
 
     def promptSettingButtonClick(self, event):
         print("Prompt Setting Button Clicked")
@@ -116,7 +116,7 @@ class SidePanel(wx.Panel):
         conversation_id = clicked_panel.conversation_id  # 여기서 conversation_id를 올바르게 가져옴
         print(f"Clicked conversation ID: {conversation_id}")
         # 대화 ID를 이용해 다음 단계로 연결하는 로직 추가
-        print(self.Parent.Parent.refresh_data(conversation_id))
+        self.Parent.Parent.refresh_data(conversation_id)
 
     def update_list(self):
         """
