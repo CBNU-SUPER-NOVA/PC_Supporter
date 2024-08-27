@@ -1,16 +1,21 @@
+from gui.componets import CodeBox
 import wx
 from gui.componets.SVGButton import SVGButton
 from gui.componets.PromptInputPanel import PromptInputPanel
 from gui.componets.AIChatBox import AIChatBox
 from gui.componets.MyChatBox import MyChatBox
-from gui.tempchatData import tempdata
-from utils.db_handler import create_conversation
+# from gui.tempchatData import tempdata
+from utils.db_handler import create_conversation, get_code_blocks, get_messages
 
 
 class AiPanel(wx.Panel):
     def __init__(self, parent):
         super(AiPanel, self).__init__(parent)
         self.SetBackgroundColour("#FFFFFF")
+
+        self.conversation_id = None  # 초기화
+
+
 
         # 더블 버퍼링 활성화
         self.SetDoubleBuffered(True)
@@ -43,15 +48,6 @@ class AiPanel(wx.Panel):
         middle_sizer = wx.BoxSizer(wx.VERTICAL)
         self.middle_panel.SetSizer(middle_sizer)
 
-        # 임시 데이터 추가
-        for data in tempdata:
-            if data["type"] == "AI":
-                ai_chat = AIChatBox(self.middle_panel, data["data"])
-                middle_sizer.Add(ai_chat, 0, wx.ALL | wx.EXPAND, 5)
-            elif data["type"] == "User":
-                user_chat = MyChatBox(self.middle_panel, data["data"])
-                middle_sizer.Add(user_chat, 0, wx.ALL | wx.EXPAND, 5)
-
         main_sizer.Add(self.middle_panel, 1, wx.EXPAND | wx.ALL, 10)
 
         # 하단의 프롬프트 입력 패널 추가
@@ -79,3 +75,39 @@ class AiPanel(wx.Panel):
             self.on_new_conversation(conversation_id)
 
         dialog.Destroy()
+
+    def refresh_data(self, conversation_id):
+        """
+        주어진 대화 ID에 해당하는 데이터를 가져와 UI에 출력합니다.
+        """
+        # 기존 대화 데이터를 초기화
+        self.middle_panel.GetSizer().Clear(True)
+
+        # DB에서 대화 ID에 해당하는 메시지와 코드 블록을 가져옴
+        messages = get_messages(conversation_id)
+        code_blocks = get_code_blocks(conversation_id)
+
+        # 메시지를 UI에 추가
+        for message in messages:
+            if message['sender_type'] == 'user':
+                user_chat = MyChatBox(self.middle_panel, message['content'])
+                self.middle_panel.GetSizer().Add(user_chat, 0, wx.ALL | wx.EXPAND, 5)
+            else:
+                ai_chat = AIChatBox(self.middle_panel, message['content'])
+                self.middle_panel.GetSizer().Add(ai_chat, 0, wx.ALL | wx.EXPAND, 5)
+
+        # 코드 블록을 UI에 추가
+        for code_block in code_blocks:
+            code_box = CodeBox(self.middle_panel, True, code_block['code_data'], code_block['code_type'])
+            self.middle_panel.GetSizer().Add(code_box, 0, wx.ALL | wx.EXPAND, 5)
+
+        # 레이아웃 갱신
+        self.middle_panel.GetSizer().Layout()
+        self.middle_panel.FitInside()
+
+
+    def set_conversation_id(self, conversation_id):
+        """SidePanel에서 선택된 conversation_id를 설정"""
+        self.conversation_id = conversation_id
+        self.prompt_panel.conversation_id = conversation_id  # PromptInputPanel에도 설정
+        print(f"Conversation ID set to: {self.conversation_id}")
