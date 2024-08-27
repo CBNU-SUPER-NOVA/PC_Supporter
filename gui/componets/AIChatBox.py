@@ -1,6 +1,5 @@
 import wx
 from .SVGButton import SVGButton
-from .CodeBox import CodeBox  # CodeBox를 사용한다고 가정
 
 
 class AIChatBox(wx.Panel):
@@ -65,6 +64,8 @@ class AIChatBox(wx.Panel):
                                                   wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
                     text_sizer.Add(message_label, 0, wx.ALL | wx.EXPAND, 3)
                 elif item["subtype"] in ["python", "bash"]:
+                    # 지연 임포트 방식으로 CodeBox 불러오기
+                    from .CodeBox import CodeBox
                     # 코드일 경우 CodeBox 사용
                     code_box = CodeBox(
                         self, isWorkflow=False, texts=item["data"], language=item["subtype"])
@@ -80,11 +81,3 @@ class AIChatBox(wx.Panel):
             message_label.SetFont(wx.Font(self.font_size, self.font_family,
                                           wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
             text_sizer.Add(message_label, 0, wx.ALL | wx.EXPAND, 3)
-
-    def message(self, message):
-        """새로운 메시지를 추가하는 메서드"""
-        text_sizer = self.GetSizer().GetChildren()[
-            1].GetSizer()  # 텍스트 사이저 가져오기
-        self.add_message(message, text_sizer, self.GetMaxSize()[0])
-        self.Fit()
-        self.Layout()
