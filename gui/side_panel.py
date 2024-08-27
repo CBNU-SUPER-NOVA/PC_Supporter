@@ -116,6 +116,7 @@ class SidePanel(wx.Panel):
         conversation_id = clicked_panel.conversation_id  # 여기서 conversation_id를 올바르게 가져옴
         print(f"Clicked conversation ID: {conversation_id}")
         # 대화 ID를 이용해 다음 단계로 연결하는 로직 추가
+        print(self.Parent.Parent.refresh_data(conversation_id))
 
     def update_list(self):
         """
@@ -136,8 +137,7 @@ class SidePanel(wx.Panel):
             workflow_panel.SetBackgroundColour(self.background_color)
             workflow_panel.conversation_id = conversation[0]  # 대화 ID 저장
             self.workflow_sizer.Add(workflow_panel, 0, wx.ALL | wx.EXPAND, 5)
-            workflow_panel.Bind(
-                wx.EVT_LEFT_UP, self.on_workflow_click)  # 이벤트 바인딩
+            workflow_panel.on_click(self.on_workflow_click)
 
         # 레이아웃 업데이트
         self.workflow_sizer.Layout()
