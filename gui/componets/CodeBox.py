@@ -244,12 +244,12 @@ class CodeBox(wx.Panel):
             elif data["type"] == "AI":
                 # AI 채팅일 경우 데이터 리스트를 처리
                 for item in data["data"]:
-                    if item["type"] == "text":
+                    if item["subtype"] == "text":
                         # AI의 텍스트 채팅은 AIChatBox로 처리
                         ai_chat = AIChatBox(self.middle_panel, item["data"])
                         self.middle_sizer.Add(
                             ai_chat, 0, wx.ALL | wx.EXPAND, 5)
-                    elif item["type"] in ["python", "bash"]:
+                    elif item["subtype"] in ["python", "bash"]:
                         # 코드 타입이면 CodeBox로 처리
                         code_box = CodeBox(
                             self.middle_panel, isWorkflow=False, texts=item["data"], language=item["type"])
