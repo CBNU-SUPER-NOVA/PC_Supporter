@@ -5,7 +5,7 @@ from gui.componets.SVGButton import SVGButton
 from gui.componets.AIChatBox import AIChatBox  # AIChatBox 모듈이 아닌 클래스 임포트
 from gui.componets.MyChatBox import MyChatBox  # MyChatBox를 명확하게 임포트
 from gpt_api.api import send_to_gpt
-from utils.db_handler import create_conversation, save_code_to_db
+from utils.db_handler import create_conversation, save_code_to_db, save_message_to_db
 
 
 class PromptInputPanel(wx.Panel):
@@ -114,67 +114,29 @@ class PromptInputPanel(wx.Panel):
         self.clear_prompt()
 
         if prompt_text:
-            # 1. 유저 메시지를 GUI에 추가
-            user_chat = MyChatBox(self.Parent.middle_panel, prompt_text)
-            self.Parent.middle_panel.GetSizer().Add(user_chat, 0, wx.ALL | wx.EXPAND, 5)
+            # 1. 유저 메시지를 DB에 추가 및 새로고침
+            save_message_to_db(self.Parent.conversation_id,
+                               "user", "text", prompt_text)
+            self.Parent.update_list()
 
             # 2. GPT API로 프롬프트 전송 및 응답 수신
             raw_response = send_to_gpt(prompt_text)
 
-            # 3. 응답 정제
+            # # 3. 응답 정제
             response = extract_code(raw_response)
 
-            # 4. 정제된 응답 GUI 추가
-            self._add_response_to_gui(response)
+            # # 4. 정제된 응답 DB에 추가 및 새로고침
+            self.add_response_to_DB(response)
+            self.Parent.update_list()
 
-            # 5. 레이아웃 갱신 및 화면 새로고침
-            self._refresh_layout()
-
-    def _add_response_to_gui(self, response):
+    def add_response_to_DB(self, response):
         """정제된 응답을 GUI에 추가하는 메서드"""
         for item in response:
             # AI 응답이 텍스트일 경우
             if item["type"] == "text":
-                ai_chat = AIChatBox(self.Parent.middle_panel, item["data"])
-                self.Parent.middle_panel.GetSizer().Add(ai_chat, 0, wx.ALL | wx.EXPAND, 5)
-
-            # AI 응답이 코드 블럭일 경우
+                save_message_to_db(self.Parent.conversation_id,
+                                   "AI", "text", item["data"])
+                # AI 응답이 코드 블럭일 경우
             elif item["type"] in ["python", "bash"]:
-                code_box = CodeBox(self.Parent.middle_panel, isWorkflow=False,
-                                texts=item["data"], language=item["type"],
-                                conversation_id=self.Parent.conversation_id)
-                self.Parent.middle_panel.GetSizer().Add(code_box, 0, wx.ALL | wx.EXPAND, 5)
-
-                # 디버깅 출력 (확인용)
-                print(f"Added CodeBox with data: {item['data']}, type: {item['type']}, conversation_id: {self.Parent.conversation_id}")
-
-        # 전체 레이아웃 갱신
-        self.Parent.middle_panel.GetSizer().Layout()
-        self.Parent.middle_panel.FitInside()
-        self.Parent.middle_panel.Scroll(
-            0, self.Parent.middle_panel.GetScrollRange(wx.VERTICAL))
-        self.Parent.middle_panel.Refresh()
-        
-    def _refresh_layout(self):
-        """레이아웃을 갱신하고 화면을 새로고침하는 메서드"""
-        self.Parent.middle_panel.GetSizer().Layout()
-        self.Parent.middle_panel.FitInside()
-        self.Parent.middle_panel.Scroll(
-            0, self.Parent.middle_panel.GetScrollRange(wx.VERTICAL))
-        self.Parent.middle_panel.Refresh()
-
-    def handle_chat(self, tempdata):
-        """채팅 데이터를 처리하여 GUI에 추가하는 메서드"""
-        for data in tempdata:
-            if data["type"] == "User":
-                user_chat = MyChatBox(self.middle_panel, data["data"])
-                self.middle_sizer.Add(user_chat, 0, wx.ALL | wx.EXPAND, 5)
-            elif data["type"] == "AI":
-                self._add_response_to_gui(data["data"])  # 정제된 응답을 처리
-        self._refresh_layout()  # 레이아웃 갱신
-
-    def clear_prompt(self):
-        self.prompt_input.Clear()
-        self.current_lines = 1
-        self.Layout()
-        self.Fit()
+                save_message_to_db(self.Parent.conversation_id, "AI",
+                                   item["type"], item["data"])
