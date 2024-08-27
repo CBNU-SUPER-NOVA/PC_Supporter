@@ -112,6 +112,7 @@ class SidePanel(wx.Panel):
         print("Prompt Setting Button Clicked")
 
     def on_workflow_click(self, event):
+        self.sideBarButtonClick(event)
         clicked_panel = event.GetEventObject()
         conversation_id = clicked_panel.conversation_id  # 여기서 conversation_id를 올바르게 가져옴
         # 대화 ID를 이용해 다음 단계로 연결하는 로직 추가
