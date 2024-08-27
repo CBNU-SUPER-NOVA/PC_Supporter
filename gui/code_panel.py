@@ -4,6 +4,7 @@ from gui.componets.CodeBox import CodeBox
 from gui.componets.SVGButton import SVGButton
 from gui.componets.RoundedPanel import RoundedPanel
 from utils.code_handler import handle_code_blocks
+from utils.code_executor import execute_code
 from utils.db_handler import save_code_to_db, delete_code_from_db, update_code_order, get_code_blocks
 
 # 임시데이터
@@ -44,7 +45,8 @@ class CodePanel(wx.Panel):
         # 독립적인 버튼 생성
         WorkflowRunButton = RoundedPanel(
             self, size=(300, 50), radius=25, alignment="center", texts="Workflow Run", color="#F7F7F8", hover_color="#C0C0C0")
-        WorkflowRunButton.on_click(self.workflowRun)
+        
+        WorkflowRunButton.Bind(wx.EVT_LEFT_DOWN, self.workflowRun)  # 이벤트 핸들러로 수정
         main_sizer.Add(WorkflowRunButton, 0, wx.ALIGN_CENTER | wx.ALL, 10)
 
         self.SetSizer(main_sizer)
@@ -125,9 +127,41 @@ class CodePanel(wx.Panel):
                 code_box = child.GetWindow()
                 update_code_order(code_box.text, index)
 
-    def workflowRun(self, code):
-        print("workflowRun")
+    def workflowRun(self, event=None):
+        print("workflowRun 실행")
 
+        # 동일한 유형의 코드 블록을 그룹화하여 저장할 변수들
+        combined_code = []
+        current_type = None
+        
+        # self.code_blocks 리스트의 코드 블록을 order_num 순서대로 실행
+        for code_block in sorted(self.code_blocks, key=lambda x: x[3]):  # order_num을 기준으로 정렬
+            code_id, code_type, code_data, order_num = code_block
+
+            # 동일한 그룹의 코드 타입일 경우
+            if current_type == code_type:
+                combined_code.append(code_data)
+
+            else:
+                # 이전 코드 그룹을 실행하고 초기화
+                if combined_code:
+                    # 코드 블록을 합쳐서 실행
+                    code_to_execute = ' && '.join(combined_code) if current_type in ['bash', 'zsh', 'cmd', 'shell'] else '\n'.join(combined_code)
+                    output = execute_code(code_to_execute, current_type)
+                    print(output)
+                    combined_code = []
+
+                # 새 그룹 시작
+                combined_code.append(code_data)
+                current_type = code_type
+
+        # 마지막 그룹 실행
+        if combined_code:
+            code_to_execute = ' && '.join(combined_code) if current_type in ['bash', 'zsh', 'cmd', 'shell'] else '\n'.join(combined_code)
+            output = execute_code(code_to_execute, current_type)
+            print(output)
+
+    
     def OnDragStart(self, event):
         self.dragging_item = event.GetEventObject().GetParent()
         self.dragging_item.Hide()
