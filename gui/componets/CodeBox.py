@@ -1,3 +1,4 @@
+from utils.db_handler import save_code_to_db
 from gui.componets import MyChatBox
 from gui.componets import AIChatBox
 import wx
@@ -7,7 +8,7 @@ from utils.code_executor import execute_code
 
 
 class CodeBox(wx.Panel):
-    def __init__(self, parent, isWorkflow, texts, language="python", fixed_width=400, code_id=None):
+    def __init__(self, parent, isWorkflow, texts, language="python", fixed_width=400, code_id=None, conversation_id=None):
         super(CodeBox, self).__init__(parent)
         self.SetBackgroundColour("white")  # 배경색 설정
         # 변수 내용 저장
@@ -19,6 +20,7 @@ class CodeBox(wx.Panel):
         self.initial_height = 24  # 초기 높이 설정
         self.min_height = 24  # 텍스트 부분의 최소 높이 설정
         self.code_id = code_id  # 각 CodeBox에 고유한 code_id 부여
+        self.conversation_id = conversation_id  # conversation_id 저장
 
         # 메인 수직 박스 사이저 생성 (위아래 배치용)
         main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -232,6 +234,24 @@ class CodeBox(wx.Panel):
             wx.MessageBox("코드 블록을 제거할 수 없습니다.", "Error", wx.OK | wx.ICON_ERROR)
 
     def on_to_workflow(self, event):
-        # 워크플로우로 전환 이벤트 처리
-        wx.MessageBox("toWorkflow Button Clicked!",
-                      "Info", wx.OK | wx.ICON_INFORMATION)
+        """
+        워크플로우로 전환 이벤트 처리
+        워크플로우로 전환된 코드 블록을 DB에 저장합니다.
+        """
+        # 대화 ID가 None인지 확인
+        if not hasattr(self.Parent.Parent, 'conversation_id') or self.Parent.Parent.conversation_id is None:
+            wx.MessageBox("대화가 존재하지 않습니다. 대화를 먼저 생성하세요.", "Error", wx.OK | wx.ICON_ERROR)
+            return
+
+        # 대화 ID 가져오기
+        conversation_id = self.Parent.Parent.conversation_id
+
+
+        # 코드 블록을 데이터베이스에 저장
+        try:
+            save_code_to_db(conversation_id, self.language, self.text, order_num=1)  # order_num은 실제 순서에 맞게 처리 가능
+            wx.MessageBox("Code block successfully added to workflow!", "Info", wx.OK | wx.ICON_INFORMATION)
+        except Exception as e:
+            wx.MessageBox(f"Failed to save code block to workflow: {str(e)}", "Error", wx.OK | wx.ICON_ERROR)
+
+    

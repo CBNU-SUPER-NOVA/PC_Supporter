@@ -133,19 +133,20 @@ class PromptInputPanel(wx.Panel):
     def _add_response_to_gui(self, response):
         """정제된 응답을 GUI에 추가하는 메서드"""
         for item in response:
+            # AI 응답이 텍스트일 경우
             if item["type"] == "text":
                 ai_chat = AIChatBox(self.Parent.middle_panel, item["data"])
                 self.Parent.middle_panel.GetSizer().Add(ai_chat, 0, wx.ALL | wx.EXPAND, 5)
+
+            # AI 응답이 코드 블럭일 경우
             elif item["type"] in ["python", "bash"]:
-                # CodeBox 생성 및 추가
                 code_box = CodeBox(self.Parent.middle_panel, isWorkflow=False,
-                                texts=item["data"], language=item["type"])
+                                texts=item["data"], language=item["type"],
+                                conversation_id=self.Parent.conversation_id)
                 self.Parent.middle_panel.GetSizer().Add(code_box, 0, wx.ALL | wx.EXPAND, 5)
 
-                # 강제로 레이아웃과 크기 갱신
-                code_box.update_size()  # 강제로 크기 업데이트 호출
-                code_box.Layout()
-                code_box.Refresh()
+                # 디버깅 출력 (확인용)
+                print(f"Added CodeBox with data: {item['data']}, type: {item['type']}, conversation_id: {self.Parent.conversation_id}")
 
         # 전체 레이아웃 갱신
         self.Parent.middle_panel.GetSizer().Layout()
