@@ -55,13 +55,13 @@ class AiPanel(wx.Panel):
         self.Parent.Parent.sidePanel.Show()
         self.Enable(False)
 
-    def update_list(self, conversation_id):
+    def update_list(self):
         # 대화 목록 초기화
         for child in self.middle_panel.GetChildren():
             child.Destroy()
 
         # 대화 목록을 데이터베이스에서 불러와 생성
-        conversations = get_messages(conversation_id)
+        conversations = get_messages(self.conversation_id)
         for conversation in conversations:
             if conversation[0] == "user":
                 chat_box = MyChatBox(self.middle_panel, conversation[2])

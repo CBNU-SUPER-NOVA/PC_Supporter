@@ -18,7 +18,7 @@ class MainFrame(wx.Frame):
         self.aiPanel = AiPanel(self.splitter)
 
         # 코드 패널 생성 및 추가
-        self.codePanel = CodePanel(self.splitter, conversation_id=None)
+        self.codePanel = CodePanel(self.splitter)
 
         # 스플릿 패널 속성
         self.splitter.SetMinimumPaneSize(600)
@@ -30,8 +30,10 @@ class MainFrame(wx.Frame):
     def refresh_data(self, conversation_id):
         # 데이터를 새로고침하는 메서드
         self.conversation_id = conversation_id  # 대화 ID 저장
-        self.aiPanel.update_list(conversation_id)
-        self.codePanel.update_list(conversation_id)
+        self.aiPanel.conversation_id = conversation_id
+        self.codePanel.conversation_id = conversation_id
+        self.aiPanel.update_list()
+        self.codePanel.update_list()
 
 
 def main():
