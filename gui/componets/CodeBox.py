@@ -1,3 +1,5 @@
+from gui.componets import MyChatBox
+from gui.componets import AIChatBox
 import wx
 from .SVGButton import SVGButton
 from .EditButton import EditButton
@@ -219,17 +221,38 @@ class CodeBox(wx.Panel):
         self.editButton.Refresh()  # 버튼 상태 업데이트
 
     def on_delete(self, event):
-    # 삭제 버튼 클릭 시 이벤트 처리
+        # 삭제 버튼 클릭 시 이벤트 처리
         parent = self.GetParent()  # ScrolledWindow
         grandparent = parent.GetParent()  # CodePanel
 
         if hasattr(grandparent, 'RemoveCodeBlock'):
             grandparent.RemoveCodeBlock(self)
         else:
-            wx.MessageBox("코드 블록을 제거할 수 없습니다.", "Error", 
+            wx.MessageBox("코드 블록을 제거할 수 없습니다.", "Error",
                           wx.OK | wx.ICON_ERROR)
-
 
     def on_to_workflow(self, event):
         wx.MessageBox("toWorkflow Button Clicked!",
                       "Info", wx.OK | wx.ICON_INFORMATION)
+
+    def handle_chat(self, tempdata):
+        for data in tempdata:
+            if data["type"] == "User":
+                # 유저 채팅일 경우 MyChatBox를 사용
+                user_chat = MyChatBox(self.middle_panel, data["data"])
+                self.middle_sizer.Add(user_chat, 0, wx.ALL | wx.EXPAND, 5)
+            elif data["type"] == "AI":
+                # AI 채팅일 경우 데이터 리스트를 처리
+                for item in data["data"]:
+                    if item["type"] == "text":
+                        # AI의 텍스트 채팅은 AIChatBox로 처리
+                        ai_chat = AIChatBox(self.middle_panel, item["data"])
+                        self.middle_sizer.Add(
+                            ai_chat, 0, wx.ALL | wx.EXPAND, 5)
+                    elif item["type"] in ["python", "bash"]:
+                        # 코드 타입이면 CodeBox로 처리
+                        code_box = CodeBox(
+                            self.middle_panel, isWorkflow=False, texts=item["data"], language=item["type"])
+                        self.middle_sizer.Add(
+                            code_box, 0, wx.ALL | wx.EXPAND, 5)
+        self.middle_sizer.Layout()  # 레이아웃 갱신

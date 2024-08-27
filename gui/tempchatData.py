@@ -1,37 +1,24 @@
 tempdata = [
-    {"type": "AI", "data": "안녕하세요. PC지원팀입니다."},
-    {"type": "AI", "data": "무엇을 도와드릴까요?"},
-    {"type": "User", "data": "PC가 느려요."},
-    {"type": "AI", "data": "PC가 언제부터 느려졌나요?"},
-    {"type": "User", "data": "며칠 전부터요."},
-    {"type": "AI", "data": "혹시 어떤 프로그램을 실행할 때 느려지나요?"},
-    {"type": "User", "data": "특히 인터넷 브라우저를 사용할 때 느려져요."},
-    {"type": "AI", "data": "인터넷 브라우저의 캐시를 삭제해 보셨나요?"},
-    {"type": "User", "data": "아니요, 어떻게 하는지 잘 모르겠어요."},
-    {"type": "AI", "data": "인터넷 브라우저에서 설정 메뉴로 가신 후, '기록' 또는 '캐시'를 삭제해 보세요."},
-    {"type": "User", "data": "알겠습니다. 한 번 시도해 볼게요."},
-    {"type": "AI", "data": "다른 질문이 있으신가요?"},
-    {"type": "User", "data": "PC가 가끔씩 혼자 재부팅되는데, 이유가 뭘까요?"},
-    {"type": "AI", "data": "PC가 과열되면 자동으로 재부팅될 수 있습니다. 최근에 PC가 뜨거워지지 않았나요?"},
-    {"type": "User", "data": "네, 요즘 계속 뜨거운 것 같아요."},
-    {"type": "AI", "data": "쿨러나 팬이 정상적으로 작동하는지 확인해 보셨나요?"},
-    {"type": "User", "data": "아직 확인하지 않았어요. 어떻게 확인할 수 있죠?"},
-    {"type": "AI", "data": "PC를 열고 팬이 정상적으로 회전하는지 확인해 보세요. 팬이 돌아가지 않으면 청소하거나 교체해야 할 수 있습니다."},
-    {"type": "User", "data": "알겠습니다. 확인해 볼게요."},
-    {"type": "AI", "data": "또 다른 문제가 있나요?"},
-    {"type": "User", "data": "최근에 새로운 프로그램을 설치한 이후부터 문제가 생긴 것 같아요."},
-    {"type": "AI", "data": "어떤 프로그램을 설치하셨나요?"},
-    {"type": "User", "data": "새로운 게임을 설치했어요."},
-    {"type": "AI", "data": "게임이 PC 사양을 초과하는 경우, 성능 저하가 발생할 수 있습니다. 시스템 요구 사항을 확인해 보셨나요?"},
-    {"type": "User", "data": "아니요, 확인하지 않았어요."},
-    {"type": "AI", "data": "게임의 시스템 요구 사항과 PC의 사양을 비교해 보세요. PC 사양이 부족하다면 설정을 낮추거나 다른 조치를 고려해 보셔야 합니다."},
-    {"type": "User", "data": "네, 그렇게 해볼게요."},
-    {"type": "AI", "data": "도움이 되셨길 바랍니다. 더 궁금한 사항이 있으면 언제든지 말씀해 주세요."},
-    {"type": "User", "data": "감사합니다. 큰 도움이 되었어요."},
-    {"type": "AI", "data": "천만에요! 좋은 하루 되세요."},
-    {"type": "User", "data": "네, 감사합니다."},
-    {"type": "AI", "data": "PC 관련해서 더 필요하신 사항이 있으면 언제든지 연락 주세요."},
-    {"type": "User", "data": "알겠습니다. 감사합니다."},
-    # {"type": "AI", "data": "   [{"Message": "hi"}, {"code": "print('hello')"}, {"code": "print('world')"}]"},
-    {"type": "User", "data": "네, 좋은 하루 보내세요."},
+    {
+        "type": "User",
+        "data": "안녕하세요, 파이썬 코드 예제를 하나 보여주세요."
+    },
+    {
+        "type": "AI",
+        "data": [
+            {"subtype": "text", "data": "Sure! Here is a simple Python code snippet that prints 'Hello, World!':"},
+            {"subtype": "python", "data": 'print("Hello, World!")'}
+        ]
+    },
+    {
+        "type": "User",
+        "data": "Bash 스크립트로 파일 목록을 출력하는 방법을 알고 싶어요."
+    },
+    {
+        "type": "AI",
+        "data": [
+            {"subtype": "text", "data": "Here is a simple bash command to list the files in the current directory:"},
+            {"subtype": "bash", "data": 'ls -la'}
+        ]
+    }
 ]

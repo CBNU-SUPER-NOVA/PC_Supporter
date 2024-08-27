@@ -1,6 +1,6 @@
 import wx
-
 from .SVGButton import SVGButton
+from .CodeBox import CodeBox  # CodeBox를 사용한다고 가정
 
 
 class AIChatBox(wx.Panel):
@@ -36,18 +36,8 @@ class AIChatBox(wx.Panel):
         # 텍스트 사이저 추가
         text_sizer = wx.BoxSizer(wx.VERTICAL)
 
-        # 메시지 레이블 생성
-        message_label = wx.StaticText(self, label=message, style=wx.ALIGN_LEFT)
-        message_label.Wrap(max_width - 100)  # 최대 너비 설정
-
-        # 텍스트 색상 및 폰트 설정
-        message_label.SetForegroundColour(self.text_color)
-        message_label.SetBackgroundColour(self.text_bg_color)
-        message_label.SetFont(wx.Font(self.font_size, self.font_family,
-                                      wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
-
-        # 텍스트 사이저에 메시지 레이블 추가
-        text_sizer.Add(message_label, 0, wx.ALL | wx.EXPAND, 3)
+        # 메시지 처리
+        self.add_message(message, text_sizer, max_width)
 
         # 메인 사이저에 텍스트 사이저 추가
         main_sizer.Add(text_sizer, 1, wx.EXPAND | wx.ALL, 10)
@@ -59,16 +49,42 @@ class AIChatBox(wx.Panel):
         self.Fit()
         self.Layout()
 
+    def add_message(self, message, text_sizer, max_width):
+        """메시지를 텍스트 또는 코드로 처리하여 사이저에 추가"""
+        if isinstance(message, list):
+            for item in message:
+                if item["subtype"] == "text":
+                    # 텍스트 메시지일 경우
+                    message_label = wx.StaticText(
+                        self, label=item["data"], style=wx.ALIGN_LEFT)
+                    message_label.Wrap(max_width - 100)  # 최대 너비 설정
+                    # 텍스트 색상 및 폰트 설정
+                    message_label.SetForegroundColour(self.text_color)
+                    message_label.SetBackgroundColour(self.text_bg_color)
+                    message_label.SetFont(wx.Font(self.font_size, self.font_family,
+                                                  wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
+                    text_sizer.Add(message_label, 0, wx.ALL | wx.EXPAND, 3)
+                elif item["subtype"] in ["python", "bash"]:
+                    # 코드일 경우 CodeBox 사용
+                    code_box = CodeBox(
+                        self, isWorkflow=False, texts=item["data"], language=item["subtype"])
+                    text_sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 5)
+        else:
+            # 단일 텍스트 메시지일 경우
+            message_label = wx.StaticText(
+                self, label=message, style=wx.ALIGN_LEFT)
+            message_label.Wrap(max_width - 100)  # 최대 너비 설정
+            # 텍스트 색상 및 폰트 설정
+            message_label.SetForegroundColour(self.text_color)
+            message_label.SetBackgroundColour(self.text_bg_color)
+            message_label.SetFont(wx.Font(self.font_size, self.font_family,
+                                          wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
+            text_sizer.Add(message_label, 0, wx.ALL | wx.EXPAND, 3)
+
     def message(self, message):
-        message_label = wx.StaticText(self, label=message, style=wx.ALIGN_LEFT)
-
-        # 텍스트 색상 및 폰트 설정
-        message_label.SetForegroundColour(self.text_color)
-        message_label.SetBackgroundColour(self.text_bg_color)
-        message_label.SetFont(wx.Font(self.font_size, self.font_family,
-                                      wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
-
-        # 메시지 레이블을 부모 사이저에 추가
-        self.GetSizer().Add(message_label, 0, wx.ALL | wx.EXPAND, 3)
+        """새로운 메시지를 추가하는 메서드"""
+        text_sizer = self.GetSizer().GetChildren()[
+            1].GetSizer()  # 텍스트 사이저 가져오기
+        self.add_message(message, text_sizer, self.GetMaxSize()[0])
         self.Fit()
         self.Layout()
