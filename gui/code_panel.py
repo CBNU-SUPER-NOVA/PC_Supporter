@@ -1,29 +1,15 @@
 import wx
-import json
 from gui.componets.CodeBox import CodeBox
-from gui.componets.SVGButton import SVGButton
 from gui.componets.RoundedPanel import RoundedPanel
-from utils.code_handler import handle_code_blocks
 from utils.db_handler import save_code_to_db, delete_code_from_db, update_code_order, get_code_blocks
-
-# 임시데이터
-json = [("ls -al", "bash"),
-        ("print('Hello, World!')", "python"),
-        ("print('Hello, World!')", "python"),
-        ("print('Hello, World!')", "python"),
-        ("print('Hello, World!')", "python"),
-        ("print('Hello, World!')", "python"),
-        ("print('Hello, World!')", "python"),
-        ("print('Hello, World!'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa)\npruint\n\n\nratasdf", "python"),
-        ("print('Hello, World!')", "python")]
 
 
 class CodePanel(wx.Panel):
-    def __init__(self, parent, conversation_id):
+    def __init__(self, parent):
         super(CodePanel, self).__init__(parent)
         self.SetSize(600, 800)
         self.SetBackgroundColour("white")
-        self.conversation_id = conversation_id
+        self.conversation_id = None  # 대화 ID를 저장할 변수
         self.code_blocks = []  # 코드 블록 데이터를 저장할 리스트
 
         # 메인 Sizer 생성 (수직 배치)
@@ -50,7 +36,7 @@ class CodePanel(wx.Panel):
         self.SetSizer(main_sizer)
 
         # 코드 블록들을 UI에 추가
-        self.update_list(conversation_id)
+        self.update_list()
 
         # 창 크기 조정 시 가로 크기를 다시 맞춤
         self.Bind(wx.EVT_SIZE, self.on_resize)
@@ -60,22 +46,20 @@ class CodePanel(wx.Panel):
         self.scrolled_window.FitInside()  # 스크롤 윈도우 내부 크기 재조정
         event.Skip()
 
-    def update_list(self, conversation_id):
-        self.code_blocks = get_code_blocks(conversation_id)
-        print("Fetched code blocks:", self.code_blocks)  # 디버깅 출력
+    def update_list(self):
+        self.code_blocks = get_code_blocks(self.conversation_id)
 
         for child in self.sizer.GetChildren():
             child.GetWindow().Destroy()
 
         for code_block in self.code_blocks:
             code_id, code_type, code_data, order_num = code_block
-            print(f"Adding CodeBox with data: {code_data}, type: {code_type}")  # 디버깅 출력
-            code_box = CodeBox(self.scrolled_window, True, code_data, code_type, code_id=code_id)
+            code_box = CodeBox(self.scrolled_window, True,
+                               code_data, code_type, code_id=code_id)
             self.sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 10)
 
         self.sizer.Layout()
         self.scrolled_window.FitInside()
-
 
     def add_code_block_to_ui(self, code, language, order):
         # 코드 블록을 UI에 추가하는 메서드
@@ -95,10 +79,8 @@ class CodePanel(wx.Panel):
     def RemoveCodeBlock(self, code_box):
         # 'X' 버튼이 클릭된 CodeBox를 제거하는 메서드
         # UI에서 제거하는 방식이 아닌 없애고 새로 그리는 방식으로 구현
-        self.code_blocks = [
-            block for block in self.code_blocks if block['data'] != code_box.text]
-        delete_code_from_db(code_box.text)  # 데이터베이스에서 코드 블록 삭제
-        self.update_ui()
+        delete_code_from_db(code_box.code_id)
+        self.update_list()
 
     def move_code_block_up(self, code_box):
         # 코드 블록을 위로 이동시키는 메서드
