@@ -1,14 +1,7 @@
 import wx
 from gui.componets.SVGButton import SVGButton
 from gui.componets.RoundedPanel import RoundedPanel
-
-string_array = ["apple", "banana", "cherry", "date",
-                "나는 문어", "꿈을 꾸는 문어", " 꿈속에서는 무엇이든지 할수있어", " 으아악ㅇㄱㅇ각",
-                "나는 문어", "꿈을 꾸는 문어", " 꿈속에서는 무엇이든지 할수있어", " 으아악ㅇㄱㅇ각",
-                "나는 문어", "꿈을 꾸는 문어", " 꿈속에서는 무엇이든지 할수있어", " 으아악ㅇㄱㅇ각",
-                "나는 문어", "꿈을 꾸는 문어", " 꿈속에서는 무엇이든지 할수있어", " 으아악ㅇㄱㅇ각",
-                "나는 문어", "꿈을 꾸는 문어", " 꿈속에서는 무엇이든지 할수있어", " 으아악ㅇㄱㅇ각"]
-
+from utils.db_handler import get_conversation_names
 
 class SidePanel(wx.Panel):
     def __init__(self, parent):
@@ -68,23 +61,15 @@ class SidePanel(wx.Panel):
         main_sizer.Add(top_sizer, 0, wx.EXPAND | wx.TOP, 10)
 
         # 스크롤 가능한 영역 생성
-        scroll_panel = wx.ScrolledWindow(self, style=wx.VSCROLL)
-        scroll_panel.SetBackgroundColour(self.background_color)
-        scroll_panel.SetScrollRate(20, 20)
+        self.scroll_panel = wx.ScrolledWindow(self, style=wx.VSCROLL)
+        self.scroll_panel.SetBackgroundColour(self.background_color)
+        self.scroll_panel.SetScrollRate(20, 20)
 
-        # workflow들을 출력할 sizer 생성
-        workflow_sizer = wx.BoxSizer(wx.VERTICAL)
-        for workflow in string_array:
-            workflow_panel = RoundedPanel(
-                scroll_panel, size=(340, 40), radius=20, texts=workflow, alignment="left", color=self.background_color)
-            workflow_panel.SetBackgroundColour(self.background_color)
-            workflow_sizer.Add(workflow_panel, 0, wx.ALL | wx.EXPAND, 5)
-            workflow_panel.on_click(self.on_workflow_click)
+        # 대화 목록을 출력할 sizer 생성
+        self.workflow_sizer = wx.BoxSizer(wx.VERTICAL)
+        self.scroll_panel.SetSizer(self.workflow_sizer)
 
-        scroll_panel.SetSizer(workflow_sizer)
-        workflow_sizer.Fit(scroll_panel)
-
-        main_sizer.Add(scroll_panel, 1, wx.EXPAND | wx.ALL, 10)
+        main_sizer.Add(self.scroll_panel, 1, wx.EXPAND | wx.ALL, 10)
 
         # 메인 사이저 설정
         self.SetSizer(main_sizer)
@@ -95,6 +80,9 @@ class SidePanel(wx.Panel):
 
         # 초기에는 숨김
         self.Hide()
+
+        # 초기화 시 대화 목록 업데이트
+        self.update_conversation_list()
 
     def on_resize(self, event):
         self.SetSize((self.GetSize().GetWidth(),
@@ -123,3 +111,34 @@ class SidePanel(wx.Panel):
 
     def on_workflow_click(self, event):
         print("Workflow Clicked")
+
+    def on_workflow_click(self, event):
+        clicked_panel = event.GetEventObject()
+        conversation_id = clicked_panel.conversation_id  # 여기서 conversation_id를 올바르게 가져옴
+        print(f"Clicked conversation ID: {conversation_id}")
+        # 대화 ID를 이용해 다음 단계로 연결하는 로직 추가
+
+    def update_conversation_list(self):
+        """
+        대화 목록을 업데이트하는 메서드
+        """
+        # 기존 목록 삭제
+        for child in self.workflow_sizer.GetChildren():
+            child.GetWindow().Destroy()
+
+        # 새로운 대화 목록을 DB에서 가져오기
+        conversation_names = get_conversation_names()
+
+        # 새로운 대화 목록을 UI에 추가
+        for conversation in conversation_names:
+            # 각 RoundedPanel에 conversation_id 저장
+            workflow_panel = RoundedPanel(
+                self.scroll_panel, size=(340, 40), radius=20, texts=conversation[1], alignment="left", color=self.background_color)
+            workflow_panel.SetBackgroundColour(self.background_color)
+            workflow_panel.conversation_id = conversation[0]  # 대화 ID 저장
+            self.workflow_sizer.Add(workflow_panel, 0, wx.ALL | wx.EXPAND, 5)
+            workflow_panel.Bind(wx.EVT_LEFT_UP, self.on_workflow_click)  # 이벤트 바인딩
+
+        # 레이아웃 업데이트
+        self.workflow_sizer.Layout()
+        self.scroll_panel.FitInside()

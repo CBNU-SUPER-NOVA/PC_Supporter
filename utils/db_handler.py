@@ -32,6 +32,18 @@ def init_db():
     conn.commit()
     conn.close()
 
+def get_conversation_names():
+    """
+    데이터베이스에서 대화 목록의 이름을 가져오는 함수
+    """
+    conn = sqlite3.connect('workflow.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, name FROM conversations")
+    conversation_names = cursor.fetchall()
+    conn.close()
+    return conversation_names
+
+
 def create_conversation(name):
     """
     새로운 대화를 생성하고, 생성된 대화의 ID를 반환
