@@ -228,7 +228,6 @@ class CodeBox(wx.Panel):
 
         if hasattr(grandparent, 'RemoveCodeBlock'):
             grandparent.RemoveCodeBlock(self)
-            grandparent.refresh()
         else:
             wx.MessageBox("코드 블록을 제거할 수 없습니다.", "Error", wx.OK | wx.ICON_ERROR)
 

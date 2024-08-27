@@ -38,12 +38,6 @@ class CodePanel(wx.Panel):
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.scrolled_window.SetSizer(self.sizer)
 
-        # sizer에 코드박스 추가
-        for i, code_info in enumerate(json):
-            code_box = CodeBox(self.scrolled_window, True,
-                               code_info[0], code_info[1])
-            self.sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 10)
-
         # ScrolledWindow를 메인 Sizer에 추가
         main_sizer.Add(self.scrolled_window, 1, wx.EXPAND | wx.ALL, 5)
 
@@ -55,6 +49,9 @@ class CodePanel(wx.Panel):
 
         self.SetSizer(main_sizer)
 
+        # 코드 블록들을 UI에 추가
+        self.update_list(conversation_id)
+
         # 창 크기 조정 시 가로 크기를 다시 맞춤
         self.Bind(wx.EVT_SIZE, self.on_resize)
 
@@ -63,14 +60,7 @@ class CodePanel(wx.Panel):
         self.scrolled_window.FitInside()  # 스크롤 윈도우 내부 크기 재조정
         event.Skip()
 
-    # def RemoveCodeBlock(self, code_box):
-    #     # 'X' 버튼이 클릭된 CodeBox를 제거하는 메서드
-    #     self.sizer.Hide(code_box)
-    #     self.sizer.Remove(code_box)
-    #     self.code_blocks = [block for block in self.code_blocks if block['data'] != code_box.text]
-    #     self.update_ui()
-
-    def load_code_blocks(self, conversation_id):
+    def update_list(self, conversation_id):
         """
         특정 대화 ID에 해당하는 코드 블록을 로드하고 UI에 표시
         """
@@ -82,27 +72,33 @@ class CodePanel(wx.Panel):
 
         # 새로운 코드 블록들 추가
         for code_block in self.code_blocks:
-            code_box = CodeBox(self.scrolled_window, True, code_block[1], code_block[2], code_block[0])
+            code_box = CodeBox(self.scrolled_window, True,
+                               code_block[1], code_block[2], code_block[0])
             self.sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 10)
 
         self.sizer.Layout()
         self.scrolled_window.FitInside()
-    
+
     def add_code_block_to_ui(self, code, language, order):
         # 코드 블록을 UI에 추가하는 메서드
         code_box = CodeBox(self.scrolled_window, True, code, language)
-        code_box.delete_callback = lambda evt, cb=code_box: self.RemoveCodeBlock(cb)  # 삭제 콜백 설정
-        code_box.up_callback = lambda evt, cb=code_box: self.move_code_block_up(cb)  # 위로 이동 콜백
-        code_box.down_callback = lambda evt, cb=code_box: self.move_code_block_down(cb)  # 아래로 이동 콜백
+        code_box.delete_callback = lambda evt, cb=code_box: self.RemoveCodeBlock(
+            cb)  # 삭제 콜백 설정
+        code_box.up_callback = lambda evt, cb=code_box: self.move_code_block_up(
+            cb)  # 위로 이동 콜백
+        code_box.down_callback = lambda evt, cb=code_box: self.move_code_block_down(
+            cb)  # 아래로 이동 콜백
         self.sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 10)
-        self.code_blocks.append({'data': code, 'language': language, 'order': order})  # 리스트에 추가
-        save_code_to_db(self.conversation_id, code, language, order)  # 데이터베이스에 저장
+        self.code_blocks.append(
+            {'data': code, 'language': language, 'order': order})  # 리스트에 추가
+        save_code_to_db(self.conversation_id, code,
+                        language, order)  # 데이터베이스에 저장
 
     def RemoveCodeBlock(self, code_box):
         # 'X' 버튼이 클릭된 CodeBox를 제거하는 메서드
-        self.sizer.Hide(code_box)
-        self.sizer.Remove(code_box)
-        self.code_blocks = [block for block in self.code_blocks if block['data'] != code_box.text]
+        # UI에서 제거하는 방식이 아닌 없애고 새로 그리는 방식으로 구현
+        self.code_blocks = [
+            block for block in self.code_blocks if block['data'] != code_box.text]
         delete_code_from_db(code_box.text)  # 데이터베이스에서 코드 블록 삭제
         self.update_ui()
 
@@ -131,13 +127,6 @@ class CodePanel(wx.Panel):
                 code_box = child.GetWindow()
                 update_code_order(code_box.text, index)
 
-    def update_ui(self):
-        # UI 업데이트: 기존 코드 블록들 제거 후 새로 그리기
-        self.scrolled_window.SetSizer(self.sizer)
-        self.sizer.Layout()
-        self.scrolled_window.FitInside()
-        self.scrolled_window.SetVirtualSize((self.GetClientSize().GetWidth(), self.sizer.GetMinSize().GetHeight()))
-
     def workflowRun(self, code):
         print("workflowRun")
 
@@ -150,7 +139,8 @@ class CodePanel(wx.Panel):
         pos = event.GetPosition()
         target_item, index = self.FindTargetItem(pos)
         if target_item:
-            self.sizer.Insert(index, self.dragging_item, 0, wx.ALL | wx.EXPAND, 10)
+            self.sizer.Insert(index, self.dragging_item,
+                              0, wx.ALL | wx.EXPAND, 10)
             self.dragging_item.Show()
             self.sizer.Layout()
             self.update_ui()

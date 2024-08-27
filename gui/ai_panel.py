@@ -62,20 +62,22 @@ class AiPanel(wx.Panel):
         self.Layout()
 
     def SidebarButtonClick(self, event):
+        # 사이드패널 보여주고 본인 비활성화
         self.Parent.Parent.overlay_panel.Show()
         self.Enable(False)
 
     def newChatButtonClick(self, event):
         # 기존의 함수에 대화 생성 로직 추가
-        dialog = wx.TextEntryDialog(self, 'Enter the conversation name :', 'New Conversation')
+        dialog = wx.TextEntryDialog(
+            self, 'Enter the conversation name :', 'New Conversation')
         if dialog.ShowModal() == wx.ID_OK:
             conversation_name = dialog.GetValue()
             # 데이터베이스에 새로운 대화 생성
             conversation_id = create_conversation(conversation_name)
-            wx.MessageBox(f'Conversation "{conversation_name}" created with ID {conversation_id}', 'Info', wx.OK | wx.ICON_INFORMATION)
+            wx.MessageBox(f'Conversation "{conversation_name}" created with ID {
+                          conversation_id}', 'Info', wx.OK | wx.ICON_INFORMATION)
 
-            # 새로운 대화 생성 후 사이드 패널 업데이트 호출
-        if hasattr(self, 'on_new_conversation'):
-            self.on_new_conversation(conversation_id)
+        # 사이드패널의 대화목록 업데이트
+        self.Parent.Parent.overlay_panel.update_list()
 
         dialog.Destroy()
