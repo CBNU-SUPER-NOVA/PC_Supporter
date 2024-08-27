@@ -230,31 +230,9 @@ class CodeBox(wx.Panel):
             grandparent.RemoveCodeBlock(self)
             grandparent.refresh()
         else:
-            wx.MessageBox("코드 블록을 제거할 수 없습니다.", "Error",
-                          wx.OK | wx.ICON_ERROR)
+            wx.MessageBox("코드 블록을 제거할 수 없습니다.", "Error", wx.OK | wx.ICON_ERROR)
 
     def on_to_workflow(self, event):
+        # 워크플로우로 전환 이벤트 처리
         wx.MessageBox("toWorkflow Button Clicked!",
                       "Info", wx.OK | wx.ICON_INFORMATION)
-
-    def handle_chat(self, tempdata):
-        for data in tempdata:
-            if data["type"] == "User":
-                # 유저 채팅일 경우 MyChatBox를 사용
-                user_chat = MyChatBox(self.middle_panel, data["data"])
-                self.middle_sizer.Add(user_chat, 0, wx.ALL | wx.EXPAND, 5)
-            elif data["type"] == "AI":
-                # AI 채팅일 경우 데이터 리스트를 처리
-                for item in data["data"]:
-                    if item["subtype"] == "text":
-                        # AI의 텍스트 채팅은 AIChatBox로 처리
-                        ai_chat = AIChatBox(self.middle_panel, item["data"])
-                        self.middle_sizer.Add(
-                            ai_chat, 0, wx.ALL | wx.EXPAND, 5)
-                    elif item["subtype"] in ["python", "bash"]:
-                        # 코드 타입이면 CodeBox로 처리
-                        code_box = CodeBox(
-                            self.middle_panel, isWorkflow=False, texts=item["data"], language=item["type"])
-                        self.middle_sizer.Add(
-                            code_box, 0, wx.ALL | wx.EXPAND, 5)
-        self.middle_sizer.Layout()  # 레이아웃 갱신
