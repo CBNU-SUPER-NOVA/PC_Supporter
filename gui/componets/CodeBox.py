@@ -240,18 +240,20 @@ class CodeBox(wx.Panel):
         """
         # 대화 ID가 None인지 확인
         if not hasattr(self.Parent.Parent, 'conversation_id') or self.Parent.Parent.conversation_id is None:
-            wx.MessageBox("대화가 존재하지 않습니다. 대화를 먼저 생성하세요.", "Error", wx.OK | wx.ICON_ERROR)
+            wx.MessageBox("대화가 존재하지 않습니다. 대화를 먼저 생성하세요.",
+                          "Error", wx.OK | wx.ICON_ERROR)
             return
 
         # 대화 ID 가져오기
         conversation_id = self.Parent.Parent.conversation_id
 
-
         # 코드 블록을 데이터베이스에 저장
         try:
-            save_code_to_db(conversation_id, self.language, self.text, order_num=1)  # order_num은 실제 순서에 맞게 처리 가능
-            wx.MessageBox("Code block successfully added to workflow!", "Info", wx.OK | wx.ICON_INFORMATION)
+            # order_num은 실제 순서에 맞게 처리 가능
+            save_code_to_db(conversation_id, self.language,
+                            self.text, order_num=1)
+            wx.MessageBox("Code block successfully added to workflow!",
+                          "Info", wx.OK | wx.ICON_INFORMATION)
         except Exception as e:
-            wx.MessageBox(f"Failed to save code block to workflow: {str(e)}", "Error", wx.OK | wx.ICON_ERROR)
-
-    
+            wx.MessageBox(f"Failed to save code block to workflow: {
+                          str(e)}", "Error", wx.OK | wx.ICON_ERROR)
