@@ -86,8 +86,7 @@ class AiPanel(wx.Panel):
             conversation_name = dialog.GetValue()
             # 데이터베이스에 새로운 대화 생성
             conversation_id = create_conversation(conversation_name)
-            wx.MessageBox(f'Conversation "{conversation_name}" created with ID {
-                          conversation_id}', 'Info', wx.OK | wx.ICON_INFORMATION)
+            wx.MessageBox(f'Conversation "{conversation_name}" created with ID {conversation_id}', 'Info', wx.OK | wx.ICON_INFORMATION)
 
             # 새로운 대화 생성 후 사이드 패널 업데이트 호출
             self.Parent.Parent.sidePanel.update_list()

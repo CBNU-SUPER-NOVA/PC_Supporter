@@ -22,7 +22,7 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             conversation_id INTEGER,
             sender_type TEXT CHECK(sender_type IN ('ai', 'user')),
-            content_type TEXT CHECK(content_type IN ('text', 'code')),
+            content_type TEXT CHECK(content_type IN ('text', 'python', 'zsh', 'shell', 'bash')),
             content TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY(conversation_id) REFERENCES conversations(id)
