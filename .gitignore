@@ -12,3 +12,5 @@ __pycache__
 *test*
 
 get-pip.py
+
+workflow.db
