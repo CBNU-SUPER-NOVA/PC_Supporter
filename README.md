@@ -1,3 +1,5 @@
 # PC_Supporter
 
-# If want to run this program , enter "python -m gui.main" in rootdir
+### execute
+If want to run this program,
+Please run `pip install -r requirements.txt` in the root directory and enter `python -m gui.main` in rootdir
