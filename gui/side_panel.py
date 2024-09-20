@@ -109,7 +109,33 @@ class SidePanel(wx.Panel):
         self.Parent.Parent.aiPanel.newChatButtonClick(event)
 
     def promptSettingButtonClick(self, event):
-        print("Prompt Setting Button Clicked")
+        """
+        사용자가 프롬프트 설정 버튼을 클릭했을 때 호출되는 함수.
+        여기서는 프롬프트를 입력받아 저장해둡니다.
+        """
+        # 프롬프트 입력을 위한 다이얼로그 생성
+        prompt_dialog = wx.TextEntryDialog(self, "Enter the default prompt to use in future:", "Prompt Setting")
+        
+        # 사용자가 OK를 눌렀을 때만 동작
+        if prompt_dialog.ShowModal() == wx.ID_OK:
+            user_prompt = prompt_dialog.GetValue()  # 입력된 프롬프트 가져오기
+            if user_prompt.strip():  # 공백이 아닌 경우에만 처리
+                # AiPanel의 prompt_panel에 접근하여 프롬프트 저장
+                ai_panel = self.Parent.Parent.aiPanel  # AiPanel에 접근
+                if hasattr(ai_panel, 'prompt_panel'):
+                    ai_panel.prompt_panel.set_saved_prompt(user_prompt)  # 프롬프트를 저장
+
+                    # 저장 성공 메시지 출력
+                    wx.MessageBox("Prompt has been saved.", "Success", wx.OK | wx.ICON_INFORMATION)
+                else:
+                    wx.MessageBox("Prompt input panel not found!", "Error", wx.OK | wx.ICON_ERROR)
+        
+        # 다이얼로그 닫기
+        prompt_dialog.Destroy()
+
+
+
+
 
     def on_workflow_click(self, event):
         self.sideBarButtonClick(event)
