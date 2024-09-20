@@ -19,6 +19,9 @@ class PromptInputPanel(wx.Panel):
         self.initial_height = 26
         self.conversation_id = None  # 대화 ID를 저장
 
+        # 프롬프트 저장 변수 추가
+        self.saved_prompt = None  # 사전에 저장된 프롬프트
+
         # 배경 색상 설정
         self.SetBackgroundColour("white")
 
@@ -109,23 +112,35 @@ class PromptInputPanel(wx.Panel):
 
         self.Refresh()
 
+    def set_saved_prompt(self, saved_prompt):
+        """
+        외부에서 미리 설정된 프롬프트를 저장하는 함수
+        """
+        self.saved_prompt = saved_prompt
+
     def send_prompt(self, event=None):
         prompt_text = self.prompt_input.GetValue().strip()
         self.clear_prompt()
 
         if prompt_text:
-            # 1. 유저 메시지를 DB에 추가 및 새로고침
+            # 1. 사용자가 입력한 프롬프트에 사전에 저장된 프롬프트 결합
+            if self.saved_prompt:
+                combined_prompt = f"{self.saved_prompt}\n{prompt_text}"
+            else:
+                combined_prompt = prompt_text
+
+            # 2. 유저 메시지를 DB에 추가 및 새로고침
             save_message_to_db(self.Parent.conversation_id,
-                               "user", "text", prompt_text)
+                               "user", "text", combined_prompt)
             self.Parent.update_list()
 
-            # 2. GPT API로 프롬프트 전송 및 응답 수신
-            raw_response = send_to_gpt(prompt_text)
+            # 3. GPT API로 프롬프트 전송 및 응답 수신
+            raw_response = send_to_gpt(combined_prompt)
 
-            # # 3. 응답 정제
+            # 4. 응답 정제
             response = extract_code(raw_response)
 
-            # # 4. 정제된 응답 DB에 추가 및 새로고침
+            # 5. 정제된 응답 DB에 추가 및 새로고침
             self.add_response_to_DB(response)
             self.Parent.update_list()
 
@@ -136,7 +151,7 @@ class PromptInputPanel(wx.Panel):
             if item["type"] == "text":
                 save_message_to_db(self.Parent.conversation_id,
                                    "AI", "text", item["data"])
-                # AI 응답이 코드 블럭일 경우
+            # AI 응답이 코드 블럭일 경우
             elif item["type"] in ["python", "bash"]:
                 save_message_to_db(self.Parent.conversation_id, "AI",
                                    item["type"], item["data"])
