@@ -118,6 +118,12 @@ class PromptInputPanel(wx.Panel):
         """
         self.saved_prompt = saved_prompt
 
+    def get_saved_prompt(self):
+            """
+            저장된 프롬프트를 반환합니다.
+            """
+            return self.saved_prompt
+
     def send_prompt(self, event=None):
         prompt_text = self.prompt_input.GetValue().strip()
         self.clear_prompt()
