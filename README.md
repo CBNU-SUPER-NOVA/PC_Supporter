@@ -57,7 +57,7 @@ PC Supporter is organized into several key components:
 
 ### System Requirements
 - **Operating System**: Windows 10 or higher, macOS
-- **Python**: Python 3.7+
+- **Python**: Python 3.12+
 - **Additional Dependencies**: Please refer to `requirements.txt` for all required packages
 
 ## How to Use
