@@ -82,6 +82,3 @@ If you have any questions, feel free to reach out to us:
   - Lee Hyungjin: gudwls2777@naver.com
   - Choi GaEun: chb7562@gmail.com
 - **GitHub Issues**: [Issues Page](https://github.com/PC-Supporter/PC_Supporter/issues)
-
----
-Feel free to modify this README to better fit the specifics of your project. Are there any features you would like to add or any specific sections you want me to elaborate on?
