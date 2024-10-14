@@ -81,4 +81,4 @@ If you have any questions, feel free to reach out to us:
   - Seo Beomsu: beom710@naver.com
   - Lee Hyungjin: gudwls2777@naver.com
   - Choi GaEun: chb7562@gmail.com
-- **GitHub Issues**: [Issues Page](https://github.com/PC-Supporter/PC_Supporter/issues)
+- **GitHub Issues**: [Issues Page](https://github.com/CBNU-SUPER-NOVA/PC_Supporter/issues)
