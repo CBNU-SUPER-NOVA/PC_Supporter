@@ -1,6 +1,4 @@
-# 이 파일은 프로젝트의 모든 종속석을 나열합니다.
-# `pip install -r requirements.txt`를 사용하여 나열된 모든 패키지 목록을 설치하십시오.
-
+# This file lists all dependencies for the project.
+# Use `pip install -r requirements.txt` to install all the listed packages.
 openai
 wxPython
-

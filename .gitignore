@@ -4,6 +4,10 @@ PCSupporter
 #logs
 __pycache__
 
+#dbfiles
+workflow.db
+PC_Supporter.db
+
 #IDE environment
 .vscode
 
