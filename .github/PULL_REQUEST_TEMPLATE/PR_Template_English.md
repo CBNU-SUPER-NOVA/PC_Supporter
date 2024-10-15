@@ -12,15 +12,16 @@ Please provide a brief summary of the changes in this PR:
 
 - Issue #:
 
+## Additional Comments
 
-## Checklist
+<!-- - Add any additional information or context about this pull request here. -->
+
+<!-- 
+Before PR requset have to check below list
 
 - [ ] I have performed a self-review of my code.
 - [ ] I have added tests that prove my fix is effective or that my feature works.
 - [ ] I have added necessary documentation (if applicable).
 - [ ] My changes generate no new warnings.
-- [ ] I have added reviewers as needed.
-
-## Additional Comments
-
-<!-- - Add any additional information or context about this pull request here. -->
+- [ ] I have added reviewers as needed. 
+-->
