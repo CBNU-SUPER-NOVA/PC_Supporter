@@ -1,4 +1,19 @@
 # PC Supporter: A Powerful Tool for Your Computer Needs
+[![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/CBNU-SUPER-NOVA/PC_Supporter?tab=MIT-1-ov-file)
+[![Contributors](https://img.shields.io/badge/contributions-welcome-green)](https://github.com/CBNU-SUPER-NOVA/PC_Supporter/issues)
+[![Python version](https://img.shields.io/badge/python-3.12-blue)](https://www.python.org/)
+[![WxPython version](https://img.shields.io/badge/wxPython-4.2.1-blue)](https://wxpython.org/)
+[![Release](https://img.shields.io/badge/release-NotYet-blue)](http://notyet.need.to.add.link)
+
+  <a href="#Introduction">Introduction</a> •
+  <a href="#Features">Features</a> •
+  <a href="#Project Structure">Project Structure</a> •
+  <a href="#Getting Started">Running naabu</a> •
+  <a href="#How to Use">How to Use</a> •
+  <a href="#Contributing">Contributing</a> •
+  <a href="#License">License</a> •
+  <a href="#Contact">Contact</a>
+
 
 ## Introduction
 
@@ -21,7 +36,7 @@ Provides a comprehensive summary of your computer's hardware and software specif
 
 
 
-### 5. User-Friendly Interface
+### 3. User-Friendly Interface
 Designed with simplicity in mind, the interface provides:
 - A conversational interface for easy interaction with the AI
 - Visual elements like graphs and progress indicators to show system health
@@ -69,10 +84,10 @@ PC Supporter is organized into several key components:
 3. **Schedule Tasks**: You can set up automated system maintenance tasks like file backups and disk cleanup using the built-in scheduler.
 
 ## Contributing
-We welcome contributions from the community! Please refer to `CONTRIBUTING.md` for more details on how to get involved in this project.
+We welcome contributions from the community! Please refer to [`CONTRIBUTING.md`](https://github.com/CBNU-SUPER-NOVA/PC_Supporter/blob/main/CONTRIBUTING.md) for more details on how to get involved in this project.
 
 ## License
-This project is licensed under the MIT License. See the `LICENSE` file for more information.
+This project is licensed under the MIT License. See the [`LICENSE`](https://github.com/CBNU-SUPER-NOVA/PC_Supporter?tab=MIT-1-ov-file) file for more information.
 
 ## Contact
 If you have any questions, feel free to reach out to us:
