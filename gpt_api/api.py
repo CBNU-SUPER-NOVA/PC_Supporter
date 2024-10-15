@@ -39,7 +39,7 @@ def send_to_gpt(user_input, default_prompt=""):
     ]
 
     # GPT API 호출
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=messages,
         max_tokens=200
