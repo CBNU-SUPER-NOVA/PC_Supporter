@@ -7,9 +7,9 @@
 
   <a href="#Introduction">Introduction</a> •
   <a href="#Features">Features</a> •
-  <a href="#Project Structure">Project Structure</a> •
-  <a href="#Getting Started">Running naabu</a> •
-  <a href="#How to Use">How to Use</a> •
+  <a href="#Project-Structure">Project Structure</a> •
+  <a href="#Getting-Started">Getting Started</a> •
+  <a href="#How-to-Use">How to Use</a> •
   <a href="#Contributing">Contributing</a> •
   <a href="#License">License</a> •
   <a href="#Contact">Contact</a>
