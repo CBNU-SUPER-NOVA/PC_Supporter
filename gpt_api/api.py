@@ -13,6 +13,7 @@ gemini_api_key = os.getenv("GEMINI_API_KEY")
 openai.api_key = openai_api_key
 genai.configure(api_key=gemini_api_key)
 
+
 def send_to_gpt(user_input, default_prompt=""):
     """
     GPT-3.5-turbo API에 메시지를 보내고 응답을 반환합니다.
@@ -35,7 +36,7 @@ def send_to_gpt(user_input, default_prompt=""):
         messages=messages,
         max_tokens=200
     )
-    return response.choices[0].message['content']
+    return response.choices[0].message.content
 
 
 def send_to_gemini(prompt, default_prompt=""):
