@@ -1,9 +1,9 @@
-from utils.db_handler import save_code_to_db
-from gui.componets import MyChatBox
-from gui.componets import AIChatBox
 import wx
-from .SVGButton import SVGButton
+from gui.componets.chat import MyChatBox
+from gui.componets.chat import AIChatBox
+from .common.SVGButton import SVGButton
 from .EditButton import EditButton
+from utils.db_handler import save_code_to_db
 from utils.code_executor import execute_code
 
 

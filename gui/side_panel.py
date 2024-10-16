@@ -1,6 +1,6 @@
 import wx
-from gui.componets.SVGButton import SVGButton
-from gui.componets.RoundedPanel import RoundedPanel
+from gui.componets.common.SVGButton import SVGButton
+from gui.componets.common.RoundedPanel import RoundedPanel
 from utils.db_handler import get_conversation_names
 
 
@@ -115,7 +115,7 @@ class SidePanel(wx.Panel):
         """
         # 프롬프트 입력을 위한 다이얼로그 생성
         prompt_dialog = wx.TextEntryDialog(self, "Enter the default prompt to use in future:", "Prompt Setting")
-        
+
         # 사용자가 OK를 눌렀을 때만 동작
         if prompt_dialog.ShowModal() == wx.ID_OK:
             user_prompt = prompt_dialog.GetValue()  # 입력된 프롬프트 가져오기
@@ -129,13 +129,9 @@ class SidePanel(wx.Panel):
                     wx.MessageBox("Prompt has been saved.", "Success", wx.OK | wx.ICON_INFORMATION)
                 else:
                     wx.MessageBox("Prompt input panel not found!", "Error", wx.OK | wx.ICON_ERROR)
-        
+
         # 다이얼로그 닫기
         prompt_dialog.Destroy()
-
-
-
-
 
     def on_workflow_click(self, event):
         self.sideBarButtonClick(event)

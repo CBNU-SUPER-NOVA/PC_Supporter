@@ -1,10 +1,10 @@
-from utils.code_extractor import extract_code
-from gui.componets.CodeBox import CodeBox
 import wx
-from gui.componets.SVGButton import SVGButton
-from gui.componets.AIChatBox import AIChatBox  # AIChatBox 모듈이 아닌 클래스 임포트
-from gui.componets.MyChatBox import MyChatBox  # MyChatBox를 명확하게 임포트
+from gui.componets.CodeBox import CodeBox
+from gui.componets.common.SVGButton import SVGButton
+from gui.componets.chat.AIChatBox import AIChatBox  # AIChatBox 모듈이 아닌 클래스 임포트
+from gui.componets.chat.MyChatBox import MyChatBox  # MyChatBox를 명확하게 임포트
 from gpt_api.api import send_to_gpt
+from utils.code_extractor import extract_code
 from utils.db_handler import create_conversation, save_code_to_db, save_message_to_db
 
 
@@ -119,10 +119,10 @@ class PromptInputPanel(wx.Panel):
         self.saved_prompt = saved_prompt
 
     def get_saved_prompt(self):
-            """
-            저장된 프롬프트를 반환합니다.
-            """
-            return self.saved_prompt
+        """
+        저장된 프롬프트를 반환합니다.
+        """
+        return self.saved_prompt
 
     def send_prompt(self, event=None):
         prompt_text = self.prompt_input.GetValue().strip()
