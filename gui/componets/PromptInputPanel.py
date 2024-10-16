@@ -1,9 +1,9 @@
 import wx
 from gui.componets.CodeBox import CodeBox
 from gui.componets.common.SVGButton import SVGButton
-from gui.componets.chat.AIChatBox import AIChatBox  # AIChatBox 모듈이 아닌 클래스 임포트
-from gui.componets.chat.MyChatBox import MyChatBox  # MyChatBox를 명확하게 임포트
-from gpt_api.api import send_to_gpt
+from gui.componets.chat.AIChatBox import AIChatBox
+from gui.componets.chat.MyChatBox import MyChatBox
+from gpt_api.api import send_to_llm
 from utils.code_extractor import extract_code
 from utils.db_handler import create_conversation, save_code_to_db, save_message_to_db
 
@@ -137,12 +137,18 @@ class PromptInputPanel(wx.Panel):
 
             # 2. 유저 메시지를 DB에 추가 및 새로고침
             save_message_to_db(self.Parent.conversation_id,
-                               "user", "text", combined_prompt)
+                               "user", "text", prompt_text)
             self.Parent.update_list()
 
-            # 3. GPT API로 프롬프트 전송 및 응답 수신
-            raw_response = send_to_gpt(combined_prompt)
+            # 3. LLM(GPT 또는 Gemini) API로 프롬프트 전송 및 응답 수신
 
+            
+            # 여기서 use_gemini를 True로 설정하면 Gemini를 사용하고, False면 GPT를 사용
+            use_gemini = True  # 필요에 따라 True로 변경할 수 있음
+
+            raw_response = send_to_llm(combined_prompt, use_gemini)
+
+            print(raw_response)
             # 4. 응답 정제
             response = extract_code(raw_response)
 

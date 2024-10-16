@@ -129,7 +129,7 @@ class SidePanel(wx.Panel):
                     wx.MessageBox("Prompt has been saved.", "Success", wx.OK | wx.ICON_INFORMATION)
                 else:
                     wx.MessageBox("Prompt input panel not found!", "Error", wx.OK | wx.ICON_ERROR)
-
+                    
         # 다이얼로그 닫기
         prompt_dialog.Destroy()
 
