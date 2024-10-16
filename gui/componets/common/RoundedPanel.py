@@ -24,7 +24,6 @@ class RoundedPanel(wx.Panel):
         self.Bind(wx.EVT_LEFT_DOWN, self.on_click)
         self.Bind(wx.EVT_ENTER_WINDOW, self.on_enter)
         self.Bind(wx.EVT_LEAVE_WINDOW, self.on_leave)
-        self.Bind(wx.EVT_RIGHT_DOWN, self.on_right_click)
 
     def on_paint(self, event):
         dc = wx.BufferedPaintDC(self)
@@ -78,8 +77,3 @@ class RoundedPanel(wx.Panel):
     # 패널 클릭 이벤트
     def on_click(self, on_click):
         self.Bind(wx.EVT_LEFT_DOWN, on_click)
-
-    def on_right_click(self, event):
-        wx.MessageBox(self.texts + " Panel Right clicked!", "Info",
-                      wx.OK | wx.ICON_INFORMATION)
-        self.Refresh()

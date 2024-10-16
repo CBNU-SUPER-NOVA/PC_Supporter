@@ -1,6 +1,6 @@
 import wx
 from gui.componets.common.SVGButton import SVGButton
-from gui.componets.common.RoundedPanel import RoundedPanel
+from gui.componets.side.ConversationPanel import ConversationPanel
 from utils.db_handler import get_conversation_names
 
 
@@ -153,8 +153,8 @@ class SidePanel(wx.Panel):
 
         # 새로운 대화 목록을 UI에 추가
         for conversation in conversation_names:
-            # 각 RoundedPanel에 conversation_id 저장
-            workflow_panel = RoundedPanel(
+            # 각 converastionPanel에 conversation_id 저장
+            workflow_panel = ConversationPanel(
                 self.scroll_panel, size=(340, 40), radius=20, texts=conversation[1], alignment="left", color=self.background_color)
             workflow_panel.SetBackgroundColour(self.background_color)
             workflow_panel.conversation_id = conversation[0]  # 대화 ID 저장
