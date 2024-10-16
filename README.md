@@ -64,7 +64,11 @@ PC Supporter is organized into several key components:
 
 ### System Architecture
 
-<img width="973" alt="스크린샷 2024-10-17 오전 4 32 23" src="https://github.com/user-attachments/assets/de02f4dc-7429-4e42-bc0f-b0d0cb4be2f9" width="10%" />
+<p align="center">
+  <img src="E5E6A561-136D-4AE3-B331-B962C2CED97F.png" 
+       alt="System Architecture Diagram" 
+       width="50%" />
+</p>
 
 ## Getting Started
 
