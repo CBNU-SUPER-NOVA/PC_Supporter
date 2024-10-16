@@ -63,11 +63,8 @@ def send_to_gemini(prompt, default_prompt=""):
         return f"Gemini API 요청 중 오류 발생: {e}"
 
 
-def send_to_llm(prompt, use_gemini=True):
-    """
-    LLM(대형 언어 모델) 선택에 따라 GPT 또는 Gemini로 프롬프트를 전송하고 응답을 반환합니다.
-    """
-    if use_gemini:
+def send_to_llm(prompt, use_api):
+    if (use_api == "GEMINI"):
         return send_to_gemini(prompt)
     else:
         return send_to_gpt(prompt)
