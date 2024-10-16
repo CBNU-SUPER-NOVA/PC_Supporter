@@ -57,7 +57,7 @@ PC Supporter is organized into several key components:
 
 ### ERD
 
-![diagram](https://github.com/user-attachments/assets/4af7c8bf-b6c3-4854-b38f-4c0e97a3d250)
+<img width="471" alt="스크린샷 2024-10-17 오전 1 56 22" src="https://github.com/user-attachments/assets/9c7b695e-8a5b-4939-9116-6b9d9c31ff01" width="80%" height="80%" />
 
 ## Getting Started
 
