@@ -93,7 +93,7 @@ PC Supporter is organized into several key components:
 
 1. **Launch PC Supporter**: Run the program using:
    ```sh
-   python -m gui.main
+   python main.py
    ```
 2. **Explore Features**: Use the sidebar to navigate through different utilities such as AI-based File Management, Performance Optimizer, and Workflow Automation.
 3. **Schedule Tasks**: You can set up automated system maintenance tasks like file backups and disk cleanup using the built-in scheduler.
