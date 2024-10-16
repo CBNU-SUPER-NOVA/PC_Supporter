@@ -5,7 +5,7 @@
 [![Python version](https://img.shields.io/badge/python-3.12-blue)](https://www.python.org/)
 [![WxPython version](https://img.shields.io/badge/wxPython-4.2.1-blue)](https://wxpython.org/)
 [![openai version](https://img.shields.io/badge/openai-1.51.2-blue)](https://openai.com/index/openai-api/)
-[![google-generativeai version](https://img.shields.io/badge/google-generativeai-0.8.3-blue)](https://github.com/google/generative-ai-python)
+[![google-generativeai version](https://img.shields.io/badge/google_generativeai-0.8.3-blue)](https://github.com/google/generative-ai-python)
 [![Release](https://img.shields.io/badge/release-NotYet-blue)](http://notyet.need.to.add.link)
 
 <a href="#Introduction">Introduction</a> •
