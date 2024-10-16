@@ -60,11 +60,11 @@ PC Supporter is organized into several key components:
 
 ### ERD
 
-<img width="500" alt="스크린샷 2024-10-17 오전 1 56 22" src="https://github.com/user-attachments/assets/9c7b695e-8a5b-4939-9116-6b9d9c31ff01" width="120%" />
+<img width="500" alt="스크린샷 2024-10-17 오전 1 56 22" src="https://github.com/user-attachments/assets/9c7b695e-8a5b-4939-9116-6b9d9c31ff01" />
 
 ### System Architecture
 
-<img width="700" alt="스크린샷 2024-10-17 오전 4 32 23" src="https://github.com/user-attachments/assets/de02f4dc-7429-4e42-bc0f-b0d0cb4be2f9" width="10%" />
+<img width="700" alt="스크린샷 2024-10-17 오전 4 32 23" src="https://github.com/user-attachments/assets/de02f4dc-7429-4e42-bc0f-b0d0cb4be2f9" />
 
 ## Getting Started
 
