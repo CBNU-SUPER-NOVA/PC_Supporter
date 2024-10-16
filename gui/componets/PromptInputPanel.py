@@ -22,6 +22,9 @@ class PromptInputPanel(wx.Panel):
         # 프롬프트 저장 변수 추가
         self.saved_prompt = None  # 사전에 저장된 프롬프트
 
+        self.use_api = "ChatGPT"
+
+
         # 배경 색상 설정
         self.SetBackgroundColour("white")
 
@@ -142,11 +145,9 @@ class PromptInputPanel(wx.Panel):
 
             # 3. LLM(GPT 또는 Gemini) API로 프롬프트 전송 및 응답 수신
 
-            
-            # 여기서 use_gemini를 True로 설정하면 Gemini를 사용하고, False면 GPT를 사용
-            use_gemini = True  # 필요에 따라 True로 변경할 수 있음
+            use_api = self.use_api
 
-            raw_response = send_to_llm(combined_prompt, use_gemini)
+            raw_response = send_to_llm(combined_prompt, use_api)
 
             print(raw_response)
             # 4. 응답 정제
