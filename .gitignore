@@ -17,4 +17,6 @@ PC_Supporter.db
 
 get-pip.py
 
-PC_Supporter.db
+# Release files
+dist/
+build/
