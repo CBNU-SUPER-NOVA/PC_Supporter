@@ -196,7 +196,7 @@ class CodeBox(wx.Panel):
 
     def on_run(self, event):
         # 실행할 코드와 언어를 정의
-        code = self.text
+        code = self.code.GetValue()
         language = self.language
 
         # 코드 실행

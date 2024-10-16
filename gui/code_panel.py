@@ -118,6 +118,9 @@ class CodePanel(wx.Panel):
         combined_code = []
         current_type = None
 
+        # db에서 내용들을 가져옴
+        self.code_blocks = get_code_blocks(self.conversation_id)
+
         # self.code_blocks 리스트의 코드 블록을 order_num 순서대로 실행
         for code_block in sorted(self.code_blocks, key=lambda x: x[3]):  # order_num을 기준으로 정렬
             code_id, code_type, code_data, order_num = code_block
