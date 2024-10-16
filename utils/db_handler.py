@@ -197,3 +197,39 @@ def update_code_data(id, code_data):
 
     conn.commit()
     conn.close()
+
+def update_conversation_name(id, new_name):
+    conn = sqlite3.connect('PC_Supporter.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        UPDATE conversations
+        SET name = ?
+        WHERE id = ?
+    ''', (new_name, id))
+
+    conn.commit()
+    conn.close()
+
+
+def delete_conversation_and_related_data(conversation_id):
+    conn = sqlite3.connect('PC_Supporter.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        DELETE FROM messages
+        WHERE conversation_id = ?
+    ''', (conversation_id, ))
+    
+    cursor.execute('''
+        DELETE FROM code_blocks
+        WHERE conversation_id = ?
+    ''', (conversation_id, ))
+    
+    cursor.execute('''
+        DELETE FROM conversations
+        WHERE id = ?
+    ''', (conversation_id, ))
+    
+    conn.commit()
+    conn.close()
