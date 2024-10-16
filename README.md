@@ -55,6 +55,10 @@ PC Supporter is organized into several key components:
 
 4. **Database Management**: Manages persistent data storage, including workflow configurations, user preferences, and system logs.
 
+### ERD
+
+![diagram](https://github.com/user-attachments/assets/4af7c8bf-b6c3-4854-b38f-4c0e97a3d250)
+
 ## Getting Started
 
 ### Installation
