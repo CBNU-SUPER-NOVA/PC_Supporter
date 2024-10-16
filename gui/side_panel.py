@@ -1,6 +1,7 @@
 import wx
 from gui.componets.common.SVGButton import SVGButton
 from gui.componets.side.ConversationPanel import ConversationPanel
+from gui.componets.side.Setting import Settings
 from utils.db_handler import get_conversation_names
 
 
@@ -47,7 +48,7 @@ class SidePanel(wx.Panel):
         self.settingButton.SetBackgroundColour(self.background_color)
         top_sizer.Add(self.settingButton, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
-        self.settingButton.set_on_click(self.settingButtonClick)
+        self.settingButton.set_on_click(self.on_open_settings)
 
         # prompt setting button
         self.promptSettingButton = SVGButton(
@@ -101,9 +102,6 @@ class SidePanel(wx.Panel):
         self.Parent.Parent.aiPanel.Enable(True)
         self.Hide()
 
-    def settingButtonClick(self, event):
-        print("Setting Button Clicked")
-
     def newChatButtonClick(self, event):
         # AI 패널의 새 채팅 버튼 클릭과 동일한 동작 수행
         self.Parent.Parent.aiPanel.newChatButtonClick(event)
@@ -129,7 +127,7 @@ class SidePanel(wx.Panel):
                     wx.MessageBox("Prompt has been saved.", "Success", wx.OK | wx.ICON_INFORMATION)
                 else:
                     wx.MessageBox("Prompt input panel not found!", "Error", wx.OK | wx.ICON_ERROR)
-                    
+
         # 다이얼로그 닫기
         prompt_dialog.Destroy()
 
@@ -164,3 +162,12 @@ class SidePanel(wx.Panel):
         # 레이아웃 업데이트
         self.workflow_sizer.Layout()
         self.scroll_panel.FitInside()
+
+    def on_open_settings(self, event):
+        """설정 창 열기"""
+        dialog = Settings(self)
+        if dialog.ShowModal() == wx.ID_OK:
+            selected_option = dialog.get_selection()  # 선택된 옵션 가져오기
+            wx.MessageBox(f"Selected: {selected_option}", "Settings", wx.OK | wx.ICON_INFORMATION)
+            # 상준이가 추가할위치
+        dialog.Destroy()
