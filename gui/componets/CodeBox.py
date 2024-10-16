@@ -4,6 +4,7 @@ from gui.componets.chat import AIChatBox
 from .common.SVGButton import SVGButton
 from .EditButton import EditButton
 from utils.db_handler import save_code_to_db
+from utils.db_handler import update_code_data
 from utils.code_executor import execute_code
 
 
@@ -58,18 +59,20 @@ class CodeBox(wx.Panel):
         top_sizer.Add(self.copyButton, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
-        self.editButton = EditButton(top_panel, "gui/icons/Edit.svg", 20)
-        self.editButton.set_on_click(self.on_edit)
-        top_sizer.Add(self.editButton, 0,
-                      wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
-
         if isWorkflow:
+            # EditButton 추가
+            self.editButton = EditButton(top_panel, "gui/icons/Edit.svg", 20)
+            self.editButton.set_on_click(self.on_edit)
+            top_sizer.Add(self.editButton, 0,
+                          wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
+            # DeleteButton 추가
             self.deleteButton = SVGButton(
                 top_panel, "gui/icons/Delete.svg", 20)
             self.deleteButton.set_on_click(self.on_delete)
             top_sizer.Add(self.deleteButton, 0,
                           wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
         else:
+            # toWorkflowButton 추가
             self.toWorkflowButton = SVGButton(
                 top_panel, "gui/icons/ToWorkflow.svg", 20)
             self.toWorkflowButton.set_on_click(self.on_to_workflow)
@@ -217,6 +220,11 @@ class CodeBox(wx.Panel):
         if self.code.IsEditable():
             self.code.SetEditable(False)
             self.editButton.is_active = False  # 활성화 해제
+            # 코드 블록을 데이터베이스에 업데이트
+            update_code_data(self.code_id, self.code.GetValue())
+            # 메시지 박스로 편집 완료 메시지 표시
+            wx.MessageBox("코드가 편집되었습니다.", "Info", wx.OK | wx.ICON_INFORMATION)
+
         else:
             self.code.SetEditable(True)
             self.editButton.is_active = True  # 활성화 상태로 설정

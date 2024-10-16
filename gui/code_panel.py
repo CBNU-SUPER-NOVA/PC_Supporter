@@ -4,6 +4,7 @@ from gui.componets.common.RoundedPanel import RoundedPanel
 from utils.code_handler import handle_code_blocks
 from utils.code_executor import execute_code
 from utils.db_handler import save_code_to_db, delete_code_from_db, update_code_order, get_code_blocks
+from utils.db_handler import update_code_data
 
 
 class CodePanel(wx.Panel):
