@@ -93,10 +93,35 @@ PC Supporter is organized into several key components:
 
 1. **Launch PC Supporter**: Run the program using:
    ```sh
-   python -m gui.main
+   python main.py
    ```
 2. **Explore Features**: Use the sidebar to navigate through different utilities such as AI-based File Management, Performance Optimizer, and Workflow Automation.
 3. **Schedule Tasks**: You can set up automated system maintenance tasks like file backups and disk cleanup using the built-in scheduler.
+
+
+## How to Create an EXE File
+1. Prepare the EXE file using PyInstaller
+   To create an executable file from your Python script using a .spec file, follow these steps:
+
+   Open your terminal or command prompt.
+   Run the following command to generate the EXE file based on your PC_Supporter.spec configuration:
+   ```sh
+   pyinstaller PC_Supporter.spec
+   ```
+   This command will use the settings defined in the PC_Supporter.spec file to package your Python code and dependencies into an executable file.
+
+2. Locate the Generated EXE File
+   Once the build process is complete, PyInstaller will create an EXE file in the dist directory within your project folder. The structure will look like this:
+
+   your_project/
+   ├── dist/
+   │   └── PC_Supporter.exe
+   ├── build/
+   ├── PC_Supporter.spec
+   └── ...
+   
+   You can now navigate to the dist/ folder and find your executable file (PC_Supporter.exe). This file is a standalone application that can be run without needing a Python environment.
+
 
 ## Contributing
 
