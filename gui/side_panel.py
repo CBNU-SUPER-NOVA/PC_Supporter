@@ -169,10 +169,6 @@ class SidePanel(wx.Panel):
         if dialog.ShowModal() == wx.ID_OK:
             selected_option = dialog.get_selection()  # 선택된 옵션 가져오기
             wx.MessageBox(f"Selected: {selected_option}", "Settings", wx.OK | wx.ICON_INFORMATION)
-        
-        print(self.Parent)  # 첫 번째 부모가 무엇인지 출력
-        print(self.Parent.Parent)  # 두 번째 부모가 무엇인지 출력
-        print(hasattr(self.Parent.Parent, 'pinput_panel'))  # pinput_panel 속성이 있는지 확인
 
         self.Parent.Parent.aiPanel.prompt_panel.use_api = selected_option
 
