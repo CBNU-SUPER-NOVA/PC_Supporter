@@ -4,8 +4,9 @@
 [![Contributors](https://img.shields.io/badge/contributions-welcome-green)](https://github.com/CBNU-SUPER-NOVA/PC_Supporter/issues)
 [![Python version](https://img.shields.io/badge/python-3.12-blue)](https://www.python.org/)
 [![WxPython version](https://img.shields.io/badge/wxPython-4.2.1-blue)](https://wxpython.org/)
-[![openai version](https://img.shields.io/badge/openai-1.51.2-blue)](https://openai.com/index/openai-api/)
+[![openai version](https://img.shields.io/badge/openai-1.51.2-blue)](https://github.com/openai/openai-python)
 [![google-generativeai version](https://img.shields.io/badge/google_generativeai-0.8.3-blue)](https://github.com/google/generative-ai-python)
+[![pyinstaller version](https://img.shields.io/badge/pyinstaller-6.11.0-blue)](https://github.com/pyinstaller/pyinstaller)
 [![Release](https://img.shields.io/badge/release-NotYet-blue)](http://notyet.need.to.add.link)
 
 <a href="#Introduction">Introduction</a> •
@@ -16,6 +17,7 @@
 <a href="#Contributing">Contributing</a> •
 <a href="#How-to-Get-API-Keys">How to Get API Keys</a> •
 <a href="#License">License</a> •
+<a href="#How-to-Create-an-EXE-File">How to Create an EXE File</a> •
 <a href="#Contact">Contact</a>
 
 ## Introduction
@@ -61,11 +63,11 @@ PC Supporter is organized into several key components:
 
 ### ERD
 
-<img width="500" alt="스크린샷 2024-10-17 오전 1 56 22" src="https://github.com/user-attachments/assets/9c7b695e-8a5b-4939-9116-6b9d9c31ff01" />
+<img width="500" alt="ERD" src="https://github.com/user-attachments/assets/9c7b695e-8a5b-4939-9116-6b9d9c31ff01" />
 
 ### System Architecture
 
-<img width="650" alt="스크린샷 2024-10-17 오전 4 32 23" src="https://github.com/user-attachments/assets/de02f4dc-7429-4e42-bc0f-b0d0cb4be2f9" />
+<img width="650" alt="System Architecture" src="https://github.com/user-attachments/assets/de02f4dc-7429-4e42-bc0f-b0d0cb4be2f9" />
 
 ## Getting Started
 
@@ -114,12 +116,14 @@ PC Supporter is organized into several key components:
 2. Locate the Generated EXE File
    Once the build process is complete, PyInstaller will create an EXE file in the dist directory within your project folder. The structure will look like this:
 
+   ```file
    your_project/
    ├── dist/
    │   └── PC_Supporter.exe
    ├── build/
    ├── PC_Supporter.spec
    └── ...
+   ```
    
    You can now navigate to the dist/ folder and find your executable file (PC_Supporter.exe). This file is a standalone application that can be run without needing a Python environment.
 
@@ -146,7 +150,7 @@ If you have any questions, feel free to reach out to us:
 
 - **Email**:
   - Park Sangjun: wns1169@gmail.com
-  - Seo Beomsu: beom710@naver.com
+  - Seo Beomsu: beom710@chungbuk.ac.kr
   - Lee Hyungjin: gudwls2777@naver.com
   - Choi GaEun: chb7562@gmail.com
 - **GitHub Issues**: [Issues Page](https://github.com/CBNU-SUPER-NOVA/PC_Supporter/issues)
