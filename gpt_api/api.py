@@ -22,7 +22,8 @@ def send_to_gpt(user_input, default_prompt=""):
     os_info = platform.system()
 
     # 시스템 메시지: 기본 프롬프트 및 운영체제 정보 포함
-    system_message = f"{default_prompt}\nThe user is using a {os_info} operating system." if default_prompt else f"The user is using a {os_info} operating system."
+    system_message = f"{default_prompt}\nThe user is using a {os_info} operating system. If the request involves providing code, respond with Python code. If the request involves commands, respond with Zsh commands." if default_prompt else f"The user is using a {os_info} operating system. If the request involves providing code, respond with Python code. If the request involves commands, respond with Zsh commands."
+
 
     # GPT에 전달할 메시지 구조
     messages = [
@@ -48,7 +49,8 @@ def send_to_gemini(prompt, default_prompt=""):
         os_info = platform.system()
 
         # 기본 프롬프트와 시스템 정보 포함
-        system_message = f"{default_prompt}\nThe user is using a {os_info} operating system." if default_prompt else f"The user is using a {os_info} operating system."
+        system_message = f"{default_prompt}\nThe user is using a {os_info} operating system. If the request involves providing code, respond with Python code. If the request involves commands, respond with Zsh commands." if default_prompt else f"The user is using a {os_info} operating system. If the request involves providing code, respond with Python code. If the request involves commands, respond with Zsh commands."
+
         combined_prompt = f"{system_message}\n{prompt}"
 
         # 생성 모델 설정
