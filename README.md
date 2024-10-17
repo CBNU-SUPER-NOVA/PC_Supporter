@@ -14,6 +14,7 @@
 <a href="#Getting-Started">Getting Started</a> •
 <a href="#How-to-Use">How to Use</a> •
 <a href="#Contributing">Contributing</a> •
+<a href="#How-to-Get-API-Keys">How to Get API Keys</a> •
 <a href="#License">License</a> •
 <a href="#Contact">Contact</a>
 
@@ -126,6 +127,14 @@ PC Supporter is organized into several key components:
 ## Contributing
 
 We welcome contributions from the community! Please refer to [`CONTRIBUTING.md`](https://github.com/CBNU-SUPER-NOVA/PC_Supporter/blob/main/CONTRIBUTING.md) for more details on how to get involved in this project.
+
+
+## How to Get API Keys
+
+For detailed instructions on how to obtain GPT and Gemini API keys, please refer to the following document:
+
+[`How to Get API Keys`](https://github.com/CBNU-SUPER-NOVA/PC_Supporter/blob/main/How%20to%20Get%20API%20Key.md)
+
 
 ## License
 
