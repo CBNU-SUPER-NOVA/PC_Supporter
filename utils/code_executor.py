@@ -36,12 +36,3 @@ def execute_code(code, language='python'):
     else:
         return "지원하지 않는 언어입니다."
 
-
-# def execute_pipeline(pipeline):
-#     for block in pipeline:
-#         print(f"Executing {block['name']}: {block['description']}")
-#         exec(block['code'])
-
-
-# def validate_path(path):
-#     return os.path.exists(path)

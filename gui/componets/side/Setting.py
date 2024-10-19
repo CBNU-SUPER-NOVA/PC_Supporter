@@ -1,7 +1,8 @@
 import wx
 
+from gpt_api.api import validate_gemini_api_key, validate_openai_api_key
+
 # 설정 다이얼로그
-# TODO : 실제 API 키 인증 로직 추가
 
 
 class Settings(wx.Dialog):
@@ -56,7 +57,7 @@ class Settings(wx.Dialog):
         # 여기에서 실제 API 키 인증 확인 로직을 추가할 수 있습니다.
         if api_key:  # 단순히 입력이 있으면 인증된다고 가정
             api_key_test = True
-            if(api_key_test):
+            if validate_openai_api_key(api_key):
                 wx.MessageBox("Chat GPT API 키가 인증되었습니다!", "확인", wx.OK | wx.ICON_INFORMATION)
             else:
                 wx.MessageBox("잘못된 Chat GPT API 키입니다.", "확인", wx.OK | wx.ICON_INFORMATION)
@@ -68,7 +69,7 @@ class Settings(wx.Dialog):
         # 여기에서도 실제 API 키 인증 확인 로직을 추가할 수 있습니다.
         if api_key:
             api_key_test = True
-            if(api_key_test):
+            if validate_gemini_api_key(api_key):
                 wx.MessageBox("Chat GPT API 키가 인증되었습니다!", "확인", wx.OK | wx.ICON_INFORMATION)
             else:
                 wx.MessageBox("잘못된 Chat GPT API 키입니다.", "확인", wx.OK | wx.ICON_INFORMATION)
