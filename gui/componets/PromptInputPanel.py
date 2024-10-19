@@ -22,6 +22,7 @@ class PromptInputPanel(wx.Panel):
         # 프롬프트 저장 변수 추가
         self.saved_prompt = None  # 사전에 저장된 프롬프트
 
+        # default AI is ChatGPT
         self.use_api = "ChatGPT"
 
 
