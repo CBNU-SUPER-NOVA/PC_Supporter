@@ -3,6 +3,7 @@ import openai
 import google.generativeai as genai
 import platform
 from dotenv import load_dotenv
+import requests
 
 # 환경변수에서 API 키 가져오기
 load_dotenv()
@@ -71,3 +72,58 @@ def send_to_llm(prompt, use_api):
         return send_to_gemini(prompt)
     else:
         return send_to_gpt(prompt)
+
+
+import openai
+
+def validate_openai_api_key(api_key):
+    try:
+        # OpenAI API 키 설정
+        openai.api_key = api_key
+        
+        # API 키 유효성 검사를 위한 간단한 모델 호출
+        openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "system", "content": "Ping"}],
+        )
+        return True  # 성공적으로 호출되면 API 키가 유효
+    except openai.APIStatusError:
+        return False  # 인증 실패 시 False 반환
+    except Exception as e:
+        print(f"OpenAI API 확인 중 오류 발생: {e}")
+        return False  # 기타 오류 처리
+
+    
+def validate_gemini_api_key(api_key):
+    try:
+        # Google Gemini API의 URL
+        url = f"https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key={api_key}"
+
+        # 요청에 사용될 데이터
+        data = {
+            "contents": [
+                {
+                    "role": "user",
+                    "parts": [{"text": "Give me five subcategories of jazz?"}]
+                }
+            ]
+        }
+
+        # 헤더 설정
+        headers = {
+            "Content-Type": "application/json"
+        }
+
+        # POST 요청 보내기
+        response = requests.post(url, json=data, headers=headers)
+
+        # 상태 코드 확인
+        if response.status_code == 200:
+            return True  # API 키가 유효하면 True 반환
+        else:
+            print(f"응답 코드: {response.status_code}, 응답 내용: {response.text}")
+            return False
+
+    except Exception as e:
+        print(f"Gemini API 확인 중 오류 발생: {e}")
+        return False
