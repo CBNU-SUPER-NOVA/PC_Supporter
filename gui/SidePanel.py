@@ -22,47 +22,35 @@ class SidePanel(wx.Panel):
         top_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
         # 사이드바 버튼 생성
-        self.sidebar_button = SVGButton(
-            self, "gui/icons/SideBar.svg", 40, hover_color="#AAAAAA")
-        self.sidebar_button.SetBackgroundColour(self.background_color)
+        self.sidebar_button = SVGButton(self, "gui/icons/SideBar.svg", 40, self.sidebar_button_Click, hover_color="#AAAAAA")
         top_sizer.Add(self.sidebar_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
-        self.sidebar_button.set_on_click(self.sidebar_button_Click)
-
         # 새 채팅 추가 버튼
         self.new_chat_button = SVGButton(
-            self, "gui/icons/NewChat.svg", 40, hover_color="#AAAAAA")
-        self.new_chat_button.SetBackgroundColour(self.background_color)
+            self, "gui/icons/NewChat.svg", 40, self.new_chat_button_Click, hover_color="#AAAAAA")
         top_sizer.Add(self.new_chat_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
-        self.new_chat_button.set_on_click(self.new_chat_button_Click)
-
         # 중간 공간 추가하여 버튼들을 우측으로 밀어내기
         top_sizer.AddStretchSpacer(1)
 
         # 세팅 버튼 생성
         self.setting_button = SVGButton(
             self, "gui/icons/Setting.svg", 40, hover_color="#AAAAAA")
-        self.setting_button.SetBackgroundColour(self.background_color)
         top_sizer.Add(self.setting_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
         self.setting_button.set_on_click(self.on_open_settings)
 
         # prompt setting button
         self.prompt_setting_button = SVGButton(
-            self, "gui/icons/promptsetting.svg", 40, hover_color="#AAAAAA")
-        self.prompt_setting_button.SetBackgroundColour(self.background_color)
+            self, "gui/icons/promptsetting.svg", 40, self.prompt_setting_button_click, hover_color="#AAAAAA")
         top_sizer.Add(self.prompt_setting_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
-        self.prompt_setting_button.set_on_click(self.prompt_setting_button_click)
 
         # informaiton button 생성
         self.information_button = SVGButton(
-            self, "gui/icons/info.svg", 40, hover_color="#AAAAAA")
-        self.information_button.SetBackgroundColour(self.background_color)
+            self, "gui/icons/info.svg", 40, self.information_button_click, hover_color="#AAAAAA")
         top_sizer.Add(self.information_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
-        self.information_button.set_on_click(self.information_button_click)
 
         # main_sizer 생성
         main_sizer = wx.BoxSizer(wx.VERTICAL)

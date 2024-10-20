@@ -45,13 +45,11 @@ class CodeBox(wx.Panel):
 
         # 버튼들 추가 (우측 정렬을 위한 공간 추가)
         self.codePlayButton = SVGButton(
-            top_panel, "gui/icons/CodePlay.svg", 20)
-        self.codePlayButton.set_on_click(self.on_run)
+            top_panel, "gui/icons/CodePlay.svg", 20, self.on_run)
         top_sizer.Add(self.codePlayButton, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
-        self.copyButton = SVGButton(top_panel, "gui/icons/Copy.svg", 20)
-        self.copyButton.set_on_click(self.on_copy)
+        self.copyButton = SVGButton(top_panel, "gui/icons/Copy.svg", 20, self.on_copy)
         top_sizer.Add(self.copyButton, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
@@ -63,15 +61,13 @@ class CodeBox(wx.Panel):
                           wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
             # DeleteButton 추가
             self.deleteButton = SVGButton(
-                top_panel, "gui/icons/Delete.svg", 20)
-            self.deleteButton.set_on_click(self.on_delete)
+                top_panel, "gui/icons/Delete.svg", 20, self.on_delete)
             top_sizer.Add(self.deleteButton, 0,
                           wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
         else:
             # toWorkflowButton 추가
             self.toWorkflowButton = SVGButton(
-                top_panel, "gui/icons/ToWorkflow.svg", 20)
-            self.toWorkflowButton.set_on_click(self.on_to_workflow)
+                top_panel, "gui/icons/ToWorkflow.svg", 20, self.on_to_workflow)
             top_sizer.Add(self.toWorkflowButton, 0,
                           wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 

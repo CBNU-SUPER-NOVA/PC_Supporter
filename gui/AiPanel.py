@@ -21,14 +21,12 @@ class AiPanel(wx.Panel):
 
         # 사이드바 버튼 생성
         self.sidebar_button = SVGButton(
-            self, "gui/icons/SideBar.svg", 40, hover_color="#AAAAAA")
-        self.sidebar_button.set_on_click(self.sidebar_button_click)
+            self, "gui/icons/SideBar.svg", 40, self.sidebar_button_click, hover_color="#AAAAAA")
         top_sizer.Add(self.sidebar_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
         # New chat 버튼 생성
         self.new_chat_button = SVGButton(
-            self, "gui/icons/NewChat.svg", 40, hover_color="#AAAAAA")
-        self.new_chat_button.set_on_click(self.new_chat_button_click)
+            self, "gui/icons/NewChat.svg", 40, self.new_chat_button_click, hover_color="#AAAAAA")
         top_sizer.Add(self.new_chat_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 

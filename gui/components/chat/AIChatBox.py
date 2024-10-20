@@ -24,8 +24,7 @@ class AIChatBox(wx.Panel):
 
         # AI SVG 이미지 버튼 생성
         SVG_sizer = wx.BoxSizer(wx.VERTICAL)
-        self.ai_icon = SVGButton(self, "gui/icons/AI.svg", 30)
-        self.ai_icon.SetBackgroundColour(self.bg_color)
+        self.ai_icon = SVGButton(self, "gui/icons/AI.svg", 30, self.on_click)
         SVG_sizer.Add(self.ai_icon, 0, wx.ALL | wx.TOP, 10)
 
         # 공백 추가해서 밀어내기
@@ -67,3 +66,7 @@ class AIChatBox(wx.Panel):
             code_box = CodeBox(
                 self, isWorkflow=False, texts=message, language=type)
             text_sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 5)
+
+    def on_click(self, event):
+        print("AI chat box clicked")
+        event.Skip()

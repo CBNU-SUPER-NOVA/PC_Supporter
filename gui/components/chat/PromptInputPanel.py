@@ -51,9 +51,7 @@ class PromptInputPanel(wx.Panel):
         sizer.Add(self.prompt_input, 1, wx.EXPAND | wx.ALL, self.padding)
 
         # 전송 버튼 생성
-        self.send_button = SVGButton(self, "gui/icons/Arrow.svg", 30)
-        self.send_button.SetBackgroundColour(self.basecolor)
-        self.send_button.set_on_click(self.send_prompt)
+        self.send_button = SVGButton(self, "gui/icons/Arrow.svg", 30, self.send_prompt, hover_color="#AAAAAA")
         sizer.Add(self.send_button, 0, wx.ALIGN_CENTER_VERTICAL |
                   wx.RIGHT, self.padding)
 
