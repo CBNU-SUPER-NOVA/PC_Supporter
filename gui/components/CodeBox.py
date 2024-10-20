@@ -1,5 +1,5 @@
 import wx
-from gui.componets import SVGButton, EditButton
+from gui.components import SVGButton, EditButton
 from utils.db_handler import save_code_to_db, update_code_data
 from utils.code_executor import execute_code
 

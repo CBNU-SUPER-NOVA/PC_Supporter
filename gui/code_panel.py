@@ -1,5 +1,5 @@
 import wx
-from gui.componets import CodeBox, RoundedPanel
+from gui.components import CodeBox, RoundedPanel
 from utils.code_executor import execute_code
 from utils.db_handler import save_code_to_db, delete_code_from_db, update_code_order, get_code_blocks
 

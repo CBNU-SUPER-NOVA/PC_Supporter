@@ -1,5 +1,5 @@
 import wx
-from gui.componets import SVGButton
+from gui.components import SVGButton
 
 
 class AIChatBox(wx.Panel):

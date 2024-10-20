@@ -1,5 +1,5 @@
 import wx
-from gui.componets import SVGButton
+from gui.components import SVGButton
 from gpt_api.api import send_to_llm
 from utils.code_extractor import extract_code
 from utils.db_handler import save_message_to_db

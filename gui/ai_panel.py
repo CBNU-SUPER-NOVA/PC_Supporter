@@ -1,5 +1,5 @@
 import wx
-from gui.componets import CodeBox, SVGButton, PromptInputPanel, AIChatBox, MyChatBox
+from gui.components import CodeBox, SVGButton, PromptInputPanel, AIChatBox, MyChatBox
 from utils.db_handler import create_conversation, get_code_blocks, get_messages
 
 
