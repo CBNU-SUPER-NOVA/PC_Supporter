@@ -1,5 +1,5 @@
 import wx
-from gui.componets.common.RoundedPanel import RoundedPanel
+from gui.components import RoundedPanel
 from utils.db_handler import update_conversation_name, delete_conversation_and_related_data
 
 

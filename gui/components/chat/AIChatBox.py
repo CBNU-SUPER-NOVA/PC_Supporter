@@ -62,7 +62,7 @@ class AIChatBox(wx.Panel):
                                           wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
             text_sizer.Add(message_label, 0, wx.ALL | wx.EXPAND, 3)
         else:
-            from ..CodeBox import CodeBox
+            from ..common.CodeBox import CodeBox
             # 코드일 경우 CodeBox 사용
             code_box = CodeBox(
                 self, isWorkflow=False, texts=message, language=type)
