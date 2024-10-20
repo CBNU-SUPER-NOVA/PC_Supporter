@@ -61,7 +61,7 @@ class SidePanel(wx.Panel):
 
         # informaiton button 생성
         self.informationButton = SVGButton(
-            self, "gui/icons/exclamation.svg", 40, hover_color="#AAAAAA")
+            self, "gui/icons/info.svg", 40, hover_color="#AAAAAA")
         self.informationButton.SetBackgroundColour(self.background_color)
         top_sizer.Add(self.informationButton, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
