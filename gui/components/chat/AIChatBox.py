@@ -3,9 +3,9 @@ from gui.components import SVGButton
 
 
 class AIChatBox(wx.Panel):
-    def __init__(self, parent, type, message, max_width=550, text_color="#000000", font_size=10, font_family=wx.FONTFAMILY_DEFAULT, bg_color="#FFFFFF", text_bg_color="#FFFFFF"):
+    def __init__(self, parent, type, message, conversation_id, max_width=550, text_color="#000000", font_size=10, font_family=wx.FONTFAMILY_DEFAULT, bg_color="#FFFFFF", text_bg_color="#FFFFFF"):
         super(AIChatBox, self).__init__(parent)
-
+        self.conversation_id = conversation_id
         # 배경 색상 설정 (패널과 텍스트 배경 색상 통일)
         self.bg_color = wx.Colour(bg_color)
         self.text_bg_color = wx.Colour(text_bg_color)
@@ -61,10 +61,10 @@ class AIChatBox(wx.Panel):
                                           wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
             text_sizer.Add(message_label, 0, wx.ALL | wx.EXPAND, 3)
         else:
-            from ..common.CodeBox import CodeBox
+            from gui.components import CodeBox
             # 코드일 경우 CodeBox 사용
             code_box = CodeBox(
-                self, isWorkflow=False, texts=message, language=type)
+                self, isWorkflow=False, texts=message, language=type, conversation_id=self.conversation_id)
             text_sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 5)
 
     def on_click(self, event):

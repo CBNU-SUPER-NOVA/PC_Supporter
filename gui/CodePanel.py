@@ -56,7 +56,7 @@ class CodePanel(wx.Panel):
         for code_block in self.code_blocks:
             code_id, code_type, code_data, order_num = code_block
             code_box = CodeBox(self.scrolled_window, True,
-                               code_data, code_type, code_id=code_id)
+                               code_data, code_type, code_id=code_id, conversation_id=self.conversation_id)
             self.sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 10)
 
         self.sizer.Layout()
@@ -65,8 +65,6 @@ class CodePanel(wx.Panel):
     def add_code_block_to_ui(self, code, language, order):
         # 코드 블록을 UI에 추가하는 메서드
         code_box = CodeBox(self.scrolled_window, True, code, language)
-        code_box.delete_callback = lambda evt, cb=code_box: self.remove_code_block(
-            cb)  # 삭제 콜백 설정
         code_box.up_callback = lambda evt, cb=code_box: self.move_code_block_up(
             cb)  # 위로 이동 콜백
         code_box.down_callback = lambda evt, cb=code_box: self.move_code_block_down(
@@ -76,12 +74,6 @@ class CodePanel(wx.Panel):
             {'data': code, 'language': language, 'order': order})  # 리스트에 추가
         save_code_to_db(self.conversation_id, code,
                         language, order)  # 데이터베이스에 저장
-
-    def remove_code_block(self, code_box):
-        # 'X' 버튼이 클릭된 CodeBox를 제거하는 메서드
-        # UI에서 제거하는 방식이 아닌 없애고 새로 그리는 방식으로 구현
-        delete_code_from_db(code_box.code_id)
-        self.update_list()
 
     def move_code_block_up(self, code_box):
         # 코드 블록을 위로 이동시키는 메서드

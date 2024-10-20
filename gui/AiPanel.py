@@ -49,7 +49,7 @@ class AiPanel(wx.Panel):
         self.Layout()
 
     def sidebar_button_click(self, event):
-        self.Parent.Parent.sidePanel.Show()
+        wx.GetTopLevelParent(self).sidePanel.Show()
         self.Enable(False)
 
     def update_list(self):
@@ -64,7 +64,7 @@ class AiPanel(wx.Panel):
                 chat_box = MyChatBox(self.middle_panel, conversation[2])
             else:
                 chat_box = AIChatBox(
-                    self.middle_panel, conversation[1], conversation[2])
+                    self.middle_panel, conversation[1], conversation[2], conversation_id=self.conversation_id)
             self.middle_panel.GetSizer().Add(chat_box, 0, wx.ALL | wx.EXPAND, 10)
 
         self.middle_panel.GetSizer().Layout()
@@ -81,7 +81,7 @@ class AiPanel(wx.Panel):
             wx.MessageBox(f'Conversation "{conversation_name}" created with ID {conversation_id}', 'Info', wx.OK | wx.ICON_INFORMATION)
 
             # 새로운 대화 생성 후 사이드 패널 업데이트 호출
-            self.Parent.Parent.sidePanel.update_list()
+            wx.GetTopLevelParent(self).sidePanel.update_list()
 
         dialog.Destroy()
 

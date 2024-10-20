@@ -93,12 +93,12 @@ class SidePanel(wx.Panel):
             self.Layout()
 
     def sidebar_button_Click(self, event):
-        self.Parent.Parent.aiPanel.Enable(True)
+        wx.GetTopLevelParent(self).aiPanel.Enable(True)
         self.Hide()
 
     def new_chat_button_Click(self, event):
         # AI 패널의 새 채팅 버튼 클릭과 동일한 동작 수행
-        self.Parent.Parent.aiPanel.new_chat_button_click(event)
+        wx.GetTopLevelParent(self).aiPanel.new_chat_button_click(event)
 
     def prompt_setting_button_click(self, event):
         """
@@ -113,7 +113,7 @@ class SidePanel(wx.Panel):
             user_prompt = prompt_dialog.GetValue()  # 입력된 프롬프트 가져오기
             if user_prompt.strip():  # 공백이 아닌 경우에만 처리
                 # AiPanel의 prompt_panel에 접근하여 프롬프트 저장
-                ai_panel = self.Parent.Parent.aiPanel  # AiPanel에 접근
+                ai_panel = wx.GetTopLevelParent(self).aiPanel  # AiPanel에 접근
                 if hasattr(ai_panel, 'prompt_panel'):
                     ai_panel.prompt_panel.set_saved_prompt(user_prompt)  # 프롬프트를 저장
 
@@ -130,7 +130,7 @@ class SidePanel(wx.Panel):
         clicked_panel = event.GetEventObject()
         conversation_id = clicked_panel.conversation_id  # 여기서 conversation_id를 올바르게 가져옴
         # 대화 ID를 이용해 다음 단계로 연결하는 로직 추가
-        self.Parent.Parent.refresh_data(conversation_id)
+        wx.GetTopLevelParent(self).refresh_data(conversation_id)
 
     def update_list(self):
         """
@@ -164,7 +164,7 @@ class SidePanel(wx.Panel):
             selected_option = dialog.get_selection()  # 선택된 옵션 가져오기
             wx.MessageBox(f"Selected: {selected_option}", "Settings", wx.OK | wx.ICON_INFORMATION)
 
-        self.Parent.Parent.aiPanel.prompt_panel.use_api = selected_option
+        wx.GetTopLevelParent(self).aiPanel.prompt_panel.use_api = selected_option
 
         dialog.Destroy()
 

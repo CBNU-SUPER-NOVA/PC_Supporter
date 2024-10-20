@@ -46,4 +46,4 @@ class ConversationPanel(RoundedPanel):
         delete_conversation_and_related_data(self.conversation_id)
         wx.MessageBox(f"{self.texts} is being deleted!", "Delete", wx.OK | wx.ICON_INFORMATION)
         # 대화 목록 업데이트
-        self.Parent.Parent.update_list()
+        wx.GetTopLevelParent(self).codePanel.update_list()

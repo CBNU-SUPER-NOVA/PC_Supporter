@@ -30,34 +30,34 @@ class CodeBox(wx.Panel):
         top_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
         # 코딩언어 라벨 (좌측 정렬)
-        self.codeLanguage = wx.StaticText(top_panel, label=self.language)
-        self.codeLanguage.SetBackgroundColour("#1E1E1E")
-        self.codeLanguage.SetForegroundColour("#FFFFFF")
-        self.codeLanguage.SetFont(wx.Font(12, wx.FONTFAMILY_DEFAULT,
-                                          wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
-        self.codeLanguage.Wrap(400)
+        self.code_language = wx.StaticText(top_panel, label=self.language)
+        self.code_language.SetBackgroundColour("#1E1E1E")
+        self.code_language.SetForegroundColour("#FFFFFF")
+        self.code_language.SetFont(wx.Font(12, wx.FONTFAMILY_DEFAULT,
+                                           wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
+        self.code_language.Wrap(400)
 
         # 좌측 정렬
-        top_sizer.Add(self.codeLanguage, 0,
+        top_sizer.Add(self.code_language, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 0)
         # 중간 공간 추가하여 버튼들을 우측으로 밀어내기
         top_sizer.AddStretchSpacer(1)
 
         # 버튼들 추가 (우측 정렬을 위한 공간 추가)
-        self.codePlayButton = SVGButton(
+        self.code_play_button = SVGButton(
             top_panel, "gui/icons/CodePlay.svg", 20, self.on_run)
-        top_sizer.Add(self.codePlayButton, 0,
+        top_sizer.Add(self.code_play_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
-        self.copyButton = SVGButton(top_panel, "gui/icons/Copy.svg", 20, self.on_copy)
-        top_sizer.Add(self.copyButton, 0,
+        self.copy_button = SVGButton(top_panel, "gui/icons/Copy.svg", 20, self.on_copy)
+        top_sizer.Add(self.copy_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
         if isWorkflow:
-            # EditButton 추가
-            self.editButton = EditButton(top_panel, "gui/icons/Edit.svg", 20)
-            self.editButton.set_on_click(self.on_edit)
-            top_sizer.Add(self.editButton, 0,
+            # edit_button 추가
+            self.edit_button = EditButton(top_panel, "gui/icons/Edit.svg", 20)
+            self.edit_button.set_on_click(self.on_edit)
+            top_sizer.Add(self.edit_button, 0,
                           wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
             # DeleteButton 추가
             self.deleteButton = SVGButton(
@@ -211,7 +211,7 @@ class CodeBox(wx.Panel):
     def on_edit(self, event):
         if self.code.IsEditable():
             self.code.SetEditable(False)
-            self.editButton.is_active = False  # 활성화 해제
+            self.edit_button.is_active = False  # 활성화 해제
             # 코드 블록을 데이터베이스에 업데이트
             update_code_data(self.code_id, self.code.GetValue())
             # 메시지 박스로 편집 완료 메시지 표시
@@ -219,38 +219,25 @@ class CodeBox(wx.Panel):
 
         else:
             self.code.SetEditable(True)
-            self.editButton.is_active = True  # 활성화 상태로 설정
+            self.edit_button.is_active = True  # 활성화 상태로 설정
 
-        self.editButton.Refresh()  # 버튼 상태 업데이트
+        self.edit_button.Refresh()  # 버튼 상태 업데이트
 
     def on_delete(self, event):
-        # 삭제 버튼 클릭 시 이벤트 처리
-        parent = self.GetParent()  # ScrolledWindow
-        grandparent = parent.GetParent()  # CodePanel
-
-        if hasattr(grandparent, 'RemoveCodeBlock'):
-            grandparent.RemoveCodeBlock(self)
-        else:
-            wx.MessageBox("코드 블록을 제거할 수 없습니다.", "Error", wx.OK | wx.ICON_ERROR)
+        # 삭제 버튼 클릭시 이벤트 처리
+        # 코드 블록을 데이터베이스에서 삭제
+        # 그이후 새로그림
+        from utils.db_handler import delete_code_from_db
+        delete_code_from_db(self.code_id)
+        wx.GetTopLevelParent(self).codePanel.update_list()
 
     def on_to_workflow(self, event):
         """
         워크플로우로 전환 이벤트 처리
         워크플로우로 전환된 코드 블록을 DB에 저장합니다.
         """
-        # 대화 ID가 None인지 확인
-        if not hasattr(self.Parent.Parent.Parent, 'conversation_id'):
-            wx.MessageBox("대화가 존재하지 않습니다. 대화를 먼저 생성하세요.",
-                          "Error", wx.OK | wx.ICON_ERROR)
-            return
-
-        # 대화 ID 가져오기
-        conversation_id = self.Parent.Parent.Parent.conversation_id
-
-        # 코드 블록을 데이터베이스에 저장
-        # order_num은 실제 순서에 맞게 처리 가능
-        save_code_to_db(conversation_id, self.language,
+        save_code_to_db(self.conversation_id, self.language,
                         self.text, order_num=1)
         wx.MessageBox("Code block successfully added to workflow!",
                       "Info", wx.OK | wx.ICON_INFORMATION)
-        self.Parent.Parent.Parent.Parent.Parent.codePanel.update_list()
+        wx.GetTopLevelParent(self).codePanel.update_list()
