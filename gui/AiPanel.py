@@ -1,9 +1,5 @@
 import wx
-from gui.componets import CodeBox
-from gui.componets.common.SVGButton import SVGButton
-from gui.componets.PromptInputPanel import PromptInputPanel
-from gui.componets.chat.AIChatBox import AIChatBox
-from gui.componets.chat.MyChatBox import MyChatBox
+from gui.components import CodeBox, SVGButton, PromptInputPanel, AIChatBox, MyChatBox
 from utils.db_handler import create_conversation, get_code_blocks, get_messages
 
 
@@ -24,16 +20,14 @@ class AiPanel(wx.Panel):
         top_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
         # 사이드바 버튼 생성
-        self.SidebarButton = SVGButton(
-            self, "gui/icons/SideBar.svg", 40, hover_color="#AAAAAA")
-        self.SidebarButton.set_on_click(self.SidebarButtonClick)
-        top_sizer.Add(self.SidebarButton, 0,
+        self.sidebar_button = SVGButton(
+            self, "gui/icons/SideBar.svg", 40, self.sidebar_button_click, hover_color="#AAAAAA")
+        top_sizer.Add(self.sidebar_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
         # New chat 버튼 생성
-        self.NewChatButton = SVGButton(
-            self, "gui/icons/NewChat.svg", 40, hover_color="#AAAAAA")
-        self.NewChatButton.set_on_click(self.newChatButtonClick)
-        top_sizer.Add(self.NewChatButton, 0,
+        self.new_chat_button = SVGButton(
+            self, "gui/icons/NewChat.svg", 40, self.new_chat_button_click, hover_color="#AAAAAA")
+        top_sizer.Add(self.new_chat_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
 
         main_sizer.Add(top_sizer, 0, wx.EXPAND | wx.TOP, 10)
@@ -54,8 +48,8 @@ class AiPanel(wx.Panel):
         self.SetSizer(main_sizer)
         self.Layout()
 
-    def SidebarButtonClick(self, event):
-        self.Parent.Parent.sidePanel.Show()
+    def sidebar_button_click(self, event):
+        wx.GetTopLevelParent(self).sidePanel.Show()
         self.Enable(False)
 
     def update_list(self):
@@ -70,13 +64,13 @@ class AiPanel(wx.Panel):
                 chat_box = MyChatBox(self.middle_panel, conversation[2])
             else:
                 chat_box = AIChatBox(
-                    self.middle_panel, conversation[1], conversation[2])
+                    self.middle_panel, conversation[1], conversation[2], conversation_id=self.conversation_id)
             self.middle_panel.GetSizer().Add(chat_box, 0, wx.ALL | wx.EXPAND, 10)
 
         self.middle_panel.GetSizer().Layout()
         self.middle_panel.FitInside()
 
-    def newChatButtonClick(self, event):
+    def new_chat_button_click(self, event):
         # 기존의 함수에 대화 생성 로직 추가
         dialog = wx.TextEntryDialog(
             self, 'Enter the conversation name :', 'New Conversation')
@@ -87,7 +81,7 @@ class AiPanel(wx.Panel):
             wx.MessageBox(f'Conversation "{conversation_name}" created with ID {conversation_id}', 'Info', wx.OK | wx.ICON_INFORMATION)
 
             # 새로운 대화 생성 후 사이드 패널 업데이트 호출
-            self.Parent.Parent.sidePanel.update_list()
+            wx.GetTopLevelParent(self).sidePanel.update_list()
 
         dialog.Destroy()
 
@@ -125,4 +119,3 @@ class AiPanel(wx.Panel):
         """SidePanel에서 선택된 conversation_id를 설정"""
         self.conversation_id = conversation_id
         self.prompt_panel.conversation_id = conversation_id  # PromptInputPanel에도 설정
-        print(f"Conversation ID set to: {self.conversation_id}")

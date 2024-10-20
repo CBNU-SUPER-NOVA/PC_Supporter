@@ -1,8 +1,5 @@
 import wx
-from gui.componets.common.SVGButton import SVGButton
-from gui.componets.side.ConversationPanel import ConversationPanel
-from gui.componets.side.Setting import Settings
-from gui.componets.side.Informaiton import Information
+from gui.components import SVGButton, ConversationPanel, Settings, Information
 from utils.db_handler import get_conversation_names
 
 
@@ -25,47 +22,35 @@ class SidePanel(wx.Panel):
         top_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
         # 사이드바 버튼 생성
-        self.sideBarButton = SVGButton(
-            self, "gui/icons/SideBar.svg", 40, hover_color="#AAAAAA")
-        self.sideBarButton.SetBackgroundColour(self.background_color)
-        top_sizer.Add(self.sideBarButton, 0,
+        self.sidebar_button = SVGButton(self, "gui/icons/SideBar.svg", 40, self.sidebar_button_Click, hover_color="#AAAAAA")
+        top_sizer.Add(self.sidebar_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
-        self.sideBarButton.set_on_click(self.sideBarButtonClick)
-
         # 새 채팅 추가 버튼
-        self.newChatButton = SVGButton(
-            self, "gui/icons/NewChat.svg", 40, hover_color="#AAAAAA")
-        self.newChatButton.SetBackgroundColour(self.background_color)
-        top_sizer.Add(self.newChatButton, 0,
+        self.new_chat_button = SVGButton(
+            self, "gui/icons/NewChat.svg", 40, self.new_chat_button_Click, hover_color="#AAAAAA")
+        top_sizer.Add(self.new_chat_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 10)
-        self.newChatButton.set_on_click(self.newChatButtonClick)
-
         # 중간 공간 추가하여 버튼들을 우측으로 밀어내기
         top_sizer.AddStretchSpacer(1)
 
         # 세팅 버튼 생성
-        self.settingButton = SVGButton(
+        self.setting_button = SVGButton(
             self, "gui/icons/Setting.svg", 40, hover_color="#AAAAAA")
-        self.settingButton.SetBackgroundColour(self.background_color)
-        top_sizer.Add(self.settingButton, 0,
+        top_sizer.Add(self.setting_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
-        self.settingButton.set_on_click(self.on_open_settings)
+        self.setting_button.set_on_click(self.on_open_settings)
 
         # prompt setting button
-        self.promptSettingButton = SVGButton(
-            self, "gui/icons/PromptSetting.svg", 40, hover_color="#AAAAAA")
-        self.promptSettingButton.SetBackgroundColour(self.background_color)
-        top_sizer.Add(self.promptSettingButton, 0,
+        self.prompt_setting_button = SVGButton(
+            self, "gui/icons/promptsetting.svg", 40, self.prompt_setting_button_click, hover_color="#AAAAAA")
+        top_sizer.Add(self.prompt_setting_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
-        self.promptSettingButton.set_on_click(self.promptSettingButtonClick)
 
         # informaiton button 생성
-        self.informationButton = SVGButton(
-            self, "gui/icons/info.svg", 40, hover_color="#AAAAAA")
-        self.informationButton.SetBackgroundColour(self.background_color)
-        top_sizer.Add(self.informationButton, 0,
+        self.information_button = SVGButton(
+            self, "gui/icons/info.svg", 40, self.information_button_click, hover_color="#AAAAAA")
+        top_sizer.Add(self.information_button, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
-        self.informationButton.set_on_click(self.informationButtonClick)
 
         # main_sizer 생성
         main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -107,15 +92,15 @@ class SidePanel(wx.Panel):
                          self.Parent.GetClientSize().GetHeight()))
             self.Layout()
 
-    def sideBarButtonClick(self, event):
-        self.Parent.Parent.aiPanel.Enable(True)
+    def sidebar_button_Click(self, event):
+        wx.GetTopLevelParent(self).aiPanel.Enable(True)
         self.Hide()
 
-    def newChatButtonClick(self, event):
+    def new_chat_button_Click(self, event):
         # AI 패널의 새 채팅 버튼 클릭과 동일한 동작 수행
-        self.Parent.Parent.aiPanel.newChatButtonClick(event)
+        wx.GetTopLevelParent(self).aiPanel.new_chat_button_click(event)
 
-    def promptSettingButtonClick(self, event):
+    def prompt_setting_button_click(self, event):
         """
         사용자가 프롬프트 설정 버튼을 클릭했을 때 호출되는 함수.
         여기서는 프롬프트를 입력받아 저장해둡니다.
@@ -128,7 +113,7 @@ class SidePanel(wx.Panel):
             user_prompt = prompt_dialog.GetValue()  # 입력된 프롬프트 가져오기
             if user_prompt.strip():  # 공백이 아닌 경우에만 처리
                 # AiPanel의 prompt_panel에 접근하여 프롬프트 저장
-                ai_panel = self.Parent.Parent.aiPanel  # AiPanel에 접근
+                ai_panel = wx.GetTopLevelParent(self).aiPanel  # AiPanel에 접근
                 if hasattr(ai_panel, 'prompt_panel'):
                     ai_panel.prompt_panel.set_saved_prompt(user_prompt)  # 프롬프트를 저장
 
@@ -141,11 +126,11 @@ class SidePanel(wx.Panel):
         prompt_dialog.Destroy()
 
     def on_workflow_click(self, event):
-        self.sideBarButtonClick(event)
+        self.sidebar_button_Click(event)
         clicked_panel = event.GetEventObject()
         conversation_id = clicked_panel.conversation_id  # 여기서 conversation_id를 올바르게 가져옴
         # 대화 ID를 이용해 다음 단계로 연결하는 로직 추가
-        self.Parent.Parent.refresh_data(conversation_id)
+        wx.GetTopLevelParent(self).refresh_data(conversation_id)
 
     def update_list(self):
         """
@@ -179,11 +164,11 @@ class SidePanel(wx.Panel):
             selected_option = dialog.get_selection()  # 선택된 옵션 가져오기
             wx.MessageBox(f"Selected: {selected_option}", "Settings", wx.OK | wx.ICON_INFORMATION)
 
-        self.Parent.Parent.aiPanel.prompt_panel.use_api = selected_option
+        wx.GetTopLevelParent(self).aiPanel.prompt_panel.use_api = selected_option
 
         dialog.Destroy()
 
-    def informationButtonClick(self, event):
+    def information_button_click(self, event):
         dialog = Information(self)
         dialog.ShowModal()
         dialog.Destroy()

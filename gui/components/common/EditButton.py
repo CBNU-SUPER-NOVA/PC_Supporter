@@ -14,7 +14,6 @@ class EditButton(wx.Panel):
         self.svg_image = wx.svg.SVGimage.CreateFromFile(URL)
         self.Bind(wx.EVT_ENTER_WINDOW, self.on_enter)
         self.Bind(wx.EVT_LEAVE_WINDOW, self.on_leave)
-        self.Bind(wx.EVT_LEFT_DOWN, self.on_click)
 
         self.is_hovered = False
         self.is_active = False  # 버튼이 눌려진 상태인지 여부
@@ -52,10 +51,6 @@ class EditButton(wx.Panel):
 
     def on_leave(self, event):
         self.is_hovered = False
-        self.Refresh()
-
-    def on_click(self, event):
-        self.is_active = not self.is_active  # 클릭 시 활성화 상태를 토글
         self.Refresh()
 
     def pos(self, x, y):

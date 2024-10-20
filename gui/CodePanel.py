@@ -1,10 +1,7 @@
 import wx
-from gui.componets.CodeBox import CodeBox
-from gui.componets.common.RoundedPanel import RoundedPanel
-from utils.code_handler import handle_code_blocks
+from gui.components import CodeBox, RoundedPanel
 from utils.code_executor import execute_code
 from utils.db_handler import save_code_to_db, delete_code_from_db, update_code_order, get_code_blocks
-from utils.db_handler import update_code_data
 
 
 class CodePanel(wx.Panel):
@@ -31,11 +28,11 @@ class CodePanel(wx.Panel):
         main_sizer.Add(self.scrolled_window, 1, wx.EXPAND | wx.ALL, 5)
 
         # 독립적인 버튼 생성
-        WorkflowRunButton = RoundedPanel(
+        workflow_run_button = RoundedPanel(
             self, size=(300, 50), radius=25, alignment="center", texts="Workflow Run", color="#F7F7F8", hover_color="#C0C0C0")
 
-        WorkflowRunButton.Bind(wx.EVT_LEFT_DOWN, self.workflowRun)  # 이벤트 핸들러로 수정
-        main_sizer.Add(WorkflowRunButton, 0, wx.ALIGN_CENTER | wx.ALL, 10)
+        workflow_run_button.Bind(wx.EVT_LEFT_DOWN, self.workflow_run)  # 이벤트 핸들러로 수정
+        main_sizer.Add(workflow_run_button, 0, wx.ALIGN_CENTER | wx.ALL, 10)
 
         self.SetSizer(main_sizer)
 
@@ -59,7 +56,7 @@ class CodePanel(wx.Panel):
         for code_block in self.code_blocks:
             code_id, code_type, code_data, order_num = code_block
             code_box = CodeBox(self.scrolled_window, True,
-                               code_data, code_type, code_id=code_id)
+                               code_data, code_type, code_id=code_id, conversation_id=self.conversation_id)
             self.sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 10)
 
         self.sizer.Layout()
@@ -68,8 +65,6 @@ class CodePanel(wx.Panel):
     def add_code_block_to_ui(self, code, language, order):
         # 코드 블록을 UI에 추가하는 메서드
         code_box = CodeBox(self.scrolled_window, True, code, language)
-        code_box.delete_callback = lambda evt, cb=code_box: self.RemoveCodeBlock(
-            cb)  # 삭제 콜백 설정
         code_box.up_callback = lambda evt, cb=code_box: self.move_code_block_up(
             cb)  # 위로 이동 콜백
         code_box.down_callback = lambda evt, cb=code_box: self.move_code_block_down(
@@ -79,12 +74,6 @@ class CodePanel(wx.Panel):
             {'data': code, 'language': language, 'order': order})  # 리스트에 추가
         save_code_to_db(self.conversation_id, code,
                         language, order)  # 데이터베이스에 저장
-
-    def RemoveCodeBlock(self, code_box):
-        # 'X' 버튼이 클릭된 CodeBox를 제거하는 메서드
-        # UI에서 제거하는 방식이 아닌 없애고 새로 그리는 방식으로 구현
-        delete_code_from_db(code_box.code_id)
-        self.update_list()
 
     def move_code_block_up(self, code_box):
         # 코드 블록을 위로 이동시키는 메서드
@@ -111,8 +100,8 @@ class CodePanel(wx.Panel):
                 code_box = child.GetWindow()
                 update_code_order(code_box.text, index)
 
-    def workflowRun(self, event=None):
-        print("workflowRun 실행")
+    def workflow_run(self, event=None):
+        print("workflow 실행")
 
         # 동일한 유형의 코드 블록을 그룹화하여 저장할 변수들
         combined_code = []
@@ -151,14 +140,14 @@ class CodePanel(wx.Panel):
         # 코드가 실행되었음을 알림 (실행 결과를 어떻게 처리할지는 나중에 결정)
         wx.MessageBox("Workflow Run 완료", "알림", wx.OK | wx.ICON_INFORMATION)
 
-    def OnDragStart(self, event):
+    def on_drag_start(self, event):
         self.dragging_item = event.GetEventObject().GetParent()
         self.dragging_item.Hide()
         event.Skip()
 
-    def OnDrop(self, event):
+    def on_drop(self, event):
         pos = event.GetPosition()
-        target_item, index = self.FindTargetItem(pos)
+        target_item, index = self.find_target_item(pos)
         if target_item:
             self.sizer.Insert(index, self.dragging_item,
                               0, wx.ALL | wx.EXPAND, 10)
@@ -171,7 +160,7 @@ class CodePanel(wx.Panel):
 
         event.Skip()
 
-    def FindTargetItem(self, pos):
+    def find_target_item(self, pos):
         for index, item in enumerate(self.sizer.GetChildren()):
             if item.GetWindow().GetScreenRect().Contains(pos):
                 return item.GetWindow(), index

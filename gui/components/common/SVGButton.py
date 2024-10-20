@@ -4,7 +4,7 @@ from utils.path_utils import resource_path
 
 
 class SVGButton(wx.Panel):
-    def __init__(self, parent, URL, size, corner_radius=10, hover_color="#F7F7F8"):
+    def __init__(self, parent, URL, size, on_click=print(""), corner_radius=10, hover_color="#F7F7F8"):
         super(SVGButton, self).__init__(parent)
         self.URL = resource_path(URL)
         self.SetMinSize((size, size))  # 최소 크기 설정
@@ -16,7 +16,7 @@ class SVGButton(wx.Panel):
         self.svg_image = wx.svg.SVGimage.CreateFromFile(self.URL)
         self.Bind(wx.EVT_ENTER_WINDOW, self.on_enter)
         self.Bind(wx.EVT_LEAVE_WINDOW, self.on_leave)
-
+        self.Bind(wx.EVT_LEFT_DOWN, on_click)
         self.is_hovered = False
         self.hover_color = hover_color  # 호버 시 배경색
         self.corner_radius = corner_radius  # 둥근 모서리 반경

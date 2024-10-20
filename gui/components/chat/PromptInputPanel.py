@@ -1,11 +1,8 @@
 import wx
-from gui.componets.CodeBox import CodeBox
-from gui.componets.common.SVGButton import SVGButton
-from gui.componets.chat.AIChatBox import AIChatBox
-from gui.componets.chat.MyChatBox import MyChatBox
+from gui.components import SVGButton
 from gpt_api.api import send_to_llm
 from utils.code_extractor import extract_code
-from utils.db_handler import create_conversation, save_code_to_db, save_message_to_db
+from utils.db_handler import save_message_to_db
 
 
 class PromptInputPanel(wx.Panel):
@@ -24,7 +21,6 @@ class PromptInputPanel(wx.Panel):
 
         # default AI is ChatGPT
         self.use_api = "ChatGPT"
-
 
         # 배경 색상 설정
         self.SetBackgroundColour("white")
@@ -55,9 +51,7 @@ class PromptInputPanel(wx.Panel):
         sizer.Add(self.prompt_input, 1, wx.EXPAND | wx.ALL, self.padding)
 
         # 전송 버튼 생성
-        self.send_button = SVGButton(self, "gui/icons/Arrow.svg", 30)
-        self.send_button.SetBackgroundColour(self.basecolor)
-        self.send_button.set_on_click(self.send_prompt)
+        self.send_button = SVGButton(self, "gui/icons/Arrow.svg", 30, self.send_prompt, hover_color="#AAAAAA")
         sizer.Add(self.send_button, 0, wx.ALIGN_CENTER_VERTICAL |
                   wx.RIGHT, self.padding)
 
