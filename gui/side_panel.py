@@ -2,6 +2,7 @@ import wx
 from gui.componets.common.SVGButton import SVGButton
 from gui.componets.side.ConversationPanel import ConversationPanel
 from gui.componets.side.Setting import Settings
+from gui.componets.side.Informaiton import Information
 from utils.db_handler import get_conversation_names
 
 
@@ -57,6 +58,14 @@ class SidePanel(wx.Panel):
         top_sizer.Add(self.promptSettingButton, 0,
                       wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
         self.promptSettingButton.set_on_click(self.promptSettingButtonClick)
+
+        # informaiton button 생성
+        self.informationButton = SVGButton(
+            self, "gui/icons/info.svg", 40, hover_color="#AAAAAA")
+        self.informationButton.SetBackgroundColour(self.background_color)
+        top_sizer.Add(self.informationButton, 0,
+                      wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 10)
+        self.informationButton.set_on_click(self.informationButtonClick)
 
         # main_sizer 생성
         main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -172,4 +181,9 @@ class SidePanel(wx.Panel):
 
         self.Parent.Parent.aiPanel.prompt_panel.use_api = selected_option
 
+        dialog.Destroy()
+
+    def informationButtonClick(self, event):
+        dialog = Information(self)
+        dialog.ShowModal()
         dialog.Destroy()

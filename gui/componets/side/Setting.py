@@ -7,7 +7,7 @@ from gpt_api.api import validate_gemini_api_key, validate_openai_api_key
 
 class Settings(wx.Dialog):
     def __init__(self, parent):
-        super().__init__(parent, title="API Key 입력", size=(600, 250))
+        super().__init__(parent, title="Settings", size=(600, 250))
 
         panel = wx.Panel(self)
 
