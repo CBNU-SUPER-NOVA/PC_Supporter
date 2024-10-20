@@ -216,7 +216,6 @@ class CodeBox(wx.Panel):
             update_code_data(self.code_id, self.code.GetValue())
             # 메시지 박스로 편집 완료 메시지 표시
             wx.MessageBox("코드가 편집되었습니다.", "Info", wx.OK | wx.ICON_INFORMATION)
-
         else:
             self.code.SetEditable(True)
             self.edit_button.is_active = True  # 활성화 상태로 설정
@@ -224,7 +223,6 @@ class CodeBox(wx.Panel):
         self.edit_button.Refresh()  # 버튼 상태 업데이트
 
     def on_delete(self, event):
-        # 삭제 버튼 클릭시 이벤트 처리
         # 코드 블록을 데이터베이스에서 삭제
         # 그이후 새로그림
         from utils.db_handler import delete_code_from_db
