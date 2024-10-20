@@ -1,11 +1,8 @@
 import wx
-from gui.componets.CodeBox import CodeBox
-from gui.componets.common.SVGButton import SVGButton
-from gui.componets.chat.AIChatBox import AIChatBox
-from gui.componets.chat.MyChatBox import MyChatBox
+from gui.componets import SVGButton
 from gpt_api.api import send_to_llm
 from utils.code_extractor import extract_code
-from utils.db_handler import create_conversation, save_code_to_db, save_message_to_db
+from utils.db_handler import save_message_to_db
 
 
 class PromptInputPanel(wx.Panel):
@@ -24,7 +21,6 @@ class PromptInputPanel(wx.Panel):
 
         # default AI is ChatGPT
         self.use_api = "ChatGPT"
-
 
         # 배경 색상 설정
         self.SetBackgroundColour("white")

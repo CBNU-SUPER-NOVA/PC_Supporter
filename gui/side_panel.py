@@ -1,8 +1,5 @@
 import wx
-from gui.componets.common.SVGButton import SVGButton
-from gui.componets.side.ConversationPanel import ConversationPanel
-from gui.componets.side.Setting import Settings
-from gui.componets.side.Informaiton import Information
+from gui.componets import SVGButton, ConversationPanel, Settings, Information
 from utils.db_handler import get_conversation_names
 
 

@@ -1,10 +1,6 @@
 import wx
-from gui.componets.chat import MyChatBox
-from gui.componets.chat import AIChatBox
-from .common.SVGButton import SVGButton
-from .EditButton import EditButton
-from utils.db_handler import save_code_to_db
-from utils.db_handler import update_code_data
+from gui.componets import SVGButton, EditButton
+from utils.db_handler import save_code_to_db, update_code_data
 from utils.code_executor import execute_code
 
 
