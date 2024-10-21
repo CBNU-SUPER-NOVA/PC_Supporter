@@ -28,11 +28,11 @@ def init_db():
     conn = sqlite3.connect('PC_Supporter.db')
     cursor = conn.cursor()
 
-    # 모델 테이블 생성
+    # 모델 테이블 생성 (model_name에 UNIQUE 제약 조건 추가)
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS models (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            model_name TEXT NOT NULL,
+            model_name TEXT NOT NULL UNIQUE,  -- UNIQUE 추가
             encrypted_api_key TEXT NOT NULL
         )
     ''')
@@ -42,7 +42,7 @@ def init_db():
         print("model_name 열이 추가되었습니다.")
     except sqlite3.OperationalError:
         print("model_name 열이 이미 존재합니다.")
-
+    
     # 대화 테이블 생성
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS conversations (
@@ -163,7 +163,7 @@ def save_api_key(model_name, api_key):
     conn = sqlite3.connect('PC_Supporter.db')
     cursor = conn.cursor()
 
-    # 기존 키가 있는지 확인 후 업데이트 또는 삽입
+    # 이미 있는 모델은 업데이트, 없으면 삽입
     cursor.execute('''
         INSERT INTO models (model_name, encrypted_api_key)
         VALUES (?, ?)
@@ -175,15 +175,11 @@ def save_api_key(model_name, api_key):
 
 
 def load_api_key(model_name):
-    """
-    저장된 API 키를 복호화하여 반환
-    """
+    """저장된 API 키 복호화 후 반환"""
     conn = sqlite3.connect('PC_Supporter.db')
     cursor = conn.cursor()
 
-    cursor.execute('''
-        SELECT encrypted_api_key FROM models WHERE model_name = ?
-    ''', (model_name,))
+    cursor.execute('SELECT encrypted_api_key FROM models WHERE model_name = ?', (model_name,))
     result = cursor.fetchone()
     conn.close()
 

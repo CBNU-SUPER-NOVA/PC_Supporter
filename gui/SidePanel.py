@@ -146,6 +146,7 @@ class SidePanel(wx.Panel):
                 color=self.background_color
             )
             workflow_panel.conversation_id = conversation[0]
+            workflow_panel.on_click(self.on_workflow_click)
             self.workflow_sizer.Add(workflow_panel, 0, wx.ALL | wx.EXPAND, 5)
 
         self.workflow_sizer.Layout()
@@ -164,32 +165,32 @@ class SidePanel(wx.Panel):
 
     def on_open_settings(self, event):
         """설정 창 열기 및 API 키 처리"""
-        dialog = Settings(self)
+        dialog = Settings(self)  # 설정 다이얼로그 열기
 
         if dialog.ShowModal() == wx.ID_OK:
-            selected_option = dialog.get_selection()
-            wx.MessageBox(f"Selected: {selected_option}", "Settings", wx.OK | wx.ICON_INFORMATION)
-
+            selected_option = dialog.get_selection()  # 사용자가 선택한 모델 가져오기
             wx.GetTopLevelParent(self).aiPanel.prompt_panel.use_api = selected_option
 
-            gpt_key = dialog.gpt_api_input.GetValue().strip()
-            gemini_key = dialog.gemini_api_input.GetValue().strip()
+            gpt_key = dialog.gpt_api_input.GetValue().strip()  # GPT API 키 가져오기
+            gemini_key = dialog.gemini_api_input.GetValue().strip()  # Gemini API 키 가져오기
 
             # GPT API 키 검증 및 저장
-            if gpt_key and validate_openai_api_key(gpt_key):
-                save_api_key("Chat GPT", gpt_key)
-                wx.MessageBox("GPT API 키가 유효하고 저장되었습니다.", "성공", wx.OK | wx.ICON_INFORMATION)
-            elif gpt_key:
-                wx.MessageBox("GPT API 키가 유효하지 않습니다.", "오류", wx.OK | wx.ICON_ERROR)
+            if gpt_key:
+                if validate_openai_api_key(gpt_key):
+                    save_api_key("Chat GPT", gpt_key)  # API 키 저장
+                    wx.MessageBox("GPT API 키가 유효하고 저장되었습니다.", "성공", wx.OK | wx.ICON_INFORMATION)
+                else:
+                    wx.MessageBox("GPT API 키가 유효하지 않습니다.", "오류", wx.OK | wx.ICON_ERROR)
 
             # Gemini API 키 검증 및 저장
-            if gemini_key and validate_gemini_api_key(gemini_key):
-                save_api_key("Gemini", gemini_key)
-                wx.MessageBox("Gemini API 키가 유효하고 저장되었습니다.", "성공", wx.OK | wx.ICON_INFORMATION)
-            elif gemini_key:
-                wx.MessageBox("Gemini API 키가 유효하지 않습니다.", "오류", wx.OK | wx.ICON_ERROR)
+            if gemini_key:
+                if validate_gemini_api_key(gemini_key):
+                    save_api_key("Gemini", gemini_key)  # API 키 저장
+                    wx.MessageBox("Gemini API 키가 유효하고 저장되었습니다.", "성공", wx.OK | wx.ICON_INFORMATION)
+                else:
+                    wx.MessageBox("Gemini API 키가 유효하지 않습니다.", "오류", wx.OK | wx.ICON_ERROR)
 
-        dialog.Destroy()
+        dialog.Destroy()  # 설정 창 닫기
 
 
     def information_button_click(self, event):
