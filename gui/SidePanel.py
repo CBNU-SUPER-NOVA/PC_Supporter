@@ -106,7 +106,7 @@ class SidePanel(wx.Panel):
         여기서는 프롬프트를 입력받아 저장해둡니다.
         """
         # 프롬프트 입력을 위한 다이얼로그 생성
-        prompt_dialog = wx.TextEntryDialog(self, "Enter the default prompt to use in future:", "Prompt Setting")
+        prompt_dialog = wx.TextEntryDialog(self, "AI가 더 나은 응답을 제공해 드리기 위해 사용자님에 대해 알아두어야 할 것이 있다면 무엇인가요?")
 
         # 사용자가 OK를 눌렀을 때만 동작
         if prompt_dialog.ShowModal() == wx.ID_OK:
