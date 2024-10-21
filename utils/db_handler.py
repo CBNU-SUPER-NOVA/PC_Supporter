@@ -189,7 +189,7 @@ def load_api_key(model_name):
 
 def create_conversation(name, model_name='GPT'):
     """
-    새로운 대화를 생성하고, 모든 프롬프트를 초기 메시지로 추가
+    새로운 대화를 생성하고, 프롬프트는 UI에 표시되지 않도록 합니다.
     """
     conn = sqlite3.connect('PC_Supporter.db')
     cursor = conn.cursor()
@@ -205,7 +205,7 @@ def create_conversation(name, model_name='GPT'):
         # 모든 프롬프트 불러오기
         prompts = get_all_prompts()
 
-        # 각 프롬프트를 해당 대화의 초기 메시지로 저장
+        # 각 프롬프트를 해당 대화의 초기 메시지로 저장 (UI 표시 제외)
         for prompt in prompts:
             cursor.execute('''
                 INSERT INTO messages (conversation_id, sender_type, content_type, content)
@@ -219,6 +219,7 @@ def create_conversation(name, model_name='GPT'):
         print(f"오류 발생: {e}")
     finally:
         conn.close()
+
 
 
 def get_conversation_model(conversation_id):
@@ -310,7 +311,8 @@ def get_conversation_names():
 
 def get_messages(conversation_id):
     """
-    특정 대화에 속한 모든 메시지를 조회하여 반환
+    특정 대화에 속한 모든 사용자 메시지를 조회하여 반환.
+    시스템 메시지는 UI에 표시하지 않음.
     """
     conn = sqlite3.connect('PC_Supporter.db')
     cursor = conn.cursor()
@@ -318,7 +320,7 @@ def get_messages(conversation_id):
     cursor.execute('''
         SELECT sender_type, content_type, content, created_at 
         FROM messages 
-        WHERE conversation_id = ? 
+        WHERE conversation_id = ? AND sender_type != 'system'
         ORDER BY created_at
     ''', (conversation_id,))
     messages = cursor.fetchall()
