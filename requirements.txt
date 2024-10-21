@@ -5,3 +5,4 @@ wxPython
 python-dotenv
 google-generativeai
 pyinstaller
+cryptography
