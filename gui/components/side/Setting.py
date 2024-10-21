@@ -1,7 +1,7 @@
 import wx
 
 from gpt_api.api import validate_gemini_api_key, validate_openai_api_key
-
+from utils.db_handler import load_api_key, save_api_key
 # 설정 다이얼로그
 
 
@@ -42,56 +42,75 @@ class Settings(wx.Dialog):
         ok_button = wx.Button(panel, label="OK", pos=(250, 150))
         ok_button.Bind(wx.EVT_BUTTON, self.on_ok)
 
-        # Todo : 실제 db상에 값이 있을경우 저장된값으로 넣어주기
-        self.chatgpt_api_input.SetValue("Chat GPT API Key")
-        self.gemini_api_input.SetValue("Gemini API Key")
-        # Todo : 실제 db상에 선택되어져있는 모델로 라디오버튼 선택하기
-        setradio = 2
-        if(setradio == 1):
+        # DB에서 저장된 값 불러오기
+        self.load_saved_values()
+
+        # # Todo : 실제 db상에 값이 있을경우 저장된값으로 넣어주기
+        # self.chatgpt_api_input.SetValue("Chat GPT API Key")
+        # self.gemini_api_input.SetValue("Gemini API Key")
+        # # Todo : 실제 db상에 선택되어져있는 모델로 라디오버튼 선택하기
+        # setradio = 2
+        # if(setradio == 1):
+        #     self.chatgpt_radio.SetValue(True)
+        # elif(setradio == 2):
+        #     self.gemini_radio.SetValue(True)
+
+    def load_saved_values(self):
+        """DB에서 저장된 API 키와 모델을 불러와 필드에 반영합니다."""
+        gpt_key = load_api_key("Chat GPT")
+        gemini_key = load_api_key("Gemini")
+
+        # API 키 필드에 저장된 값 반영
+        if gpt_key:
+            self.chatgpt_api_input.SetValue(gpt_key)
+        if gemini_key:
+            self.gemini_api_input.SetValue(gemini_key)
+
+        # 기본 모델 선택 (DB에서 가져온 값으로 설정 가능)
+        selected_model = "Gemini" if gemini_key else "Chat GPT"
+        if selected_model == "Chat GPT":
             self.chatgpt_radio.SetValue(True)
-        elif(setradio == 2):
+        else:
             self.gemini_radio.SetValue(True)
 
     def on_check_chatgpt_api(self, event):
-        api_key = self.chatgpt_api_input.GetValue()
-        # 여기에서 실제 API 키 인증 확인 로직을 추가할 수 있습니다.
-        if api_key:  # 단순히 입력이 있으면 인증된다고 가정
-            api_key_test = True
-            if validate_openai_api_key(api_key):
-                wx.MessageBox("Chat GPT API 키가 인증되었습니다!", "확인", wx.OK | wx.ICON_INFORMATION)
-            else:
-                wx.MessageBox("잘못된 Chat GPT API 키입니다.", "확인", wx.OK | wx.ICON_INFORMATION)
+        """Chat GPT API 키 유효성 확인"""
+        api_key = self.chatgpt_api_input.GetValue().strip()
+        if api_key and validate_openai_api_key(api_key):
+            wx.MessageBox("Chat GPT API 키가 인증되었습니다!", "확인", wx.OK | wx.ICON_INFORMATION)
         else:
-            wx.MessageBox("Chat GPT API 키를 입력하세요.", "경고", wx.OK | wx.ICON_WARNING)
+            wx.MessageBox("잘못된 Chat GPT API 키입니다.", "오류", wx.OK | wx.ICON_ERROR)
 
     def on_check_gemini_api(self, event):
-        api_key = self.gemini_api_input.GetValue()
-        # 여기에서도 실제 API 키 인증 확인 로직을 추가할 수 있습니다.
-        if api_key:
-            api_key_test = True
-            if validate_gemini_api_key(api_key):
-                wx.MessageBox("Chat GPT API 키가 인증되었습니다!", "확인", wx.OK | wx.ICON_INFORMATION)
-            else:
-                wx.MessageBox("잘못된 Chat GPT API 키입니다.", "확인", wx.OK | wx.ICON_INFORMATION)
+        """Gemini API 키 유효성 확인"""
+        api_key = self.gemini_api_input.GetValue().strip()
+        if api_key and validate_gemini_api_key(api_key):
+            wx.MessageBox("Gemini API 키가 인증되었습니다!", "확인", wx.OK | wx.ICON_INFORMATION)
         else:
-            wx.MessageBox("Gemini API 키를 입력하세요.", "경고", wx.OK | wx.ICON_WARNING)
+            wx.MessageBox("잘못된 Gemini API 키입니다.", "오류", wx.OK | wx.ICON_ERROR)
 
     def on_ok(self, event):
-        # 현재 선택된 라디오 버튼과 입력된 API 키 값 확인
+        """OK 버튼 클릭 시 API 키 저장 및 설정 적용"""
         selected_model = "Chat GPT" if self.chatgpt_radio.GetValue() else "Gemini"
-        api_key = self.chatgpt_api_input.GetValue() if selected_model == "Chat GPT" else self.gemini_api_input.GetValue()
+        api_key = self.chatgpt_api_input.GetValue().strip() if selected_model == "Chat GPT" else self.gemini_api_input.GetValue().strip()
 
-        # 현재 선택된 라디오 값과 입력된 api키 값 확인해서 문제있으면 경고창 띄우기
-        if selected_model == "Chat GPT" and not api_key:
-            # 키가 없을경우 경고창 띄우기
-            wx.MessageBox("Chat GPT API 키를 입력하세요.", "경고", wx.OK | wx.ICON_WARNING)
-            # db상의 키값이 맞지 않을경우 경고창 띄우기
-        elif selected_model == "Gemini" and not api_key:
-            wx.MessageBox("Gemini API 키를 입력하세요.", "경고", wx.OK | wx.ICON_WARNING)
+        if not api_key:
+            wx.MessageBox(f"{selected_model} API 키를 입력하세요.", "경고", wx.OK | wx.ICON_WARNING)
+            return
+
+        # 유효한 키만 DB에 저장
+        if selected_model == "Chat GPT" and validate_openai_api_key(api_key):
+            save_api_key("Chat GPT", api_key)
+            wx.MessageBox("Chat GPT API 키가 저장되었습니다.", "성공", wx.OK | wx.ICON_INFORMATION)
+        elif selected_model == "Gemini" and validate_gemini_api_key(api_key):
+            save_api_key("Gemini", api_key)
+            wx.MessageBox("Gemini API 키가 저장되었습니다.", "성공", wx.OK | wx.ICON_INFORMATION)
         else:
-            # 전부다 괜찮을경우 모달창 닫기
-            self.EndModal(wx.ID_OK)
-        # 간단한 출력 테스트
+            wx.MessageBox("유효하지 않은 API 키입니다.", "오류", wx.OK | wx.ICON_ERROR)
+            return
+
+        # 설정이 완료되면 다이얼로그 닫기
+        self.EndModal(wx.ID_OK)
 
     def get_selection(self):
         """사용자가 선택한 옵션을 반환"""
