@@ -106,7 +106,9 @@ class SidePanel(wx.Panel):
         사용자가 프롬프트 설정 버튼을 클릭했을 때 호출되는 함수.
         입력된 프롬프트를 DB에 저장하고 모든 대화에 적용합니다.
         """
-        prompt_dialog = wx.TextEntryDialog(self, "Enter the default prompt to use in future:", "Prompt Setting")
+        
+        # 프롬프트 입력을 위한 다이얼로그 생성
+        prompt_dialog = wx.TextEntryDialog(self, "AI가 더 나은 응답을 제공해 드리기 위해 사용자님에 대해 알아두어야 할 것이 있다면 무엇인가요?")
 
         if prompt_dialog.ShowModal() == wx.ID_OK:
             user_prompt = prompt_dialog.GetValue().strip()
