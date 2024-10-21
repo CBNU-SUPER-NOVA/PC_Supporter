@@ -1,6 +1,7 @@
 import wx
 from gui.components import SVGButton, ConversationPanel, Settings, Information
-from utils.db_handler import get_conversation_names
+from gpt_api.api import validate_openai_api_key, validate_gemini_api_key
+from utils.db_handler import get_conversation_names, save_prompt_setting, load_prompt_setting, save_api_key
 
 
 class SidePanel(wx.Panel):
@@ -103,27 +104,22 @@ class SidePanel(wx.Panel):
     def prompt_setting_button_click(self, event):
         """
         사용자가 프롬프트 설정 버튼을 클릭했을 때 호출되는 함수.
-        여기서는 프롬프트를 입력받아 저장해둡니다.
+        입력된 프롬프트를 DB에 저장하고 모든 대화에 적용합니다.
         """
+        
         # 프롬프트 입력을 위한 다이얼로그 생성
         prompt_dialog = wx.TextEntryDialog(self, "AI가 더 나은 응답을 제공해 드리기 위해 사용자님에 대해 알아두어야 할 것이 있다면 무엇인가요?")
 
-        # 사용자가 OK를 눌렀을 때만 동작
         if prompt_dialog.ShowModal() == wx.ID_OK:
-            user_prompt = prompt_dialog.GetValue()  # 입력된 프롬프트 가져오기
-            if user_prompt.strip():  # 공백이 아닌 경우에만 처리
-                # AiPanel의 prompt_panel에 접근하여 프롬프트 저장
-                ai_panel = wx.GetTopLevelParent(self).aiPanel  # AiPanel에 접근
-                if hasattr(ai_panel, 'prompt_panel'):
-                    ai_panel.prompt_panel.set_saved_prompt(user_prompt)  # 프롬프트를 저장
+            user_prompt = prompt_dialog.GetValue().strip()
+            if user_prompt:
+                # 프롬프트를 DB에 저장
+                save_prompt_setting(user_prompt)
 
-                    # 저장 성공 메시지 출력
-                    wx.MessageBox("Prompt has been saved.", "Success", wx.OK | wx.ICON_INFORMATION)
-                else:
-                    wx.MessageBox("Prompt input panel not found!", "Error", wx.OK | wx.ICON_ERROR)
-
-        # 다이얼로그 닫기
+                # 저장 성공 메시지
+                wx.MessageBox("Prompt has been saved to the database.", "Success", wx.OK | wx.ICON_INFORMATION)
         prompt_dialog.Destroy()
+
 
     def on_workflow_click(self, event):
         self.sidebar_button_Click(event)
@@ -134,39 +130,67 @@ class SidePanel(wx.Panel):
 
     def update_list(self):
         """
-        대화 목록을 업데이트하는 메서드
+        대화 목록을 업데이트하는 메서드.
         """
         # 기존 목록 삭제
         for child in self.workflow_sizer.GetChildren():
             child.GetWindow().Destroy()
 
-        # 새로운 대화 목록을 DB에서 가져오기
+        # 대화 목록 가져오기
         conversation_names = get_conversation_names()
 
-        # 새로운 대화 목록을 UI에 추가
+        # 대화 목록 UI에 추가
         for conversation in conversation_names:
-            # 각 converastionPanel에 conversation_id 저장
             workflow_panel = ConversationPanel(
-                self.scroll_panel, size=(340, 40), radius=20, texts=conversation[1], alignment="left", color=self.background_color)
-            workflow_panel.SetBackgroundColour(self.background_color)
-            workflow_panel.conversation_id = conversation[0]  # 대화 ID 저장
+                self.scroll_panel, size=(340, 40), radius=20, texts=conversation[1], alignment="left",
+                color=self.background_color
+            )
+            workflow_panel.conversation_id = conversation[0]
             self.workflow_sizer.Add(workflow_panel, 0, wx.ALL | wx.EXPAND, 5)
-            workflow_panel.on_click(self.on_workflow_click)
 
-        # 레이아웃 업데이트
         self.workflow_sizer.Layout()
         self.scroll_panel.FitInside()
+    
+    def apply_saved_prompt(self):
+        """
+        저장된 프롬프트를 모든 대화에 적용합니다.
+        """
+        saved_prompt = load_prompt_setting()
+        if saved_prompt:
+            # 모든 대화에 프롬프트 적용
+            ai_panel = wx.GetTopLevelParent(self).aiPanel
+            if hasattr(ai_panel, 'prompt_panel'):
+                ai_panel.prompt_panel.set_saved_prompt(saved_prompt)
 
     def on_open_settings(self, event):
-        """설정 창 열기"""
+        """설정 창 열기 및 API 키 처리"""
         dialog = Settings(self)
+
         if dialog.ShowModal() == wx.ID_OK:
-            selected_option = dialog.get_selection()  # 선택된 옵션 가져오기
+            selected_option = dialog.get_selection()
             wx.MessageBox(f"Selected: {selected_option}", "Settings", wx.OK | wx.ICON_INFORMATION)
 
-        wx.GetTopLevelParent(self).aiPanel.prompt_panel.use_api = selected_option
+            wx.GetTopLevelParent(self).aiPanel.prompt_panel.use_api = selected_option
+
+            gpt_key = dialog.gpt_api_input.GetValue().strip()
+            gemini_key = dialog.gemini_api_input.GetValue().strip()
+
+            # GPT API 키 검증 및 저장
+            if gpt_key and validate_openai_api_key(gpt_key):
+                save_api_key("Chat GPT", gpt_key)
+                wx.MessageBox("GPT API 키가 유효하고 저장되었습니다.", "성공", wx.OK | wx.ICON_INFORMATION)
+            elif gpt_key:
+                wx.MessageBox("GPT API 키가 유효하지 않습니다.", "오류", wx.OK | wx.ICON_ERROR)
+
+            # Gemini API 키 검증 및 저장
+            if gemini_key and validate_gemini_api_key(gemini_key):
+                save_api_key("Gemini", gemini_key)
+                wx.MessageBox("Gemini API 키가 유효하고 저장되었습니다.", "성공", wx.OK | wx.ICON_INFORMATION)
+            elif gemini_key:
+                wx.MessageBox("Gemini API 키가 유효하지 않습니다.", "오류", wx.OK | wx.ICON_ERROR)
 
         dialog.Destroy()
+
 
     def information_button_click(self, event):
         dialog = Information(self)
