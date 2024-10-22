@@ -2,7 +2,6 @@ import os
 import openai
 import google.generativeai as genai
 import platform
-from dotenv import load_dotenv
 import requests
 from utils.db_handler import load_api_key  # API 키를 불러오는 함수
 
