@@ -2,7 +2,7 @@ import wx
 from gui.components import SVGButton
 from gpt_api.api import send_to_llm
 from utils.code_extractor import extract_code
-from utils.db_handler import save_message_to_db
+from utils.db_handler import save_message_to_db, get_conversation_model, load_prompt_setting
 
 
 class PromptInputPanel(wx.Panel):
@@ -15,12 +15,6 @@ class PromptInputPanel(wx.Panel):
         self.current_lines = 1
         self.initial_height = 26
         self.conversation_id = None  # 대화 ID를 저장
-
-        # 프롬프트 저장 변수 추가
-        self.saved_prompt = None  # 사전에 저장된 프롬프트
-
-        # default AI is ChatGPT
-        self.use_api = "ChatGPT"
 
         # 배경 색상 설정
         self.SetBackgroundColour("white")
@@ -110,21 +104,14 @@ class PromptInputPanel(wx.Panel):
 
         self.Refresh()
 
-    def set_saved_prompt(self, saved_prompt):
-        """
-        외부에서 미리 설정된 프롬프트를 저장하는 함수
-        """
-        self.saved_prompt = saved_prompt
-
-    def get_saved_prompt(self):
-        """
-        저장된 프롬프트를 반환합니다.
-        """
-        return self.saved_prompt
-
     def send_prompt(self, event=None):
         prompt_text = self.prompt_input.GetValue().strip()
         self.clear_prompt()
+
+        # 기본 프롬프트 내용인데 아직 모르겟음
+        # 이부분은 db에 프롬프트 저장하는 부분부터 수정이 필요해보임.
+        self.saved_prompt = load_prompt_setting()
+        print(self.saved_prompt)
 
         if prompt_text:
             # 1. 사용자가 입력한 프롬프트에 사전에 저장된 프롬프트 결합
@@ -140,9 +127,10 @@ class PromptInputPanel(wx.Panel):
 
             # 3. LLM(GPT 또는 Gemini) API로 프롬프트 전송 및 응답 수신
 
-            use_api = self.use_api
+            # 사용할 API 선택
+            ai_model = get_conversation_model(self.Parent.conversation_id)
 
-            raw_response = send_to_llm(combined_prompt, use_api)
+            raw_response = send_to_llm(combined_prompt, ai_model)
 
             print(raw_response)
             # 4. 응답 정제

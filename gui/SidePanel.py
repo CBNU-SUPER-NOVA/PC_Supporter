@@ -1,7 +1,6 @@
 import wx
 from gui.components import SVGButton, ConversationPanel, Settings, Information
-from gpt_api.api import validate_openai_api_key, validate_gemini_api_key
-from utils.db_handler import get_conversation_names, save_prompt_setting, load_prompt_setting, save_api_key
+from utils.db_handler import get_conversation_names, save_prompt_setting
 
 
 class SidePanel(wx.Panel):
@@ -150,17 +149,6 @@ class SidePanel(wx.Panel):
 
         self.workflow_sizer.Layout()
         self.scroll_panel.FitInside()
-
-    def apply_saved_prompt(self):
-        """
-        저장된 프롬프트를 모든 대화에 적용합니다.
-        """
-        saved_prompt = load_prompt_setting()
-        if saved_prompt:
-            # 모든 대화에 프롬프트 적용
-            ai_panel = wx.GetTopLevelParent(self).aiPanel
-            if hasattr(ai_panel, 'prompt_panel'):
-                ai_panel.prompt_panel.set_saved_prompt(saved_prompt)
 
     def on_open_settings(self, event):
         """설정 창 열기 및 대화 id 전달"""
