@@ -1,15 +1,18 @@
 import wx
 
 from gpt_api.api import validate_gemini_api_key, validate_openai_api_key
-from utils.db_handler import load_api_key, save_api_key
+from utils.db_handler import load_api_key, save_api_key, set_conversation_model, get_conversation_model
 # 설정 다이얼로그
 
 
 class Settings(wx.Dialog):
-    def __init__(self, parent):
+    def __init__(self, parent, conversation_id):
         super().__init__(parent, title="Settings", size=(600, 250))
 
         panel = wx.Panel(self)
+
+        # 현재 대화의 converation_id 가져오기
+        self.conversation_id = conversation_id
 
         # 사용 모델 레이블
         model_label = wx.StaticText(panel, label="사용 모델", pos=(20, 20))
@@ -45,16 +48,6 @@ class Settings(wx.Dialog):
         # DB에서 저장된 값 불러오기
         self.load_saved_values()
 
-        # # Todo : 실제 db상에 값이 있을경우 저장된값으로 넣어주기
-        # self.chatgpt_api_input.SetValue("Chat GPT API Key")
-        # self.gemini_api_input.SetValue("Gemini API Key")
-        # # Todo : 실제 db상에 선택되어져있는 모델로 라디오버튼 선택하기
-        # setradio = 2
-        # if(setradio == 1):
-        #     self.chatgpt_radio.SetValue(True)
-        # elif(setradio == 2):
-        #     self.gemini_radio.SetValue(True)
-
     def load_saved_values(self):
         """DB에서 저장된 API 키와 모델을 불러와 필드에 반영합니다."""
         gpt_key = load_api_key("Chat GPT")
@@ -67,64 +60,50 @@ class Settings(wx.Dialog):
             self.gemini_api_input.SetValue(gemini_key)
 
         # 기본 모델 선택 (DB에서 가져온 값으로 설정 가능)
-        selected_model = "Gemini" if gemini_key else "Chat GPT"
+
+        selected_model = get_conversation_model(self.conversation_id)
         if selected_model == "Chat GPT":
             self.chatgpt_radio.SetValue(True)
         else:
             self.gemini_radio.SetValue(True)
 
     def on_check_chatgpt_api(self, event):
-        """Chat GPT API 키 유효성 확인"""
-        api_key = self.chatgpt_api_input.GetValue().strip()
+        """Chat GPT API 키 유효성 확인 및 DB 저장"""
+        api_key = self.chatgpt_api_input.GetValue()
         if api_key and validate_openai_api_key(api_key):
+            save_api_key("Chat GPT", api_key)
             wx.MessageBox("Chat GPT API 키가 인증되었습니다!", "확인", wx.OK | wx.ICON_INFORMATION)
         else:
             wx.MessageBox("잘못된 Chat GPT API 키입니다.", "오류", wx.OK | wx.ICON_ERROR)
 
     def on_check_gemini_api(self, event):
-        """Gemini API 키 유효성 확인"""
-        api_key = self.gemini_api_input.GetValue().strip()
+        """Gemini API 키 유효성 확인 및 DB 저장"""
+        api_key = self.gemini_api_input.GetValue()
         if api_key and validate_gemini_api_key(api_key):
+            save_api_key("Gemini", api_key)
             wx.MessageBox("Gemini API 키가 인증되었습니다!", "확인", wx.OK | wx.ICON_INFORMATION)
         else:
             wx.MessageBox("잘못된 Gemini API 키입니다.", "오류", wx.OK | wx.ICON_ERROR)
 
     def on_ok(self, event):
-        """OK 버튼 클릭 시 API 키 저장 및 설정 적용"""
-        selected_model = "Chat GPT" if self.chatgpt_radio.GetValue() else "Gemini"
-        api_key = self.chatgpt_api_input.GetValue().strip() if selected_model == "Chat GPT" else self.gemini_api_input.GetValue().strip()
+        """OK 버튼 클릭 시 선택된 AI와 API키가 저장되어있는지 체크 없으면 alert"""
 
-        if not api_key:
-            wx.MessageBox(f"{selected_model} API 키를 입력하세요.", "경고", wx.OK | wx.ICON_WARNING)
+        # 선택 되어있는 모델의 키값이 없는지 확인
+        model_name = get_conversation_model(self.conversation_id)
+        if(load_api_key(model_name) == None):
+            wx.MessageBox(f"{model_name}의 키값을 입력해주세요", "오류", wx.OK | wx.ICON_ERROR)
             return
-
-        # 유효한 키만 DB에 저장
-        if selected_model == "Chat GPT" and validate_openai_api_key(api_key):
-            save_api_key("Chat GPT", api_key)
-            wx.MessageBox("Chat GPT API 키가 저장되었습니다.", "성공", wx.OK | wx.ICON_INFORMATION)
-        elif selected_model == "Gemini" and validate_gemini_api_key(api_key):
-            save_api_key("Gemini", api_key)
-            wx.MessageBox("Gemini API 키가 저장되었습니다.", "성공", wx.OK | wx.ICON_INFORMATION)
-        else:
-            wx.MessageBox("유효하지 않은 API 키입니다.", "오류", wx.OK | wx.ICON_ERROR)
-            return
-
         # 설정이 완료되면 다이얼로그 닫기
         self.EndModal(wx.ID_OK)
 
-    def get_selection(self):
-        """사용자가 선택한 옵션을 반환"""
-        if self.gemini_radio.GetValue():
-            return "GEMINI"
-        elif self.chatgpt_radio.GetValue():
-            return "ChatGPT"
-
     def on_radio_button_selected(self, event):
-        """라디오 버튼 선택시 이벤트 핸들러"""
+        """라디오 버튼 선택시 DB에 저장하기"""
         radio_selected = event.GetEventObject()
         if radio_selected == self.chatgpt_radio:
+            set_conversation_model(self.conversation_id, "Chat GPT")
             print("Chat GPT 모델이 선택되었습니다.")
         elif radio_selected == self.gemini_radio:
+            set_conversation_model(self.conversation_id, "Gemini")
             print("Gemini 모델이 선택되었습니다.")
         else:
             raise ValueError("올바르지 않은 라디오 버튼입니다.")
