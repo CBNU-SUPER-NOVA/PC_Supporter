@@ -8,15 +8,15 @@ class SidePanel(wx.Panel):
         super(SidePanel, self).__init__(parent, size=(
             400, parent.GetClientSize().GetHeight()))
 
+        # 더블 버퍼링 활성화
+        self.SetDoubleBuffered(True)
+
         # 컬러 설정
         self.background_color = "#F7F7F8"
         self.text_color = "#000000"
 
         # 배경색 설정
         self.SetBackgroundColour(self.background_color)
-
-        # 더블 버퍼링 활성화
-        self.SetDoubleBuffered(True)
 
         # 상단 버튼들의 박스사이저 생성
         top_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -84,6 +84,7 @@ class SidePanel(wx.Panel):
         self.SetSize((self.GetSize().GetWidth(),
                      self.Parent.GetClientSize().GetHeight()))
         self.Layout()  # 레이아웃 갱신
+        self.Refresh()  # 화면 갱신
         event.Skip()
 
     def on_show(self, event):

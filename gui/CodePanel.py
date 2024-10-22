@@ -7,6 +7,10 @@ from utils.db_handler import save_code_to_db, delete_code_from_db, update_code_o
 class CodePanel(wx.Panel):
     def __init__(self, parent):
         super(CodePanel, self).__init__(parent)
+
+        # 더블 버퍼링 활성화
+        self.SetDoubleBuffered(True)
+
         self.SetSize(600, 800)
         self.SetBackgroundColour("white")
         self.conversation_id = None  # 대화 ID를 저장할 변수
@@ -17,6 +21,7 @@ class CodePanel(wx.Panel):
 
         # ScrolledWindow 생성 (수직 스크롤만 허용)
         self.scrolled_window = wx.ScrolledWindow(self, style=wx.VSCROLL)
+        self.scrolled_window.SetDoubleBuffered(True)
         self.scrolled_window.SetScrollRate(20, 20)  # 스크롤 속도 설정
         self.scrolled_window.SetBackgroundColour("white")
 
@@ -48,6 +53,9 @@ class CodePanel(wx.Panel):
         event.Skip()
 
     def update_list(self):
+        # 렌더링 동결
+        self.Freeze()
+
         self.code_blocks = get_code_blocks(self.conversation_id)
 
         for child in self.sizer.GetChildren():
@@ -61,6 +69,12 @@ class CodePanel(wx.Panel):
 
         self.sizer.Layout()
         self.scrolled_window.FitInside()
+
+        # 스크롤을 최하단으로 이동
+        x, y = self.scrolled_window.GetVirtualSize()
+        self.scrolled_window.Scroll(0, y)
+        # 렌더링 재개
+        self.Thaw()
 
     def add_code_block_to_ui(self, code, language, order):
         # 코드 블록을 UI에 추가하는 메서드

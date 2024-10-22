@@ -34,6 +34,9 @@ class MainFrame(wx.Frame):
         # 데이터를 새로고침
         self.refresh_data(init_Conversation())
 
+        # 창 크기 조정 이벤트 바인딩
+        self.Bind(wx.EVT_SIZE, self.on_resize)
+
     def refresh_data(self, conversation_id):
         # 데이터를 새로고침하는 메서드
         self.conversation_id = conversation_id  # 대화 ID 저장
@@ -42,23 +45,22 @@ class MainFrame(wx.Frame):
         self.aiPanel.update_list()
         self.codePanel.update_list()
 
+    def on_resize(self, event):
+        # 창이 리사이즈되면 전체 레이아웃을 다시 계산
+        self.Layout()  # 메인 프레임과 모든 하위 위젯들에 대해 레이아웃 업데이트
+        self.sidePanel.on_resize(event)  # 사이드 패널도 리사이즈
+        event.Skip()  # 기본 리사이즈 이벤트 처리
+
 
 def main():
     load_encryption_key()  # 먼저 암호화 키를 로드
     init_db()  # 그 후 데이터베이스를 초기화
-
-    conversation_id = init_Conversation()  # 대화 ID 가져오기
 
     app = wx.App(False)
     frame = MainFrame(None)
     frame.Show(True)
     app.MainLoop()
 
-    # 선택된 대화의 모델 로드
-    selected_model = get_conversation_model(conversation_id)
-    print(f"선택된 모델: {selected_model}")  # 디버그용 출력
-
-    frame.Show(True)
 
 def init_Conversation():
     # DB 에서 대화이름들을 가져옴
@@ -71,6 +73,7 @@ def init_Conversation():
     else:
         conversation_id = conversation_names[0][0]
         return conversation_id
+
 
 if __name__ == "__main__":
     main()
