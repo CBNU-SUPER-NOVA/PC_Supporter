@@ -5,12 +5,15 @@ import platform
 import requests
 from utils.db_handler import load_api_key  # API 키를 불러오는 함수
 
-# 모델 이름에 따라 API 키 로드, 없으면 None 처리
-openai_api_key = None or load_api_key('GPT')
-gemini_api_key = None or load_api_key('Gemini')
-# OpenAI와 Gemini API 설정
-openai.api_key = openai_api_key
-genai.configure(api_key=gemini_api_key)
+def load_openai_and_gemini_keys():
+    openai_api_key = load_api_key('GPT')  # 'GPT' 모델의 키 로드
+    gemini_api_key = load_api_key('Gemini')  # 'Gemini' 모델의 키 로드
+    
+    # 키를 설정하는 부분
+    if openai_api_key:
+        openai.api_key = openai_api_key
+    if gemini_api_key:
+        genai.configure(api_key=gemini_api_key)
 
 
 def send_to_gpt(user_input, default_prompt=""):
@@ -18,6 +21,7 @@ def send_to_gpt(user_input, default_prompt=""):
     GPT-3.5-turbo API에 메시지를 보내고 응답을 반환합니다.
     """
     # 운영체제 정보 확인
+    load_openai_and_gemini_keys()
     os_info = platform.system()
 
     # 시스템 메시지: 기본 프롬프트 및 운영체제 정보 포함
@@ -45,6 +49,7 @@ def send_to_gemini(prompt, default_prompt=""):
     """
     try:
         # 운영체제 정보 확인
+        load_openai_and_gemini_keys() 
         os_info = platform.system()
 
         # 기본 프롬프트와 시스템 정보 포함
