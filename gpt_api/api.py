@@ -4,12 +4,11 @@ import google.generativeai as genai
 import platform
 from dotenv import load_dotenv
 import requests
+from utils.db_handler import load_api_key  # API 키를 불러오는 함수
 
-# 환경변수에서 API 키 가져오기
-load_dotenv()
-openai_api_key = os.getenv("OPENAI_API_KEY")
-gemini_api_key = os.getenv("GEMINI_API_KEY")
-
+# 모델 이름에 따라 API 키 로드, 없으면 None 처리
+openai_api_key = None or load_api_key('GPT')
+gemini_api_key = None or load_api_key('Gemini')
 # OpenAI와 Gemini API 설정
 openai.api_key = openai_api_key
 genai.configure(api_key=gemini_api_key)
@@ -68,7 +67,7 @@ def send_to_gemini(prompt, default_prompt=""):
 
 
 def send_to_llm(prompt, use_api):
-    if (use_api == "GEMINI"):
+    if (use_api == "Gemini"):
         return send_to_gemini(prompt)
     else:
         return send_to_gpt(prompt)
