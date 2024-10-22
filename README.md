@@ -6,6 +6,7 @@
 [![WxPython version](https://img.shields.io/badge/wxPython-4.2.1-blue)](https://wxpython.org/)
 [![openai version](https://img.shields.io/badge/openai-1.51.2-blue)](https://github.com/openai/openai-python)
 [![google-generativeai version](https://img.shields.io/badge/google_generativeai-0.8.3-blue)](https://github.com/google/generative-ai-python)
+[![cryptography version](https://img.shields.io/badge/cryptograpyh-43.0.3-blue)](https://github.com/pyca/cryptography?tab=License-1-ov-file)
 [![pyinstaller version](https://img.shields.io/badge/pyinstaller-6.11.0-blue)](https://github.com/pyinstaller/pyinstaller)
 [![Release](https://img.shields.io/badge/release-NotYet-blue)](http://notyet.need.to.add.link)
 
