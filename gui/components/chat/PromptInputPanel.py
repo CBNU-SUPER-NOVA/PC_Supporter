@@ -146,8 +146,8 @@ class PromptInputPanel(wx.Panel):
             # AI 응답이 텍스트일 경우
             if item["type"] == "text":
                 save_message_to_db(self.Parent.conversation_id,
-                                   "AI", "text", item["data"])
+                                   "ai", "text", item["data"])
             # AI 응답이 코드 블럭일 경우
             elif item["type"] in ["python", "bash"]:
-                save_message_to_db(self.Parent.conversation_id, "AI",
+                save_message_to_db(self.Parent.conversation_id, "ai",
                                    item["type"], item["data"])
