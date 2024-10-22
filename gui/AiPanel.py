@@ -70,6 +70,10 @@ class AiPanel(wx.Panel):
         self.middle_panel.GetSizer().Layout()
         self.middle_panel.FitInside()
 
+        # 스크롤을 최하단으로 이동
+        x, y = self.middle_panel.GetVirtualSize()
+        self.middle_panel.Scroll(0, y)
+
     def new_chat_button_click(self, event):
         # 기존의 함수에 대화 생성 로직 추가
         dialog = wx.TextEntryDialog(

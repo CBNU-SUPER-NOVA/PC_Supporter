@@ -69,6 +69,10 @@ class CodePanel(wx.Panel):
 
         self.sizer.Layout()
         self.scrolled_window.FitInside()
+
+        # 스크롤을 최하단으로 이동
+        x, y = self.scrolled_window.GetVirtualSize()
+        self.scrolled_window.Scroll(0, y)
         # 렌더링 재개
         self.Thaw()
 
