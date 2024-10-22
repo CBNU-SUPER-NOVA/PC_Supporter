@@ -106,7 +106,7 @@ class SidePanel(wx.Panel):
         사용자가 프롬프트 설정 버튼을 클릭했을 때 호출되는 함수.
         입력된 프롬프트를 DB에 저장하고 모든 대화에 적용합니다.
         """
-        
+
         # 프롬프트 입력을 위한 다이얼로그 생성
         prompt_dialog = wx.TextEntryDialog(self, "AI가 더 나은 응답을 제공해 드리기 위해 사용자님에 대해 알아두어야 할 것이 있다면 무엇인가요?")
 
@@ -119,7 +119,6 @@ class SidePanel(wx.Panel):
                 # 저장 성공 메시지
                 wx.MessageBox("Prompt has been saved to the database.", "Success", wx.OK | wx.ICON_INFORMATION)
         prompt_dialog.Destroy()
-
 
     def on_workflow_click(self, event):
         self.sidebar_button_Click(event)
@@ -151,7 +150,7 @@ class SidePanel(wx.Panel):
 
         self.workflow_sizer.Layout()
         self.scroll_panel.FitInside()
-    
+
     def apply_saved_prompt(self):
         """
         저장된 프롬프트를 모든 대화에 적용합니다.
@@ -164,34 +163,10 @@ class SidePanel(wx.Panel):
                 ai_panel.prompt_panel.set_saved_prompt(saved_prompt)
 
     def on_open_settings(self, event):
-        """설정 창 열기 및 API 키 처리"""
-        dialog = Settings(self)  # 설정 다이얼로그 열기
-
-        if dialog.ShowModal() == wx.ID_OK:
-            selected_option = dialog.get_selection()  # 사용자가 선택한 모델 가져오기
-            wx.GetTopLevelParent(self).aiPanel.prompt_panel.use_api = selected_option
-
-            gpt_key = dialog.gpt_api_input.GetValue().strip()  # GPT API 키 가져오기
-            gemini_key = dialog.gemini_api_input.GetValue().strip()  # Gemini API 키 가져오기
-
-            # GPT API 키 검증 및 저장
-            if gpt_key:
-                if validate_openai_api_key(gpt_key):
-                    save_api_key("Chat GPT", gpt_key)  # API 키 저장
-                    wx.MessageBox("GPT API 키가 유효하고 저장되었습니다.", "성공", wx.OK | wx.ICON_INFORMATION)
-                else:
-                    wx.MessageBox("GPT API 키가 유효하지 않습니다.", "오류", wx.OK | wx.ICON_ERROR)
-
-            # Gemini API 키 검증 및 저장
-            if gemini_key:
-                if validate_gemini_api_key(gemini_key):
-                    save_api_key("Gemini", gemini_key)  # API 키 저장
-                    wx.MessageBox("Gemini API 키가 유효하고 저장되었습니다.", "성공", wx.OK | wx.ICON_INFORMATION)
-                else:
-                    wx.MessageBox("Gemini API 키가 유효하지 않습니다.", "오류", wx.OK | wx.ICON_ERROR)
-
+        """설정 창 열기 및 대화 id 전달"""
+        dialog = Settings(self, wx.GetTopLevelParent(self).aiPanel.conversation_id)  # 설정 다이얼로그 열기
+        dialog.ShowModal()  # 설정 창을 모달로 열기
         dialog.Destroy()  # 설정 창 닫기
-
 
     def information_button_click(self, event):
         dialog = Information(self)
