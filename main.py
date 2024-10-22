@@ -47,18 +47,11 @@ def main():
     load_encryption_key()  # 먼저 암호화 키를 로드
     init_db()  # 그 후 데이터베이스를 초기화
 
-    conversation_id = init_Conversation()  # 대화 ID 가져오기
-
     app = wx.App(False)
     frame = MainFrame(None)
     frame.Show(True)
     app.MainLoop()
 
-    # 선택된 대화의 모델 로드
-    selected_model = get_conversation_model(conversation_id)
-    print(f"선택된 모델: {selected_model}")  # 디버그용 출력
-
-    frame.Show(True)
 
 def init_Conversation():
     # DB 에서 대화이름들을 가져옴
@@ -71,6 +64,7 @@ def init_Conversation():
     else:
         conversation_id = conversation_names[0][0]
         return conversation_id
+
 
 if __name__ == "__main__":
     main()
