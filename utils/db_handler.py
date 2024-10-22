@@ -2,14 +2,17 @@ import sqlite3
 import os
 from cryptography.fernet import Fernet
 
+
 def get_key_path():
     return os.path.join(os.path.dirname(__file__), "encryption.key")
+
 
 def generate_encryption_key():
     key = Fernet.generate_key()
     with open(get_key_path(), "wb") as key_file:
         key_file.write(key)
     print("새로운 암호화 키가 생성되었습니다.")
+
 
 def load_encryption_key():
     key_path = get_key_path()
@@ -20,8 +23,10 @@ def load_encryption_key():
     with open(key_path, "rb") as key_file:
         return key_file.read()
 
+
 encryption_key = load_encryption_key()
 cipher = Fernet(encryption_key)
+
 
 def init_db():
 
@@ -42,7 +47,7 @@ def init_db():
         print("model_name 열이 추가되었습니다.")
     except sqlite3.OperationalError:
         print("model_name 열이 이미 존재합니다.")
-    
+
     # 대화 테이블 생성
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS conversations (
@@ -95,6 +100,7 @@ def init_db():
     conn.commit()
     conn.close()
 
+
 def insert_prompt(prompt):
     """
     프롬프트를 prompt_settings 테이블에 저장
@@ -114,6 +120,7 @@ def insert_prompt(prompt):
         print(f"오류 발생: {e}")
     finally:
         conn.close()
+
 
 def view_prompt_settings():
     """
@@ -137,8 +144,10 @@ def view_prompt_settings():
     finally:
         conn.close()
 
+
 # 테스트: 프롬프트 조회
 view_prompt_settings()
+
 
 def get_all_prompts():
     """
@@ -156,6 +165,7 @@ def get_all_prompts():
         print(f"오류 발생: {e}")
     finally:
         conn.close()
+
 
 def save_api_key(model_name, api_key):
     """API 키를 암호화하여 저장하거나 업데이트"""
@@ -186,6 +196,7 @@ def load_api_key(model_name):
     if result:
         return cipher.decrypt(result[0]).decode()
     return None
+
 
 def create_conversation(name, model_name='GPT'):
     """
@@ -221,6 +232,22 @@ def create_conversation(name, model_name='GPT'):
         conn.close()
 
 
+def set_conversation_model(conversation_id, model_name):
+    """
+    특정 대화에 사용된 모델 이름을 업데이트
+    """
+    conn = sqlite3.connect('PC_Supporter.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        UPDATE conversations
+        SET model_name = ?
+        WHERE id = ?
+    ''', (model_name, conversation_id))
+
+    conn.commit()
+    conn.close()
+
 
 def get_conversation_model(conversation_id):
     """
@@ -237,6 +264,7 @@ def get_conversation_model(conversation_id):
 
     return result[0] if result else 'GPT'
 
+
 def save_prompt_setting(prompt):
     """
     prompt_settings 테이블에 프롬프트를 저장하는 함수
@@ -251,6 +279,7 @@ def save_prompt_setting(prompt):
     conn.commit()
     conn.close()
 
+
 def load_prompt_setting():
     """
     저장된 프롬프트 설정을 불러오기
@@ -262,7 +291,6 @@ def load_prompt_setting():
     result = cursor.fetchone()
     conn.close()
     return result[0] if result else None
-
 
 
 def save_message_to_db(conversation_id, sender_type, content_type, content):
@@ -399,6 +427,7 @@ def update_code_data(id, code_data):
     conn.commit()
     conn.close()
 
+
 def update_conversation_name(id, new_name):
     conn = sqlite3.connect('PC_Supporter.db')
     cursor = conn.cursor()
@@ -421,16 +450,16 @@ def delete_conversation_and_related_data(conversation_id):
         DELETE FROM messages
         WHERE conversation_id = ?
     ''', (conversation_id, ))
-    
+
     cursor.execute('''
         DELETE FROM code_blocks
         WHERE conversation_id = ?
     ''', (conversation_id, ))
-    
+
     cursor.execute('''
         DELETE FROM conversations
         WHERE id = ?
     ''', (conversation_id, ))
-    
+
     conn.commit()
     conn.close()
