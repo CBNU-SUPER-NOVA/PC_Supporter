@@ -5,7 +5,6 @@ PCSupporter
 __pycache__
 
 #dbfiles
-workflow.db
 PC_Supporter.db
 
 #IDE environment
