@@ -1,5 +1,5 @@
 import wx
-from gui.components import SVGButton, EditButton
+from gui.components import SVGButton, EditButton, Font
 from utils.db_handler import save_code_to_db, update_code_data
 from utils.code_executor import execute_code
 
@@ -33,9 +33,8 @@ class CodeBox(wx.Panel):
         self.code_language = wx.StaticText(top_panel, label=self.language)
         self.code_language.SetBackgroundColour("#1E1E1E")
         self.code_language.SetForegroundColour("#FFFFFF")
-        self.code_language.SetFont(wx.Font(12, wx.FONTFAMILY_DEFAULT,
-                                           wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
-        self.code_language.Wrap(400)
+        self.code_language.SetFont(Font.bold(18))
+        # self.code_language.Wrap(400)
 
         # 좌측 정렬
         top_sizer.Add(self.code_language, 0,
@@ -78,16 +77,12 @@ class CodeBox(wx.Panel):
         main_sizer.Add(top_panel, 0, wx.EXPAND | wx.ALL, 10)
 
         # 코드 입력 상자 (아래쪽)
-        self.code = wx.TextCtrl(self, value=self.text, style=wx.NO_BORDER | wx.TE_MULTILINE |
-                                wx.TE_NO_VSCROLL | wx.TE_RICH2 | wx.TE_PROCESS_ENTER | wx.TE_PROCESS_TAB)
+        self.code = wx.TextCtrl(self, style=wx.NO_BORDER | wx.TE_MULTILINE | wx.TE_NO_VSCROLL)
+        self.code.SetValue(self.text)
         self.code.SetEditable(False)
+        self.code.SetFont(Font.bold(16))
         self.code.SetBackgroundColour("#000000")
         self.code.SetForegroundColour("#FFFFFF")
-        self.code.SetFont(wx.Font(12, wx.FONTFAMILY_DEFAULT,
-                                  wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
-        self.code.SetStyle(0, self.code.GetLastPosition(),
-                           wx.TextAttr(wx.Colour(255, 255, 255)))  # 흰색 텍스트
-
         # 고정된 너비와 기본 높이 설정
         self.code.SetMinSize(wx.Size(self.fixed_width, self.min_height))
         self.code.SetSize(wx.Size(self.fixed_width, self.initial_height))
@@ -164,18 +159,15 @@ class CodeBox(wx.Panel):
         if initial or lines != self.current_lines:
             self.current_lines = lines
             # 텍스트 높이 측정
-            text_height = self.code.GetCharHeight() * lines
+            text_height = self.code.GetCharHeight() * lines + 20
 
             # 창의 높이 설정 (최소 높이만 고려)
-            new_height = max(text_height + self.padding + 40,  # 40 추가
-                             self.min_height)
+            new_height = max(text_height, self.min_height)
 
             self.code.SetMinSize(wx.Size(self.fixed_width, new_height))
             self.code.SetSize(wx.Size(self.fixed_width, new_height))
 
             # 패널의 크기 업데이트 및 레이아웃 재조정
-            self.SetMinSize(
-                wx.Size(self.fixed_width, new_height + self.padding))
             self.Layout()
             self.Fit()
 
