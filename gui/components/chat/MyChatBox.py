@@ -1,13 +1,13 @@
 import wx
+from gui.components import Font
 
 
 class MyChatBox(wx.Panel):
-    def __init__(self, parent, message, text_color="#000000", font_size=10, font_family=wx.FONTFAMILY_DEFAULT):
+    def __init__(self, parent, message, text_color="#000000", font_size=12):
         super(MyChatBox, self).__init__(parent)
         self.color = "#F7F7F8"
         self.text_color = text_color
         self.font_size = font_size
-        self.font_family = font_family
 
         # 메인 사이저 생성 (수평 정렬)
         main_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -24,9 +24,7 @@ class MyChatBox(wx.Panel):
         message_label.SetForegroundColour(self.text_color)
 
         # 폰트 설정
-        font = wx.Font(self.font_size, self.font_family,
-                       wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
-        message_label.SetFont(font)
+        message_label.SetFont(Font.bold(self.font_size))
 
         # 둥근 박스 안에 레이블을 포함하는 사이저 생성
         rounded_sizer = wx.BoxSizer(wx.HORIZONTAL)

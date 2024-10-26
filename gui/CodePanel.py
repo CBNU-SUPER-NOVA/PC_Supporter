@@ -7,10 +7,11 @@ from utils.db_handler import save_code_to_db, update_code_order, get_code_blocks
 class CodePanel(wx.Panel):
     def __init__(self, parent):
         super(CodePanel, self).__init__(parent)
+        # 최소 사이즈 설정
+        self.SetMinSize((600, 800))
 
         # 더블 버퍼링 활성화
         self.SetDoubleBuffered(True)
-
         self.SetSize(600, 800)
         self.SetBackgroundColour("white")
         self.conversation_id = None  # 대화 ID를 저장할 변수
