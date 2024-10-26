@@ -1,6 +1,7 @@
 # 순환참조 오류가 생길수 있으니 가장 기본적인 common을 먼저 import 해주어야함.
 
 # common 내용
+from .common.Font import Font
 from .common.RoundedPanel import RoundedPanel
 from .common.SVGButton import SVGButton
 from .common.EditButton import EditButton
