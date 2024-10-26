@@ -1,6 +1,6 @@
 import wx
-from gui.components import CodeBox, SVGButton, PromptInputPanel, AIChatBox, MyChatBox
-from utils.db_handler import create_conversation, get_code_blocks, get_messages
+from gui.components import SVGButton, PromptInputPanel, AIChatBox, MyChatBox
+from utils.db_handler import create_conversation, get_messages
 
 
 class AiPanel(wx.Panel):

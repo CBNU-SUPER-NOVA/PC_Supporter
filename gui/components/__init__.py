@@ -10,6 +10,7 @@ from .common.CodeBox import CodeBox
 from .side.ConversationPanel import ConversationPanel
 from .side.Informaiton import Information
 from .side.Setting import Settings
+from .side.PromptSetting import PromptSetting
 
 # chat 내용
 from .chat.AIChatBox import AIChatBox

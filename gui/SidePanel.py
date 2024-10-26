@@ -1,6 +1,6 @@
 import wx
-from gui.components import SVGButton, ConversationPanel, Settings, Information
-from utils.db_handler import get_conversation_names, save_prompt_setting
+from gui.components import SVGButton, ConversationPanel, Settings, Information, PromptSetting
+from utils.db_handler import get_conversation_names
 
 
 class SidePanel(wx.Panel):
@@ -102,22 +102,9 @@ class SidePanel(wx.Panel):
         wx.GetTopLevelParent(self).aiPanel.new_chat_button_click(event)
 
     def prompt_setting_button_click(self, event):
-        """
-        사용자가 프롬프트 설정 버튼을 클릭했을 때 호출되는 함수.
-        입력된 프롬프트를 DB에 저장하고 모든 대화에 적용합니다.
-        """
-
         # 프롬프트 입력을 위한 다이얼로그 생성
-        prompt_dialog = wx.TextEntryDialog(self, "AI가 더 나은 응답을 제공해 드리기 위해 사용자님에 대해 알아두어야 할 것이 있다면 무엇인가요?")
-
-        if prompt_dialog.ShowModal() == wx.ID_OK:
-            user_prompt = prompt_dialog.GetValue().strip()
-            if user_prompt:
-                # 프롬프트를 DB에 저장
-                save_prompt_setting(user_prompt)
-
-                # 저장 성공 메시지
-                wx.MessageBox("Prompt has been saved to the database.", "Success", wx.OK | wx.ICON_INFORMATION)
+        prompt_dialog = PromptSetting(self)
+        prompt_dialog.ShowModal()
         prompt_dialog.Destroy()
 
     def on_workflow_click(self, event):
