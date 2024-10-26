@@ -13,7 +13,9 @@ from utils.db_handler import init_db, get_conversation_names, create_conversatio
 class MainFrame(wx.Frame):
     def __init__(self, *args, **kw):
         super(MainFrame, self).__init__(*args, **kw)
+        # 기본사이즈 설정
         self.SetSize((1200, 800))
+        self.SetMinSize((1200, 800))
         self.SetTitle("PCSupporter")
         # 스플릿 패널 추가
         self.splitter = wx.SplitterWindow(self)
@@ -25,7 +27,6 @@ class MainFrame(wx.Frame):
         self.codePanel = CodePanel(self.splitter)
 
         # 스플릿 패널 속성
-        self.splitter.SetMinimumPaneSize(600)
         self.splitter.SplitVertically(self.aiPanel, self.codePanel)
 
         # 오버레이 패널 생성 및 추가

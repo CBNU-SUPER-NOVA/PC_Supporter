@@ -6,8 +6,10 @@ from utils.db_handler import create_conversation, get_messages
 class AiPanel(wx.Panel):
     def __init__(self, parent):
         super(AiPanel, self).__init__(parent)
-        self.SetBackgroundColour("#FFFFFF")
+        # 최소 사이즈 설정
+        self.SetMinSize((600, 800))
 
+        self.SetBackgroundColour("#FFFFFF")
         self.conversation_id = None  # 초기화
 
         # 더블 버퍼링 활성화
