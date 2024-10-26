@@ -1,4 +1,5 @@
 import wx
+from gui.components import Font
 
 
 class RoundedPanel(wx.Panel):
@@ -41,9 +42,7 @@ class RoundedPanel(wx.Panel):
         gc.DrawRoundedRectangle(0, 0, width, height, self.radius)
 
         # 텍스트 그리기
-        font = wx.Font(18, wx.FONTFAMILY_DEFAULT,
-                       wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
-        gc.SetFont(font, wx.Colour("#000000"))
+        gc.SetFont(Font.bold(24), wx.Colour("#000000"))
 
         # 텍스트 크기 측정
         text_width, text_height = gc.GetTextExtent(self.texts)

@@ -1,5 +1,5 @@
 import wx
-from gui.components import SVGButton
+from gui.components import SVGButton, Font
 from gpt_api.api import send_to_llm
 from utils.code_extractor import extract_code
 from utils.db_handler import save_message_to_db, get_conversation_model, load_prompt_setting
@@ -29,9 +29,7 @@ class PromptInputPanel(wx.Panel):
         self.prompt_input.SetBackgroundColour(self.basecolor)
 
         # 폰트 크기 설정
-        font = wx.Font(16, wx.FONTFAMILY_DEFAULT,
-                       wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD)
-        self.prompt_input.SetFont(font)
+        self.prompt_input.SetFont(Font.bold(16))
 
         # 초기 입력 창 크기 설정
         self.prompt_input.SetMinSize(

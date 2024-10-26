@@ -1,9 +1,9 @@
 import wx
-from gui.components import SVGButton
+from gui.components import SVGButton, Font
 
 
 class AIChatBox(wx.Panel):
-    def __init__(self, parent, type, message, conversation_id, max_width=480, text_color="#000000", font_size=10, font_family=wx.FONTFAMILY_DEFAULT, bg_color="#FFFFFF", text_bg_color="#FFFFFF"):
+    def __init__(self, parent, type, message, conversation_id, max_width=480, text_color="#000000", font_size=12, bg_color="#FFFFFF", text_bg_color="#FFFFFF"):
         super(AIChatBox, self).__init__(parent)
         self.conversation_id = conversation_id
 
@@ -15,7 +15,6 @@ class AIChatBox(wx.Panel):
         # 텍스트 색상 및 폰트 설정
         self.text_color = wx.Colour(text_color)
         self.font_size = font_size
-        self.font_family = font_family
         self.max_width = max_width  # 최대 너비 제한 설정
 
         # 메인 사이저 생성
@@ -56,8 +55,7 @@ class AIChatBox(wx.Panel):
             # 텍스트 색상 및 폰트 설정
             message_label.SetForegroundColour(self.text_color)
             message_label.SetBackgroundColour(self.text_bg_color)
-            message_label.SetFont(wx.Font(self.font_size, self.font_family,
-                                          wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
+            message_label.SetFont(Font.bold(self.font_size))
             text_sizer.Add(message_label, 0, wx.ALL | wx.EXPAND, 3)
         else:
             from gui.components import CodeBox
