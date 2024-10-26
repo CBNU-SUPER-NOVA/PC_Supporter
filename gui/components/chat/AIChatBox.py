@@ -3,9 +3,10 @@ from gui.components import SVGButton
 
 
 class AIChatBox(wx.Panel):
-    def __init__(self, parent, type, message, conversation_id, max_width=550, text_color="#000000", font_size=10, font_family=wx.FONTFAMILY_DEFAULT, bg_color="#FFFFFF", text_bg_color="#FFFFFF"):
+    def __init__(self, parent, type, message, conversation_id, max_width=480, text_color="#000000", font_size=10, font_family=wx.FONTFAMILY_DEFAULT, bg_color="#FFFFFF", text_bg_color="#FFFFFF"):
         super(AIChatBox, self).__init__(parent)
         self.conversation_id = conversation_id
+
         # 배경 색상 설정 (패널과 텍스트 배경 색상 통일)
         self.bg_color = wx.Colour(bg_color)
         self.text_bg_color = wx.Colour(text_bg_color)
@@ -15,9 +16,7 @@ class AIChatBox(wx.Panel):
         self.text_color = wx.Colour(text_color)
         self.font_size = font_size
         self.font_family = font_family
-
-        # 패널의 최대 너비 설정 (높이는 제한하지 않음)
-        self.SetMaxSize((max_width, -1))
+        self.max_width = max_width  # 최대 너비 제한 설정
 
         # 메인 사이저 생성
         main_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -35,9 +34,9 @@ class AIChatBox(wx.Panel):
         text_sizer = wx.BoxSizer(wx.VERTICAL)
 
         # 메시지 처리
-        self.add_message(type, message, text_sizer, max_width)
+        self.add_message(type, message, text_sizer)
 
-        # 메인 사이저에 텍스트 사이저 추가
+        # 메인 사이저에 텍스트 사이저 추가 (wx.EXPAND를 사용하여 좌우로 확장 가능하게 설정)
         main_sizer.Add(text_sizer, 1, wx.EXPAND | wx.ALL, 10)
 
         # 패널에 메인 사이저 설정
@@ -47,13 +46,13 @@ class AIChatBox(wx.Panel):
         self.Fit()
         self.Layout()
 
-    def add_message(self, type, message, text_sizer, max_width):
+    def add_message(self, type, message, text_sizer):
         """메시지를 텍스트 또는 코드로 처리하여 사이저에 추가"""
         if (type == "text"):
-           # 텍스트 메시지일 경우
+            # 텍스트 메시지일 경우
             message_label = wx.StaticText(
                 self, label=message, style=wx.ALIGN_LEFT)
-            message_label.Wrap(max_width - 100)  # 최대 너비 설정
+            message_label.Wrap(self.max_width - 100)  # 최대 너비에 따라 줄 바꿈
             # 텍스트 색상 및 폰트 설정
             message_label.SetForegroundColour(self.text_color)
             message_label.SetBackgroundColour(self.text_bg_color)
