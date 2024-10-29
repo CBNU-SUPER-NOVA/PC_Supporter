@@ -59,10 +59,8 @@ def send_to_gemini(prompt, default_prompt=""):
 
         # 생성 모델 설정
         model = genai.GenerativeModel(model_name="gemini-1.5-flash")
-
         # 텍스트 생성
         response = model.generate_content(combined_prompt)
-
         # 응답 결과 반환
         return response.text
     except Exception as e:

@@ -1,8 +1,6 @@
 import wx
 from utils.db_handler import save_prompt_setting
 
-# TODO : DB에 저장된 프롬프트를 불러와 텍스트 필드에 표시하는 기능 구현
-
 
 class PromptSetting(wx.Dialog):
     def __init__(self, parent):

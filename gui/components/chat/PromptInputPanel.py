@@ -106,10 +106,7 @@ class PromptInputPanel(wx.Panel):
         prompt_text = self.prompt_input.GetValue().strip()
         self.clear_prompt()
 
-        # 기본 프롬프트 내용인데 아직 모르겟음
-        # 이부분은 db에 프롬프트 저장하는 부분부터 수정이 필요해보임.
         self.saved_prompt = load_prompt_setting()
-        print(self.saved_prompt)
 
         if prompt_text:
             # 1. 사용자가 입력한 프롬프트에 사전에 저장된 프롬프트 결합
