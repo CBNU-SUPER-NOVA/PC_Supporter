@@ -2,7 +2,7 @@ import wx
 from gui.components import SVGButton, Font
 from gpt_api.api import send_to_llm
 from utils.code_extractor import extract_code
-from utils.db_handler import save_message_to_db, get_conversation_model, load_prompt_setting
+from utils.db_handler import save_message_to_db, get_conversation_model, load_prompt_setting, load_api_key
 
 
 class PromptInputPanel(wx.Panel):
@@ -115,6 +115,13 @@ class PromptInputPanel(wx.Panel):
             else:
                 combined_prompt = prompt_text
 
+            # 사용할 API 선택
+            ai_model = get_conversation_model(self.Parent.conversation_id)
+            # 만약에 입력된 AI API키가 없다면 경고창을 띄우고 리턴함
+            if load_api_key(ai_model) == None:
+                wx.MessageBox(f"Setting창에서 {ai_model}의 키값을 입력해주세요.\n API key 값을 찾는 방법은 Github에서 확인할 수 있습니다.", "오류", wx.OK | wx.ICON_ERROR)
+                return
+
             # 2. 유저 메시지를 DB에 추가 및 새로고침
             save_message_to_db(self.Parent.conversation_id,
                                "user", "text", prompt_text)
@@ -122,12 +129,8 @@ class PromptInputPanel(wx.Panel):
 
             # 3. LLM(GPT 또는 Gemini) API로 프롬프트 전송 및 응답 수신
 
-            # 사용할 API 선택
-            ai_model = get_conversation_model(self.Parent.conversation_id)
-
             raw_response = send_to_llm(combined_prompt, ai_model)
 
-            print(raw_response)
             # 4. 응답 정제
             response = extract_code(raw_response)
 

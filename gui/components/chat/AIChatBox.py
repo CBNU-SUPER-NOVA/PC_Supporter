@@ -65,5 +65,4 @@ class AIChatBox(wx.Panel):
             text_sizer.Add(code_box, 0, wx.ALL | wx.EXPAND, 5)
 
     def on_click(self, event):
-        print("AI chat box clicked")
         event.Skip()

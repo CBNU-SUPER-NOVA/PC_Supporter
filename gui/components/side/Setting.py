@@ -101,9 +101,7 @@ class Settings(wx.Dialog):
         radio_selected = event.GetEventObject()
         if radio_selected == self.chatgpt_radio:
             set_conversation_model(self.conversation_id, "Chat GPT")
-            print("Chat GPT 모델이 선택되었습니다.")
         elif radio_selected == self.gemini_radio:
             set_conversation_model(self.conversation_id, "Gemini")
-            print("Gemini 모델이 선택되었습니다.")
         else:
             raise ValueError("올바르지 않은 라디오 버튼입니다.")
