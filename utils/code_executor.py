@@ -4,7 +4,6 @@
 import subprocess
 import sys
 import io
-import os
 
 
 def execute_code(code, language='python'):
