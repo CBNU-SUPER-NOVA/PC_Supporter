@@ -267,13 +267,15 @@ def get_conversation_model(conversation_id):
 
 def save_prompt_setting(prompt):
     """
-    prompt_settings 테이블에 프롬프트를 저장하는 함수
+    prompt_settings 테이블에 프롬프트를 저장하거나 기존 데이터를 업데이트합니다.
     """
     conn = sqlite3.connect('PC_Supporter.db')
     cursor = conn.cursor()
 
+    # 데이터가 있으면 업데이트, 없으면 삽입
     cursor.execute('''
-        INSERT INTO prompt_settings (prompt) VALUES (?)
+        INSERT INTO prompt_settings (id, prompt) VALUES (1, ?)
+        ON CONFLICT(id) DO UPDATE SET prompt = excluded.prompt
     ''', (prompt,))
 
     conn.commit()
@@ -287,7 +289,8 @@ def load_prompt_setting():
     conn = sqlite3.connect('PC_Supporter.db')
     cursor = conn.cursor()
 
-    cursor.execute('SELECT prompt FROM prompt_settings ORDER BY id DESC LIMIT 1')
+    # id가 1인 prompt 값을 불러옵니다.
+    cursor.execute('SELECT prompt FROM prompt_settings WHERE id = 1')
     result = cursor.fetchone()
     conn.close()
     return result[0] if result else None

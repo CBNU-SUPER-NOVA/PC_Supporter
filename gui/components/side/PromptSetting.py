@@ -1,5 +1,5 @@
 import wx
-from utils.db_handler import save_prompt_setting
+from utils.db_handler import save_prompt_setting, load_prompt_setting
 
 
 class PromptSetting(wx.Dialog):
@@ -16,6 +16,11 @@ class PromptSetting(wx.Dialog):
         # 텍스트 입력 필드
         self.prompt_text_ctrl = wx.TextCtrl(self)
         vbox.Add(self.prompt_text_ctrl, flag=wx.ALL | wx.EXPAND, border=5)
+
+        # DB에서 저장된 프롬프트 불러오기
+        prompt_setting = load_prompt_setting()
+        if prompt_setting:
+            self.prompt_text_ctrl.SetValue(prompt_setting)
 
         # 저장 버튼과 취소 버튼을 가로로 배치할 사이저
         hbox = wx.BoxSizer(wx.HORIZONTAL)
@@ -42,7 +47,6 @@ class PromptSetting(wx.Dialog):
         user_prompt = self.prompt_text_ctrl.GetValue().strip()
         if user_prompt:
             save_prompt_setting(user_prompt)  # 프롬프트를 DB에 저장
-            wx.MessageBox("Prompt has been saved to the database.", "Success", wx.OK | wx.ICON_INFORMATION)
             self.EndModal(wx.ID_OK)
         else:
             wx.MessageBox("Prompt cannot be empty.", "Warning", wx.OK | wx.ICON_WARNING)
