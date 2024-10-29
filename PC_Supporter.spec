@@ -5,7 +5,7 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('gui/icons/*', 'gui/icons')],
+    datas=[('gui/icons/*', 'gui/icons') , ('utils/encryption.key', 'utils')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
