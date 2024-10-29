@@ -8,7 +8,7 @@
 [![google-generativeai version](https://img.shields.io/badge/google_generativeai-0.8.3-blue)](https://github.com/google/generative-ai-python)
 [![cryptography version](https://img.shields.io/badge/cryptograpyh-43.0.3-blue)](https://github.com/pyca/cryptography?tab=License-1-ov-file)
 [![pyinstaller version](https://img.shields.io/badge/pyinstaller-6.11.0-blue)](https://github.com/pyinstaller/pyinstaller)
-[![Release](https://img.shields.io/badge/release-NotYet-blue)](http://notyet.need.to.add.link)
+[![Release](https://img.shields.io/badge/v0.0.1-alpha)]([http://notyet.need.to.add.link](https://github.com/CBNU-SUPER-NOVA/PC_Supporter/releases/tag/v0.0.1))
 
 <a href="#Introduction">Introduction</a> •
 <a href="#Features">Features</a> •
