@@ -116,7 +116,6 @@ class CodePanel(wx.Panel):
                 update_code_order(code_box.text, index)
 
     def workflow_run(self, event=None):
-        print("workflow 실행")
 
         # 동일한 유형의 코드 블록을 그룹화하여 저장할 변수들
         combined_code = []
