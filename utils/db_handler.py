@@ -63,7 +63,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS messages (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             conversation_id INTEGER,
-            sender_type TEXT CHECK(sender_type IN ('ai', 'user')),
+            sender_type TEXT CHECK(sender_type IN ('ai', 'user', 'system')),
             content_type TEXT CHECK(content_type IN ('text', 'python', 'zsh', 'shell', 'bash')),
             content TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -91,11 +91,11 @@ def init_db():
         )
     ''')
 
-    # 기본 대화 설정 (최초 실행 시)
-    cursor.execute('''
-        INSERT OR IGNORE INTO conversations (id, name, model_name)
-        VALUES (1, 'MyConversation', 'GPT')
-    ''')
+    # # 기본 대화 설정 (최초 실행 시)
+    # cursor.execute('''
+    #     INSERT OR IGNORE INTO conversations (id, name, model_name)
+    #     VALUES (1, 'MyConversation', 'GPT')
+    # ''')
 
     conn.commit()
     conn.close()
@@ -398,7 +398,7 @@ def update_code_order(id, new_order_num):
 
 def delete_code_from_db(id):
     """
-    특정 코드 블록을 데이터베이스에서 삭제
+    특정 코드 블록을 데이터베이스에서 삭��
     """
     conn = sqlite3.connect('PC_Supporter.db')
     cursor = conn.cursor()
