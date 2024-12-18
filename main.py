@@ -66,14 +66,14 @@ def main():
 def init_Conversation():
     # DB 에서 대화이름들을 가져옴
     conversation_names = get_conversation_names()
-    # 대화 목록이 없을경우 MyConversation으로 하나 생성하고 지정함
-    if not conversation_names:
-        conversation_name = "MyConversation"
-        conversation_id = create_conversation(conversation_name)
-        return conversation_id
-    else:
-        conversation_id = conversation_names[0][0]
-        return conversation_id
+    # # 대화 목록이 없을경우 MyConversation으로 하나 생성하고 지정함
+    # if not conversation_names:
+    #     conversation_name = "MyConversation"
+    #     conversation_id = create_conversation(conversation_name)
+    #     return conversation_id
+    # else:
+    #     conversation_id = conversation_names[0][0]
+    #     return conversation_id
 
 
 if __name__ == "__main__":
